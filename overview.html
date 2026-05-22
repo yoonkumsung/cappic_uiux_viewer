@@ -157,6 +157,29 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .nav-link{display:inline-block;padding:4px 10px;margin:3px;background:#1a1a1a;border:1px solid #333;border-radius:6px;font-size:11px;color:#4ECDC4;cursor:pointer;transition:all .2s;}
 .nav-link:hover{background:#0d2a28;border-color:#4ECDC4;}
 
+/* ========== ZOOM-IN PANEL (single click) ========== */
+.zi-sidebar{position:fixed;left:0;top:44px;bottom:0;width:240px;background:#111;border-right:1px solid #222;overflow-y:auto;z-index:50;transform:translateX(-100%);transition:transform .3s ease;}
+.zi-sidebar.show{transform:translateX(0);}
+.zi-sidebar::-webkit-scrollbar{width:4px;}
+.zi-sidebar::-webkit-scrollbar-thumb{background:#333;border-radius:2px;}
+.zi-sidebar .os-group{color:#666;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;padding:12px 14px 4px;}
+.zi-sidebar .os-item{display:flex;align-items:center;gap:6px;padding:6px 14px;color:#999;font-size:11px;cursor:pointer;border:none;background:none;width:100%;text-align:left;transition:background .15s;}
+.zi-sidebar .os-item:hover{background:rgba(255,255,255,.05);color:#ccc;}
+.zi-sidebar .os-item.active{background:#4ECDC4;color:#fff;font-weight:600;}
+.zi-sidebar .os-item .os-code{font-size:9px;opacity:.6;min-width:46px;font-weight:600;}
+
+.zi-desc{position:fixed;right:0;top:44px;bottom:0;width:360px;background:#111;border-left:1px solid #222;overflow-y:auto;z-index:50;transform:translateX(100%);transition:transform .3s ease;padding:20px;}
+.zi-desc.show{transform:translateX(0);}
+.zi-desc::-webkit-scrollbar{width:4px;}
+.zi-desc::-webkit-scrollbar-thumb{background:#333;border-radius:2px;}
+
+.zi-device-bar{position:fixed;top:44px;left:240px;right:360px;z-index:50;display:none;justify-content:center;gap:4px;padding:8px 12px;background:rgba(10,10,10,.85);backdrop-filter:blur(8px);border-bottom:1px solid #222;}
+.zi-device-bar.show{display:flex;}
+
+.zi-close{position:fixed;top:52px;right:368px;z-index:51;background:#222;border:1px solid #333;color:#aaa;width:28px;height:28px;border-radius:6px;cursor:pointer;font-size:14px;display:none;align-items:center;justify-content:center;}
+.zi-close.show{display:flex;}
+.zi-close:hover{border-color:#4ECDC4;color:#fff;}
+
 /* Code modal */
 .modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:400;justify-content:center;align-items:center;backdrop-filter:blur(4px);}
 .modal-bg.show{display:flex;}
@@ -214,6 +237,12 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 </div>
 
 <div class="minimap" id="minimap"></div>
+
+<!-- Zoom-in panels (single click) -->
+<div class="zi-sidebar" id="ziSidebar"></div>
+<div class="zi-device-bar" id="ziDeviceBar"></div>
+<button class="zi-close" id="ziClose" onclick="closeZoomIn()">&times;</button>
+<div class="zi-desc" id="ziDesc"></div>
 
 <!-- Tokens view -->
 <div class="tokens-view" id="tokensView">
@@ -847,7 +876,14 @@ screens.forEach(s => {
     <div class="scard-code">${s.code}</div>
     <div class="scard-name">${s.name}</div>
   `;
-  card.addEventListener('click', () => openOverlay(s.id));
+  card.addEventListener('click', (e) => {
+    e.stopPropagation();
+    openZoomIn(s.id);
+  });
+  card.addEventListener('dblclick', (e) => {
+    e.stopPropagation();
+    openOverlay(s.id);
+  });
   canvas.appendChild(card);
 });
 
@@ -1268,10 +1304,182 @@ document.addEventListener('keydown', e => {
   if (e.key === 'Escape') {
     if (document.getElementById('codeModal').classList.contains('show')) closeCode();
     else if (document.getElementById('overlay').classList.contains('show')) closeOverlay();
+    else if (ziActive) closeZoomIn();
   }
   if (document.getElementById('overlay').classList.contains('show')) {
     if (e.key === 'ArrowLeft') prevScreen();
     if (e.key === 'ArrowRight') nextScreen();
+  }
+});
+
+// ========== ZOOM-IN MODE (single click) ==========
+let ziActive = false;
+let ziScreen = null;
+let ziSidebarBuilt = false;
+
+function buildZiSidebar() {
+  if (ziSidebarBuilt) return;
+  ziSidebarBuilt = true;
+  const sb = document.getElementById('ziSidebar');
+  const groups = [
+    { key:'adm', label:'관리자 앱' },
+    { key:'comm', label:'공통 기능' },
+    { key:'con', label:'소비자 앱' },
+    { key:'web', label:'웹' },
+  ];
+  let html = '';
+  groups.forEach(g => {
+    html += `<div class="os-group">${g.label}</div>`;
+    screens.filter(s => s.cat === g.key).forEach(s => {
+      html += `<button class="os-item" data-zisid="${s.id}" onclick="openZoomIn('${s.id}')"><span class="os-code">${s.code}</span>${s.name}</button>`;
+    });
+  });
+  sb.innerHTML = html;
+}
+
+function buildZiDeviceBar() {
+  const bar = document.getElementById('ziDeviceBar');
+  if (bar.children.length > 0) return;
+  bar.innerHTML = devices.map(d =>
+    `<button class="device-tab ${d.id===currentDevice.id?'active':''}" data-zidev="${d.id}" onclick="switchZiDevice('${d.id}')">${d.name}<span class="dt-size">${d.w}×${d.h}</span></button>`
+  ).join('');
+}
+
+function switchZiDevice(deviceId) {
+  const d = devices.find(x => x.id === deviceId);
+  if (!d) return;
+  currentDevice = d;
+  document.querySelectorAll('[data-zidev]').forEach(t => t.classList.toggle('active', t.dataset.zidev === deviceId));
+  // Re-zoom to card with new device aspect ratio
+  if (ziScreen) zoomToCard(ziScreen.id);
+}
+
+function openZoomIn(screenId) {
+  const s = screens.find(x => x.id === screenId);
+  if (!s) return;
+  ziScreen = s;
+  ziActive = true;
+
+  // Build panels
+  buildZiSidebar();
+  buildZiDeviceBar();
+
+  // Show panels
+  document.getElementById('ziSidebar').classList.add('show');
+  document.getElementById('ziDesc').classList.add('show');
+  document.getElementById('ziDeviceBar').classList.add('show');
+  document.getElementById('ziClose').classList.add('show');
+
+  // Update sidebar active
+  document.querySelectorAll('[data-zisid]').forEach(b => b.classList.toggle('active', b.dataset.zisid === screenId));
+  const activeBtn = document.querySelector('[data-zisid].active');
+  if (activeBtn) activeBtn.scrollIntoView({ block:'nearest', behavior:'smooth' });
+
+  // Highlight card
+  document.querySelectorAll('.scard').forEach(c => c.classList.toggle('highlight', c.id === 'scard-' + screenId));
+
+  // Zoom canvas to card
+  zoomToCard(screenId);
+
+  // Fill description
+  fillZiDesc(screenId);
+
+  // Adjust viewport padding for panels
+  document.getElementById('viewport').style.marginLeft = '240px';
+  document.getElementById('viewport').style.marginRight = '360px';
+  document.getElementById('viewport').style.marginTop = '40px';
+}
+
+function zoomToCard(screenId) {
+  const pos = positions[screenId];
+  if (!pos) return;
+  const vp = document.getElementById('viewport');
+  const vpW = vp.clientWidth;
+  const vpH = vp.clientHeight;
+
+  // Target: card centered, zoomed to ~0.8
+  const targetScale = 0.7;
+  const cardCenterX = pos.x + CW / 2;
+  const cardCenterY = pos.y + CH / 2;
+
+  scale = targetScale;
+  panX = vpW / 2 - cardCenterX * scale;
+  panY = vpH / 2 - cardCenterY * scale;
+
+  // Smooth transition
+  canvas.style.transition = 'transform 0.4s ease';
+  updateTransform();
+  setTimeout(() => { canvas.style.transition = ''; }, 400);
+}
+
+function fillZiDesc(screenId) {
+  const descEl = document.getElementById('ziDesc');
+  const s = screens.find(x => x.id === screenId);
+  let html = '';
+
+  const d = descriptions[screenId];
+  if (d) {
+    html += `<div class="desc-title">${d.title}</div>`;
+    d.items.forEach(([label, text]) => {
+      html += `<div class="desc-item"><div class="desc-label">${label}</div><div class="desc-text">${text}</div></div>`;
+    });
+  } else if (s) {
+    html += `<div class="desc-title">${s.code} ${s.name}</div>`;
+  }
+
+  // Connected screens
+  const outgoing = connections.filter(c => c[0] === screenId).map(c => c[1]);
+  const incoming = connections.filter(c => c[1] === screenId).map(c => c[0]);
+  if (outgoing.length > 0) {
+    html += '<div class="nav-section"><div class="nav-title">이동할 수 있는 화면</div>';
+    outgoing.forEach(tid => {
+      const ts = screens.find(x => x.id === tid);
+      if (ts) html += `<a class="nav-link" onclick="openZoomIn('${tid}')">${ts.code} ${ts.name}</a>`;
+    });
+    html += '</div>';
+  }
+  if (incoming.length > 0) {
+    html += '<div class="nav-section"><div class="nav-title">이 화면으로 오는 화면</div>';
+    incoming.forEach(tid => {
+      const ts = screens.find(x => x.id === tid);
+      if (ts) html += `<a class="nav-link" onclick="openZoomIn('${tid}')">${ts.code} ${ts.name}</a>`;
+    });
+    html += '</div>';
+  }
+
+  // Double click hint
+  html += `<div style="margin-top:24px;padding:12px;background:#1a1a1a;border-radius:8px;border:1px solid #222;text-align:center;">
+    <div style="font-size:11px;color:#888;">카드를 <strong style="color:#4ECDC4;">더블클릭</strong>하면 전체화면 프리뷰</div>
+  </div>`;
+
+  descEl.innerHTML = html;
+  descEl.scrollTop = 0;
+}
+
+function closeZoomIn() {
+  ziActive = false;
+  ziScreen = null;
+
+  document.getElementById('ziSidebar').classList.remove('show');
+  document.getElementById('ziDesc').classList.remove('show');
+  document.getElementById('ziDeviceBar').classList.remove('show');
+  document.getElementById('ziClose').classList.remove('show');
+
+  document.querySelectorAll('.scard').forEach(c => c.classList.remove('highlight'));
+
+  // Reset viewport margins
+  document.getElementById('viewport').style.marginLeft = '';
+  document.getElementById('viewport').style.marginRight = '';
+  document.getElementById('viewport').style.marginTop = '';
+
+  // Zoom back to fit
+  zoomFit();
+}
+
+// Close zoom-in when clicking empty canvas area
+document.getElementById('viewport').addEventListener('click', (e) => {
+  if (ziActive && !e.target.closest('.scard')) {
+    closeZoomIn();
   }
 });
 
