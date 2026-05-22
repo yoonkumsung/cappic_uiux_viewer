@@ -1,0 +1,1218 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CAPP!C 화면 개요 — Flow Map</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#0a0a0a;color:#fff;overflow:hidden;height:100vh;user-select:none;}
+
+/* Toolbar */
+.toolbar{display:flex;align-items:center;gap:12px;padding:8px 20px;background:#111;border-bottom:1px solid #222;z-index:200;position:relative;height:44px;}
+.toolbar-logo{font-weight:800;font-size:16px;color:#4ECDC4;}
+.toolbar-sep{width:1px;height:18px;background:#333;}
+.toolbar-label{font-size:12px;color:#666;}
+.zoom-controls{display:flex;align-items:center;gap:4px;}
+.zoom-btn{background:#1a1a1a;border:1px solid #333;color:#aaa;width:28px;height:28px;border-radius:6px;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;}
+.zoom-btn:hover{border-color:#4ECDC4;color:#fff;}
+.zoom-val{font-size:11px;color:#888;width:36px;text-align:center;}
+.search-box{margin-left:auto;background:#1a1a1a;border:1px solid #333;color:#fff;padding:5px 12px;border-radius:6px;font-size:12px;width:200px;outline:none;}
+.search-box:focus{border-color:#4ECDC4;}
+.search-box::placeholder{color:#555;}
+.legend{display:flex;gap:8px;align-items:center;}
+.legend-dot{width:8px;height:8px;border-radius:2px;display:inline-block;}
+.legend-text{font-size:10px;color:#888;}
+
+/* Canvas viewport */
+.viewport{width:100%;height:calc(100vh - 44px);overflow:hidden;position:relative;cursor:grab;}
+.viewport.grabbing{cursor:grabbing;}
+.canvas{position:absolute;transform-origin:0 0;will-change:transform;}
+
+/* Category label on canvas */
+.cat-label{position:absolute;font-size:14px;font-weight:800;letter-spacing:1px;color:#fff;opacity:.3;text-transform:uppercase;pointer-events:none;white-space:nowrap;}
+
+/* Screen card on canvas */
+.scard{position:absolute;width:140px;cursor:pointer;transition:box-shadow .2s;}
+.scard:hover{z-index:10;}
+.scard:hover .scard-phone{border-color:#4ECDC4;box-shadow:0 4px 20px rgba(78,205,196,.25);}
+.scard.highlight .scard-phone{border-color:#FFE66D;box-shadow:0 0 20px rgba(255,230,109,.4);}
+.scard-phone{width:140px;height:248px;border-radius:16px;border:2px solid #2a2a2a;background:#111;overflow:hidden;position:relative;transition:border-color .2s,box-shadow .2s;}
+.scard-phone-inner{width:375px;height:812px;transform:scale(0.3733);transform-origin:top left;pointer-events:none;position:absolute;top:0;left:0;}
+.scard-badge{position:absolute;top:6px;right:6px;font-size:8px;padding:1px 5px;border-radius:3px;font-weight:700;z-index:2;}
+.scard-code{margin-top:6px;font-size:9px;font-weight:700;color:#4ECDC4;text-align:center;letter-spacing:.3px;}
+.scard-name{font-size:11px;font-weight:600;color:#ccc;text-align:center;line-height:1.3;margin-top:1px;}
+
+/* Category colors */
+.cat-adm{background:#FF6B6B;color:#fff;} .adm-border{border-color:#FF6B6B !important;}
+.cat-comm{background:#FFE66D;color:#333;} .comm-border{border-color:#FFE66D !important;}
+.cat-con{background:#4ECDC4;color:#fff;} .con-border{border-color:#4ECDC4 !important;}
+.cat-web{background:#A78BFA;color:#fff;} .web-border{border-color:#A78BFA !important;}
+
+/* Arrows SVG */
+.arrows-svg{position:absolute;top:0;left:0;pointer-events:none;overflow:visible;}
+
+/* ============ DETAIL OVERLAY ============ */
+.overlay{position:fixed;inset:0;background:#0a0a0a;z-index:300;display:none;flex-direction:column;}
+.overlay.show{display:flex;}
+.overlay-header{display:flex;align-items:center;gap:12px;padding:10px 20px;background:#111;border-bottom:1px solid #222;flex-shrink:0;}
+.overlay-back{background:none;border:1px solid #333;color:#ccc;padding:5px 14px;border-radius:6px;cursor:pointer;font-size:12px;display:flex;align-items:center;gap:6px;}
+.overlay-back:hover{border-color:#4ECDC4;color:#fff;}
+.overlay-title{font-size:15px;font-weight:700;flex:1;}
+.overlay-nav{display:flex;gap:4px;}
+.overlay-nav button{background:#1a1a1a;border:1px solid #333;color:#aaa;width:30px;height:30px;border-radius:6px;cursor:pointer;font-size:13px;}
+.overlay-nav button:hover{border-color:#4ECDC4;color:#fff;}
+.extract-btns{display:flex;gap:4px;}
+.extract-btns button{background:#1a1a1a;border:1px solid #333;color:#aaa;padding:5px 12px;border-radius:6px;cursor:pointer;font-size:11px;font-weight:600;}
+.extract-btns button:hover{border-color:#4ECDC4;color:#4ECDC4;}
+.overlay-body{flex:1;display:flex;overflow:hidden;}
+
+/* Left sidebar in overlay */
+.overlay-sidebar{width:260px;background:#111;border-right:1px solid #222;overflow-y:auto;padding:12px 0;flex-shrink:0;}
+.overlay-sidebar::-webkit-scrollbar{width:4px;}
+.overlay-sidebar::-webkit-scrollbar-thumb{background:#333;border-radius:2px;}
+.overlay-sidebar .os-group{color:#666;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;padding:14px 16px 6px;}
+.overlay-sidebar .os-item{display:flex;align-items:center;gap:8px;padding:7px 16px;color:#999;font-size:12px;cursor:pointer;transition:background .15s;border:none;background:none;width:100%;text-align:left;}
+.overlay-sidebar .os-item:hover{background:rgba(255,255,255,.05);color:#ccc;}
+.overlay-sidebar .os-item.active{background:#4ECDC4;color:#fff;font-weight:600;}
+.overlay-sidebar .os-item .os-code{font-size:9px;opacity:.6;min-width:50px;font-weight:600;}
+
+.overlay-phone-area{flex:1;background:#0d0d0d;overflow:hidden;min-width:0;min-height:0;display:flex;}
+
+/* Device tabs - in header */
+.device-tabs{display:flex;gap:4px;flex-wrap:wrap;align-items:center;}
+.device-tab{padding:4px 12px;border:1px solid #333;background:none;color:#888;border-radius:6px;cursor:pointer;font-size:11px;transition:all .15s;white-space:nowrap;}
+.device-tab:hover{border-color:#555;color:#ccc;}
+.device-tab.active{border-color:#4ECDC4;color:#4ECDC4;background:rgba(78,205,196,.08);}
+.device-tab .dt-size{font-size:9px;color:#555;margin-left:4px;}
+.device-tab.active .dt-size{color:rgba(78,205,196,.5);}
+
+/* Phone frame */
+.overlay-phone-wrap{flex:1;min-width:0;min-height:0;overflow:hidden;position:relative;}
+.overlay-phone{position:absolute;overflow:hidden;background:#000;box-shadow:0 12px 48px rgba(0,0,0,.6);box-sizing:content-box;}
+.overlay-phone iframe{border:none;display:block;transform-origin:top left;}
+.overlay-desc{width:380px;min-width:380px;background:#111;border-left:1px solid #222;overflow-y:auto;padding:24px;flex-shrink:0;}
+.overlay-desc::-webkit-scrollbar{width:4px;}
+.overlay-desc::-webkit-scrollbar-thumb{background:#333;border-radius:2px;}
+.desc-title{font-size:15px;font-weight:800;color:#fff;margin-bottom:16px;padding-bottom:10px;border-bottom:1px solid #222;}
+.desc-item{padding:10px 12px;margin-bottom:6px;background:#1a1a1a;border-radius:8px;}
+.desc-label{font-size:10px;font-weight:700;color:#4ECDC4;margin-bottom:3px;text-transform:uppercase;letter-spacing:.3px;}
+.desc-text{font-size:13px;color:#ddd;line-height:1.5;}
+.nav-section{margin-top:24px;padding-top:16px;border-top:1px solid #222;}
+.nav-title{font-size:11px;font-weight:700;color:#666;margin-bottom:10px;text-transform:uppercase;letter-spacing:.5px;}
+.nav-link{display:inline-block;padding:4px 10px;margin:3px;background:#1a1a1a;border:1px solid #333;border-radius:6px;font-size:11px;color:#4ECDC4;cursor:pointer;transition:all .2s;}
+.nav-link:hover{background:#0d2a28;border-color:#4ECDC4;}
+
+/* Code modal */
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:400;justify-content:center;align-items:center;backdrop-filter:blur(4px);}
+.modal-bg.show{display:flex;}
+.modal{background:#1a1a1a;border:1px solid #333;border-radius:16px;width:90%;max-width:900px;max-height:85vh;display:flex;flex-direction:column;}
+.modal-head{padding:14px 20px;border-bottom:1px solid #222;display:flex;align-items:center;}
+.modal-head h3{flex:1;font-size:14px;}
+.modal-head button{padding:5px 12px;border-radius:6px;border:1px solid #333;background:#222;color:#ccc;cursor:pointer;font-size:11px;margin-left:6px;}
+.modal-head button:hover{border-color:#4ECDC4;color:#4ECDC4;}
+.modal-body{flex:1;overflow:auto;}
+.modal-body pre{margin:0;padding:16px;font-size:11px;line-height:1.6;color:#ccc;white-space:pre-wrap;word-break:break-all;font-family:'Consolas','Monaco',monospace;}
+
+/* Toast */
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(20px);background:#4ECDC4;color:#000;padding:8px 20px;border-radius:8px;font-size:12px;font-weight:600;z-index:500;opacity:0;transition:all .3s;pointer-events:none;}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+/* Minimap */
+.minimap{position:fixed;bottom:16px;right:16px;width:180px;height:120px;background:#161616;border:1px solid #333;border-radius:8px;z-index:100;overflow:hidden;opacity:.7;transition:opacity .2s;}
+.minimap:hover{opacity:1;}
+.minimap-viewport{position:absolute;border:1px solid #4ECDC4;background:rgba(78,205,196,.08);pointer-events:none;}
+.minimap-dot{position:absolute;border-radius:1px;}
+</style>
+</head>
+<body>
+
+<div class="toolbar">
+  <span class="toolbar-logo">CAPP!C</span>
+  <span class="toolbar-sep"></span>
+  <span class="toolbar-label">화면 흐름도</span>
+  <span class="toolbar-sep"></span>
+  <div class="zoom-controls">
+    <button class="zoom-btn" onclick="zoomBy(-0.1)">−</button>
+    <span class="zoom-val" id="zoomVal">50%</span>
+    <button class="zoom-btn" onclick="zoomBy(0.1)">+</button>
+    <button class="zoom-btn" onclick="zoomFit()" title="전체 보기" style="font-size:10px;width:auto;padding:0 8px;">FIT</button>
+  </div>
+  <span class="toolbar-sep"></span>
+  <div class="legend">
+    <span class="legend-dot" style="background:#FF6B6B"></span><span class="legend-text">관리자</span>
+    <span class="legend-dot" style="background:#FFE66D"></span><span class="legend-text">공통</span>
+    <span class="legend-dot" style="background:#4ECDC4"></span><span class="legend-text">소비자</span>
+    <span class="legend-dot" style="background:#A78BFA"></span><span class="legend-text">웹</span>
+  </div>
+  <a href="tokens.html" style="color:#4ECDC4;text-decoration:none;font-size:11px;border:1px solid #333;padding:4px 12px;border-radius:6px;white-space:nowrap;">디자인 토큰</a>
+  <input class="search-box" placeholder="화면 검색..." id="searchInput">
+</div>
+
+<div class="viewport" id="viewport">
+  <div class="canvas" id="canvas">
+    <svg class="arrows-svg" id="arrowsSvg"></svg>
+  </div>
+</div>
+
+<div class="minimap" id="minimap"></div>
+
+<!-- Detail overlay -->
+<div class="overlay" id="overlay">
+  <div class="overlay-header">
+    <button class="overlay-back" onclick="closeOverlay()">&#9664; 돌아가기</button>
+    <span class="overlay-title" id="overlayTitle"></span>
+    <div class="device-tabs" id="deviceTabs"></div>
+    <div class="overlay-nav">
+      <button onclick="prevScreen()" title="이전 (←)">&#9664;</button>
+      <button onclick="nextScreen()" title="다음 (→)">&#9654;</button>
+    </div>
+    <div class="extract-btns">
+      <button onclick="extractPNG()">PNG 추출</button>
+      <button onclick="extractHTML()">HTML 코드</button>
+    </div>
+  </div>
+  <div class="overlay-body">
+    <div class="overlay-sidebar" id="overlaySidebar"></div>
+    <div class="overlay-phone-area">
+      <div class="overlay-phone-wrap" id="overlayPhoneWrap">
+        <div class="overlay-phone" id="overlayPhone">
+          <iframe id="overlayIframe"></iframe>
+        </div>
+      </div>
+    </div>
+    <div class="overlay-desc" id="overlayDesc"></div>
+  </div>
+</div>
+
+<div class="modal-bg" id="codeModal">
+  <div class="modal">
+    <div class="modal-head">
+      <h3 id="codeModalTitle">HTML 코드</h3>
+      <button onclick="downloadCode()">다운로드</button>
+      <button onclick="copyCode()">복사</button>
+      <button onclick="closeCode()">닫기</button>
+    </div>
+    <div class="modal-body"><pre id="codeContent"></pre></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ========== DATA ==========
+const screens = [
+  {id:'adm-login',code:'ADM-01',name:'로그인',cat:'adm'},
+  {id:'adm-01',code:'ADM-02',name:'홈',cat:'adm'},
+  {id:'adm-01-empty',code:'ADM-02e',name:'홈 (빈 상태)',cat:'adm'},
+  {id:'adm-04',code:'ADM-03',name:'캡픽 찾기',cat:'adm'},
+  {id:'adm-02',code:'ADM-04',name:'촬영 관리',cat:'adm'},
+  {id:'adm-03',code:'ADM-04a',name:'촬영 미리보기',cat:'adm',landscape:true},
+  {id:'adm-05',code:'ADM-05',name:'녹화 저장 중',cat:'adm'},
+  {id:'adm-06',code:'ADM-06',name:'녹화 저장 완료',cat:'adm'},
+  {id:'adm-07',code:'ADM-07',name:'아카이브',cat:'adm'},
+  {id:'adm-07-empty',code:'ADM-07e',name:'아카이브 (빈 상태)',cat:'adm'},
+  {id:'adm-08',code:'ADM-08',name:'영상 상세',cat:'adm'},
+  {id:'adm-08p',code:'ADM-08a',name:'선수 상세',cat:'adm'},
+  {id:'adm-10l',code:'ADM-08b',name:'영상 플레이어',cat:'adm',landscape:true},
+  {id:'adm-15',code:'ADM-09',name:'일정',cat:'adm'},
+  {id:'adm-15-empty',code:'ADM-09e',name:'일정 (빈 상태)',cat:'adm'},
+  {id:'adm-15a',code:'ADM-09a',name:'일정 추가',cat:'adm'},
+  {id:'adm-settings',code:'ADM-10',name:'설정',cat:'adm'},
+  {id:'adm-users',code:'ADM-10a',name:'운영자 관리',cat:'adm'},
+  {id:'adm-users-add',code:'ADM-10b',name:'운영자 추가',cat:'adm'},
+  {id:'adm-16',code:'ADM-10c',name:'네트워크 상태',cat:'adm'},
+  {id:'editor-1',code:'COMM-01',name:'편집: 구간 선택',cat:'comm'},
+  {id:'editor',code:'COMM-02',name:'편집: 상세 조정',cat:'comm'},
+  {id:'editor-loading',code:'COMM-03',name:'편집: 만들기 중',cat:'comm'},
+  {id:'editor-3',code:'COMM-04',name:'편집: 영상 완성',cat:'comm'},
+  {id:'adm-09',code:'COMM-05',name:'하이라이트: 영상 선택',cat:'comm'},
+  {id:'adm-10',code:'COMM-06',name:'하이라이트: 선수 선택',cat:'comm'},
+  {id:'adm-11',code:'COMM-07',name:'하이라이트: 설정',cat:'comm'},
+  {id:'adm-13',code:'COMM-08',name:'하이라이트: 만들기 중',cat:'comm'},
+  {id:'adm-14',code:'COMM-09',name:'하이라이트: 완성',cat:'comm'},
+  {id:'comm-upload-vid',code:'COMM-10',name:'영상 올리기',cat:'comm'},
+  {id:'comm-upload-loading',code:'COMM-10a',name:'올리기 진행 중',cat:'comm'},
+  {id:'comm-upload-done',code:'COMM-10b',name:'올리기 완료',cat:'comm'},
+  {id:'comm-merge',code:'COMM-11',name:'영상 합치기',cat:'comm'},
+  {id:'comm-merge-loading',code:'COMM-11a',name:'합치기 진행 중',cat:'comm'},
+  {id:'comm-merge-done',code:'COMM-11b',name:'합치기 완료',cat:'comm'},
+  {id:'con-02',code:'CON-01',name:'로그인 / 회원가입',cat:'con'},
+  {id:'con-01',code:'CON-02',name:'온보딩',cat:'con'},
+  {id:'con-03',code:'CON-03',name:'프로필 설정',cat:'con'},
+  {id:'con-ob1',code:'CON-04',name:'캡픽 설정: WiFi',cat:'con'},
+  {id:'con-ob2',code:'CON-04a',name:'캡픽 설정: 찾기',cat:'con'},
+  {id:'con-ob-register',code:'CON-04b',name:'캡픽 설정: 등록',cat:'con'},
+  {id:'con-ob3',code:'CON-04c',name:'캡픽 설정: 설치',cat:'con'},
+  {id:'con-ob-test',code:'CON-04d',name:'캡픽 설정: 테스트',cat:'con'},
+  {id:'con-ob4',code:'CON-04e',name:'캡픽 설정: 완료',cat:'con'},
+  {id:'con-04',code:'CON-05',name:'홈',cat:'con'},
+  {id:'con-04-empty',code:'CON-05e',name:'홈 (빈 상태)',cat:'con'},
+  {id:'con-05',code:'CON-06',name:'구장 추가하기',cat:'con'},
+  {id:'con-06',code:'CON-07',name:'경기 목록',cat:'con'},
+  {id:'con-06-empty',code:'CON-07e',name:'경기 목록 (빈 상태)',cat:'con'},
+  {id:'con-07',code:'CON-08',name:'영상 상세 (학부모)',cat:'con'},
+  {id:'con-07b',code:'CON-08a',name:'영상 상세 (일반)',cat:'con'},
+  {id:'con-player',code:'CON-09',name:'선수 상세',cat:'con'},
+  {id:'con-10l',code:'CON-10',name:'영상 플레이어',cat:'con',landscape:true},
+  {id:'con-feed',code:'CON-11',name:'피드 (쇼츠)',cat:'con'},
+  {id:'con-publish',code:'CON-22',name:'새 게시물',cat:'con'},
+  {id:'con-archive',code:'CON-12',name:'내 아카이브',cat:'con'},
+  {id:'con-archive-empty',code:'CON-12e',name:'내 아카이브 (빈 상태)',cat:'con'},
+  {id:'con-09',code:'CON-13',name:'알림',cat:'con'},
+  {id:'con-my',code:'CON-14',name:'마이페이지',cat:'con'},
+  {id:'con-settings',code:'CON-15',name:'설정',cat:'con'},
+  {id:'con-18',code:'CON-16',name:'캡픽 관리',cat:'con'},
+  {id:'con-18-empty',code:'CON-16e',name:'캡픽 관리 (빈 상태)',cat:'con'},
+  {id:'con-18-register',code:'CON-16a',name:'캡픽 등록하기',cat:'con'},
+  {id:'con-08',code:'CON-17',name:'실시간 중계',cat:'con'},
+  {id:'con-upload',code:'CON-18',name:'촬영 설정',cat:'con'},
+  {id:'con-explore',code:'CON-19',name:'탐색',cat:'con'},
+  {id:'con-profile-other',code:'CON-20',name:'다른 사용자 프로필',cat:'con'},
+  {id:'con-followers',code:'CON-21',name:'팔로워/팔로잉',cat:'con'},
+  {id:'con-pw-reset',code:'CON-23',name:'비밀번호 찾기',cat:'con'},
+  {id:'con-signup',code:'CON-24',name:'회원가입',cat:'con'},
+  {id:'con-profile-edit',code:'CON-25',name:'프로필 수정',cat:'con'},
+  {id:'con-pw-change',code:'CON-26',name:'비밀번호 변경',cat:'con'},
+  {id:'con-subscribe',code:'CON-27',name:'구독 관리',cat:'con'},
+  {id:'con-venue-manage',code:'CON-28',name:'구장 관리',cat:'con'},
+  {id:'con-terms',code:'CON-29',name:'이용약관',cat:'con'},
+  {id:'con-privacy',code:'CON-30',name:'개인정보처리방침',cat:'con'},
+  {id:'con-badges',code:'CON-31',name:'활동 배지',cat:'con'},
+  {id:'con-purchase',code:'CON-32',name:'캡픽 구매',cat:'con'},
+  {id:'web-01',code:'WEB-01',name:'구장 경기 페이지',cat:'web'},
+  {id:'web-02',code:'WEB-02',name:'1분 하이라이트 (학부모)',cat:'web'},
+  {id:'web-02a',code:'WEB-02a',name:'1분 하이라이트 (일반)',cat:'web'},
+];
+
+// Navigation connections [from, to]
+const connections = [
+  ['adm-login','adm-01'],
+  ['adm-01','adm-04'],['adm-01','adm-02'],['adm-01','adm-07'],['adm-01','adm-15'],['adm-01','adm-settings'],
+  ['adm-01-empty','adm-04'],
+  ['adm-02','adm-03'],['adm-02','adm-05'],
+  ['adm-05','adm-06'],
+  ['adm-06','adm-07'],['adm-06','adm-01'],
+  ['adm-07','adm-08'],['adm-07','comm-upload-vid'],['adm-07','comm-merge'],
+  ['adm-08','adm-08p'],['adm-08','adm-10l'],
+  ['adm-15','adm-15a'],
+  ['adm-settings','adm-users'],['adm-settings','adm-16'],['adm-settings','adm-09'],['adm-settings','editor-1'],
+  ['adm-users','adm-users-add'],
+  ['editor-1','editor'],['editor','editor-loading'],['editor-loading','editor-3'],
+  ['editor-3','con-publish'],
+  ['adm-09','adm-10'],['adm-10','adm-11'],['adm-11','adm-13'],['adm-13','adm-14'],
+  ['adm-14','con-publish'],
+  ['comm-upload-vid','comm-upload-loading'],['comm-upload-loading','comm-upload-done'],
+  ['comm-upload-done','con-publish'],
+  ['comm-merge','comm-merge-loading'],['comm-merge-loading','comm-merge-done'],
+  ['comm-merge-done','con-publish'],
+  ['con-02','con-01'],['con-02','con-pw-reset'],['con-02','con-signup'],
+  ['con-signup','con-01'],
+  ['con-01','con-03'],
+  ['con-03','con-04'],
+  ['con-04','con-05'],['con-04','con-06'],['con-04','con-18'],['con-04','con-09'],
+  ['con-04','con-explore'],['con-04','con-feed'],['con-04','con-archive'],['con-04','con-my'],
+  ['con-04-empty','con-05'],['con-04-empty','con-purchase'],
+  ['con-05','con-04'],
+  ['con-06','con-07'],['con-06','con-07b'],
+  ['con-07','con-10l'],['con-07','con-player'],
+  ['con-07b','con-10l'],['con-07b','con-player'],
+  ['con-player','con-10l'],
+  ['con-feed','con-profile-other'],
+  ['con-profile-other','con-followers'],
+  ['con-archive','editor-1'],['con-archive','adm-09'],['con-archive','comm-upload-vid'],['con-archive','comm-merge'],
+  ['con-my','con-settings'],['con-my','con-followers'],['con-my','con-badges'],['con-my','con-feed'],
+  ['con-settings','con-profile-edit'],['con-settings','con-pw-change'],['con-settings','con-subscribe'],
+  ['con-settings','con-venue-manage'],['con-settings','con-terms'],['con-settings','con-privacy'],
+  ['con-18','con-08'],['con-18','con-upload'],
+  ['con-18-empty','con-18-register'],
+  ['con-18-register','con-ob1'],
+  ['con-ob1','con-ob2'],['con-ob2','con-ob-register'],['con-ob-register','con-ob3'],
+  ['con-ob3','con-ob-test'],['con-ob-test','con-ob4'],['con-ob4','con-04'],
+  ['con-venue-manage','con-05'],
+  ['web-01','web-02'],['web-01','web-02a'],
+];
+
+// ========== DESCRIPTIONS (from index.html) ==========
+const descriptions = {
+  'adm-login': { title: 'ADM-01 로그인 안내', items: [
+    ['페이지 설명', '관리자 전용 로그인 화면이에요. 운영자 계정으로만 접근할 수 있어요'],
+    ['CAPP!C ADMIN', '상단에 로고와 "관리자 계정으로 로그인해주세요" 안내 문구가 표시돼요'],
+    ['이메일 입력', '관리자 이메일을 입력하는 칸이에요'],
+    ['비밀번호 입력', '비밀번호를 입력하는 칸이에요'],
+    ['로그인 버튼', '탭하면 입력한 정보로 로그인해요. 성공하면 ADM-02 홈으로 이동해요'],
+    ['비밀번호 찾기', '비밀번호를 잊었을 때 탭하면 재설정 안내를 받을 수 있어요'],
+    ['문의하기 버튼', '탭하면 전화번호(052-1234-5678)와 이메일(support@cappic.co)이 펼쳐져요'],
+    ['전화/이메일 복사', '전화번호나 이메일을 탭하면 클립보드에 복사돼요'],
+  ]},
+  'adm-01': { title: 'ADM-02 홈 안내', items: [
+    ['페이지 설명', '관리자 앱의 메인 화면이에요. 연결된 모든 캡픽 상태를 한눈에 볼 수 있어요'],
+    ['구장 이름', '좌측 상단에 현재 시설 이름(캡틴FC 용인점)이 표시돼요'],
+    ['알림 아이콘', '우측 상단 종 모양 아이콘이에요. 새 알림이 있으면 빨간 점이 표시돼요'],
+    ['WiFi 상태 배너', '상단 초록 배너에 연결된 WiFi 이름과 IP 주소가 표시돼요'],
+    ['마지막 업데이트', '정보를 마지막으로 불러온 시간이 표시돼요'],
+    ['캡픽 카드', '각 캡픽의 이름, IP, 연결 상태, 녹화 상태(REC/대기/경고/꺼짐)를 보여줘요. 카드를 탭하면 ADM-04 촬영 관리로 이동해요'],
+    ['경고 메시지', '문제가 있는 캡픽는 카드 하단에 빨간색 경고 문구가 표시돼요'],
+    ['업데이트 하기', '캡픽 목록을 새로 불러와요'],
+    ['하단 네비게이션', '홈(활성) / 아카이브(ADM-07 아카이브) / 일정(ADM-09 일정) / 설정(ADM-10 설정) 4개 탭'],
+  ]},
+  'adm-01-empty': { title: 'ADM-02e 홈 (빈 상태) 안내', items: [
+    ['페이지 설명', '연결된 캡픽가 없을 때 보이는 홈 화면이에요'],
+    ['WiFi 상태 배너', '상단에 WiFi 연결 상태가 표시돼요'],
+    ['빈 상태 안내', '"연결된 캡픽이 없어요"와 "캡픽을 찾아볼까요?" 메시지가 나와요'],
+    ['디바이스 찾기 버튼', '탭하면 주변 캡픽을 검색하는 화면(ADM-03 캡픽 찾기)으로 이동해요'],
+    ['하단 네비게이션', '홈(활성) / 아카이브 / 일정 / 설정 4개 탭이에요'],
+  ]},
+  'adm-04': { title: 'ADM-03 캡픽 찾기 안내', items: [
+    ['페이지 설명', '주변에 있는 캡픽를 자동으로 검색하는 화면이에요'],
+    ['뒤로가기', '좌측 상단 화살표를 탭하면 ADM-02 홈으로 돌아가요'],
+    ['검색 애니메이션', '중앙에 캡픽 캐릭터와 함께 펄스 애니메이션이 표시돼요'],
+    ['발견된 캡픽', '검색된 캡픽이 카드로 나열돼요. "연결하기" 배지를 탭하면 연결돼요'],
+    ['이미 연결됨', '이미 연결된 캡픽은 "이미 연결됨" 배지로 표시돼요'],
+    ['완료 버튼', '탭하면 ADM-02 홈으로 돌아가요'],
+  ]},
+  'adm-02': { title: 'ADM-04 촬영 관리 안내', items: [
+    ['페이지 설명', '선택한 캡픽의 실시간 촬영 화면과 상세 정보를 확인하는 화면이에요'],
+    ['뒤로가기', '좌측 상단 화살표를 탭하면 ADM-02 홈으로 돌아가요'],
+    ['실시간 화면', '캡픽가 지금 찍고 있는 영상을 실시간으로 볼 수 있어요'],
+    ['녹화 상태 표시', '좌측 상단에 빨간 REC 표시와 녹화 시간이 나와요'],
+    ['전체화면 버튼', '영상 우측 하단 버튼을 탭하면 ADM-04a 촬영 미리보기로 전환돼요'],
+    ['촬영/영상 화질 칩', '촬영 화질(4K), 영상 화질(6K), 저장공간(45%) 정보가 칩으로 표시돼요'],
+    ['촬영 상태 패널', '"촬영 상태: 정상" 버튼을 탭하면 펼쳐져요'],
+    ['문제가 발생했어요', '촬영 상태를 고객센터에 전송하는 팝업이 나와요'],
+    ['녹화 중지 버튼', '빨간색 버튼을 탭하면 확인 팝업 후 ADM-05 녹화 저장 중으로 이동해요'],
+    ['하단 네비게이션', '홈 / 아카이브 / 일정 / 설정 4개 탭'],
+  ]},
+  'adm-03': { title: 'ADM-04a 촬영 미리보기 안내', items: [
+    ['페이지 설명', '촬영 중인 영상을 가로 전체화면으로 크게 보는 화면이에요'],
+    ['가로 모드', '폰 프레임이 가로로 회전하여 넓은 화면으로 봐요'],
+    ['상단 오버레이', 'REC 상태, 캡픽 이름, 녹화 시간이 표시돼요'],
+    ['뒤로가기', '좌측 상단 화살표를 탭하면 ADM-04 촬영 관리로 돌아가요'],
+    ['메뉴 버튼', '우측 상단 버튼을 탭하면 촬영 상태 서랍이 열려요'],
+    ['녹화 중지 버튼', '하단 빨간 버튼을 탭하면 ADM-05 녹화 저장 중으로 이동해요'],
+  ]},
+  'adm-10l': { title: 'ADM-08b 영상 플레이어 안내', items: [
+    ['페이지 설명', '관리자가 아카이브 영상을 가로 전체화면으로 재생해요'],
+    ['뒤로가기', '좌측 상단 화살표를 탭하면 ADM-08 영상 상세로 돌아가요'],
+    ['재생/일시정지', '중앙 버튼을 탭해요'],
+    ['-10s / +10s', '좌우 버튼으로 10초씩 이동해요'],
+    ['진행 바', '드래그로 원하는 위치로 이동해요'],
+    ['설정', '재생 속도(0.5x~2x)와 화질(480p~4K) 선택 가능해요'],
+  ]},
+  'adm-05': { title: 'ADM-05 저장 중 안내', items: [
+    ['페이지 설명', '녹화 중지 후 영상을 저장하는 중이에요'],
+    ['회전 애니메이션', '돌아가는 동그라미가 저장 진행 중임을 알려줘요'],
+    ['자동 전환', '완료 시 ADM-06 녹화 저장 완료로 자동 이동해요'],
+  ]},
+  'adm-06': { title: 'ADM-06 저장 완료 안내', items: [
+    ['페이지 설명', '영상 저장이 완료된 화면이에요. 2단계 전환 애니메이션이 있어요'],
+    ['1단계 (체크)', '"영상이 저장되었어요!" 메시지가 1.5초간 표시돼요'],
+    ['2단계 (미리보기)', '"Its Your Highlights!" 타이틀과 16:9 미리보기가 나타나요'],
+    ['공유/다운로드', '영상 공유, 내려받기 가능해요'],
+    ['아카이브', '탭하면 ADM-07 아카이브로 이동해요'],
+    ['홈으로', '탭하면 ADM-02 홈으로 돌아가요'],
+  ]},
+  'adm-07': { title: 'ADM-07 아카이브 안내', items: [
+    ['페이지 설명', '녹화된 모든 영상을 모아서 보는 화면이에요'],
+    ['탭: 전체 영상', '모든 녹화 영상을 시간순으로 보여줘요'],
+    ['탭: 찜한 영상', '저장하기를 누른 영상만 모아서 보여줘요'],
+    ['영상 카드', '일정 이름, 날짜, 구장, 시간, 썸네일이 카드로 표시돼요'],
+    ['공유하기', '탭하면 링크가 복사되고 토스트 알림이 나와요'],
+    ['전체보기', '탭하면 ADM-08 영상 상세로 이동해요'],
+    ['영상 올리기', '탭하면 COMM-10 영상 올리기로 이동해요'],
+    ['영상 합치기', '탭하면 COMM-11 영상 합치기로 이동해요'],
+    ['하단 네비게이션', '홈 / 아카이브(활성) / 일정 / 설정 4개 탭'],
+  ]},
+  'adm-07-empty': { title: 'ADM-07e 아카이브 (빈 상태) 안내', items: [
+    ['페이지 설명', '녹화된 영상이 없을 때 보이는 화면이에요'],
+    ['빈 상태 안내', '"아직 녹화된 영상이 없어요"가 표시돼요'],
+    ['촬영 시작하기 버튼', '탭하면 ADM-02 촬영 관리로 이동해요'],
+  ]},
+  'adm-08': { title: 'ADM-08 영상 상세 안내', items: [
+    ['페이지 설명', '경기의 모든 영상을 확인하고 관리하는 화면이에요'],
+    ['뒤로가기', '탭하면 ADM-07 아카이브로 돌아가요'],
+    ['세션 정보 태그', '날짜, 구장, 시간 태그가 표시돼요'],
+    ['1분 하이라이트', '영상 + 전체화면 + 공유/저장/다운로드 버튼이에요'],
+    ['선수별 하이라이트', '4:5 그리드에요. 탭하면 ADM-08a 선수 상세로 이동해요'],
+    ['10분/전체 경기', '각각 공유/저장/다운로드 가능해요'],
+    ['다운로드', '화질 선택 팝업(480p~4K)이 나와요'],
+    ['전체 다운로드', '모든 영상 zip 파일 내려받기 확인 팝업이에요'],
+  ]},
+  'adm-08p': { title: 'ADM-08a 선수 상세 안내', items: [
+    ['페이지 설명', '특정 선수의 하이라이트를 모아 보는 화면이에요'],
+    ['뒤로가기', '탭하면 ADM-08 영상 상세로 돌아가요'],
+    ['이름 입력', '선수 이름을 입력하고 저장하면 아카이브에 반영돼요'],
+    ['1분/10분 하이라이트', '선수의 요약 영상이에요. 공유/저장/다운로드 가능해요'],
+    ['Its Your Play', '전체 경기에서 이 선수만 따라간 영상이에요'],
+    ['Its Your Highlights', '주요 장면 쇼츠 클립 그리드에요'],
+  ]},
+  'adm-15': { title: 'ADM-09 일정 안내', items: [
+    ['페이지 설명', '월간 캘린더와 오늘의 일정을 확인해요'],
+    ['월간 캘린더', '좌우 화살표로 월 이동. 일정 있는 날에 민트색 점 표시돼요'],
+    ['오늘의 일정', '오늘 예정된 일정이 시간순으로 나열돼요'],
+    ['일정 추가하기', '탭하면 ADM-09a 일정 추가로 이동해요'],
+  ]},
+  'adm-15-empty': { title: 'ADM-09e 일정 (빈 상태) 안내', items: [
+    ['페이지 설명', '등록된 일정이 없을 때 보이는 화면이에요'],
+    ['빈 상태 안내', '"등록된 일정이 없어요"가 표시돼요'],
+    ['일정 추가하기', '탭하면 ADM-09a 일정 추가로 이동해요'],
+  ]},
+  'adm-15a': { title: 'ADM-09a 일정 추가 안내', items: [
+    ['페이지 설명', '새 일정을 등록하는 입력 화면이에요'],
+    ['뒤로가기', '탭하면 ADM-09 일정으로 돌아가요'],
+    ['일정 이름/구장/유형', '이름 입력, A/B구장 칩, 수업/대관/레슨/기타 칩 선택이에요'],
+    ['시간/반복', '시작/종료 시간, 요일별 반복 설정이에요'],
+    ['캡픽 자동 녹화', '캡픽를 선택하면 일정 시작 시 자동 녹화돼요'],
+    ['담당 운영자', '선택한 운영자에게 알림이 전송돼요'],
+    ['저장', '탭하면 ADM-09 일정으로 돌아가요'],
+  ]},
+  'adm-settings': { title: 'ADM-10 설정 안내', items: [
+    ['페이지 설명', '관리자 앱 전체 설정이에요'],
+    ['운영자 관리', '탭하면 ADM-10a 운영자 관리로 이동해요'],
+    ['네트워크 상태', '탭하면 ADM-10c 네트워크 상태로 이동해요'],
+    ['시설 정보', '시설명, 캡픽 수, 구장 수 확인이에요'],
+    ['AI 하이라이트', '탭하면 COMM-05 하이라이트: 영상 선택으로 이동해요'],
+    ['나만의 하이라이트', '탭하면 COMM-01 편집: 구간 선택으로 이동해요'],
+    ['로그아웃', '빨간 버튼을 탭하면 ADM-01 로그인으로 이동해요'],
+  ]},
+  'adm-16': { title: 'ADM-10c 네트워크 상태 안내', items: [
+    ['페이지 설명', '캡픽 연결 문제 해결을 위한 네트워크 정보에요'],
+    ['뒤로가기', '탭하면 ADM-10 설정으로 돌아가요'],
+    ['네트워크 인터페이스', 'wlan0/eth0 활성/비활성 상태와 IP 주소에요'],
+    ['클립보드에 복사', '네트워크 정보를 텍스트로 복사해요'],
+    ['문의하기', '오류 정보를 전송해서 빠르게 도움받을 수 있어요'],
+  ]},
+  'adm-users': { title: 'ADM-10a 운영자 관리 안내', items: [
+    ['페이지 설명', '운영자 계정을 관리하는 화면이에요'],
+    ['뒤로가기', '탭하면 ADM-10 설정으로 돌아가요'],
+    ['운영자 카드', '이름, 역할(admin/coach/staff), 전화/이메일이 표시돼요'],
+    ['운영자 추가하기', '탭하면 ADM-10b 운영자 추가로 이동해요'],
+  ]},
+  'adm-users-add': { title: 'ADM-10b 운영자 추가 안내', items: [
+    ['페이지 설명', '새 운영자를 초대하는 화면이에요'],
+    ['뒤로가기', '탭하면 ADM-10a 운영자 관리로 돌아가요'],
+    ['입력 폼', '이름/이메일/전화번호를 입력해요'],
+    ['역할 선택', 'admin/coach/staff 칩을 탭해요'],
+    ['초대하기', '탭하면 초대 링크 생성 팝업이 나와요'],
+  ]},
+  'editor-1': { title: 'COMM-01 편집: 구간 선택 안내', items: [
+    ['페이지 설명', '클립을 선택하는 첫 번째 단계에요'],
+    ['쇼츠 클립 그리드', '4열 그리드에요. 탭하면 체크 표시로 선택돼요'],
+    ['경기 영상 리스트', '전체 경기 영상 목록이에요'],
+    ['선택 현황', '"4개 선택됨 / 0:41"로 표시돼요'],
+    ['다음 버튼', '탭하면 COMM-02 편집: 상세 조정으로 이동해요'],
+  ]},
+  'editor': { title: 'COMM-02 편집: 상세 조정 안내', items: [
+    ['페이지 설명', '클립 순서를 정하고 편집하는 두 번째 단계에요'],
+    ['영상 미리보기', '세로 미리보기에요. 탭하면 재생/일시정지돼요'],
+    ['클립 트레이', '가로 스크롤로 클립 순서를 확인해요. 길게 눌러 순서 변경해요'],
+    ['편집 도구', '텍스트/음악/스티커/필터/비율 5개 도구에요'],
+    ['완성! 버튼', '탭하면 COMM-03 편집: 영상 만들기 중으로 이동해요'],
+  ]},
+  'editor-loading': { title: 'COMM-03 편집: 영상 만들기 중 안내', items: [
+    ['페이지 설명', '영상을 만들고 있는 로딩 화면이에요'],
+    ['자동 전환', '약 2초 후 COMM-04 편집: 영상 완성으로 이동해요'],
+  ]},
+  'editor-3': { title: 'COMM-04 편집: 영상 완성 안내', items: [
+    ['페이지 설명', '나만의 하이라이트가 완성된 화면이에요'],
+    ['1단계 (체크)', '"영상이 완성되었어요!" 메시지가 1.5초간 표시돼요'],
+    ['2단계 (미리보기)', '"Its Your Highlights!" 타이틀과 미리보기가 나타나요'],
+    ['공유/다운로드', '링크 공유, 영상 내려받기 가능해요'],
+    ['피드 올리기', '탭하면 CON-22 새 게시물로 이동해요'],
+  ]},
+  'adm-09': { title: 'COMM-05 하이라이트: 영상 선택 안내', items: [
+    ['페이지 설명', 'AI 하이라이트용 영상 소스를 선택해요'],
+    ['아카이브에서 선택', '기존 영상에서 고를 수 있어요'],
+    ['기기에서 선택', '내 기기 영상을 올릴 수 있어요'],
+  ]},
+  'adm-10': { title: 'COMM-06 하이라이트: 선수 선택 안내', items: [
+    ['페이지 설명', 'AI가 감지한 인물 중 대상을 선택해요'],
+    ['프레임 캔버스', '감지된 인물에 색깔 테두리가 표시돼요'],
+    ['감지된 인물 그리드', '동그라미를 탭해서 선택/해제해요'],
+    ['다음 버튼', '탭하면 COMM-07 하이라이트: 설정으로 이동해요'],
+  ]},
+  'adm-11': { title: 'COMM-07 하이라이트: 설정 안내', items: [
+    ['페이지 설명', 'AI 하이라이트 출력 옵션을 설정해요'],
+    ['점수/매칭 정확도', '슬라이더로 AI 정확도를 조절해요'],
+    ['FPS/비트레이트', '초당 프레임 수와 영상 품질을 입력해요'],
+    ['영상 비율', '16:9/4:3/1:1/9:16/3:4 칩을 선택해요'],
+    ['영상 만들기', '탭하면 COMM-08 하이라이트: 만들기 중으로 이동해요'],
+  ]},
+  'adm-13': { title: 'COMM-08 하이라이트: 만들기 중 안내', items: [
+    ['페이지 설명', 'AI가 하이라이트를 만들고 있어요'],
+    ['자동 전환', '약 2초 후 COMM-09 하이라이트: 완성으로 이동해요'],
+  ]},
+  'adm-14': { title: 'COMM-09 하이라이트: 완성 안내', items: [
+    ['페이지 설명', 'AI 하이라이트가 완성된 화면이에요'],
+    ['1단계 (체크)', '"AI 하이라이트가 완성되었어요!" 1.5초간 표시돼요'],
+    ['2단계 (미리보기)', '"Its Your Highlights!" + 16:9 미리보기가 나타나요'],
+    ['공유/다운로드', '영상 공유, 내려받기 가능해요'],
+    ['피드 올리기', '탭하면 CON-22 새 게시물로 이동해요'],
+  ]},
+  'comm-upload-vid': { title: 'COMM-10 영상 올리기 안내', items: [
+    ['페이지 설명', '기기의 영상 파일을 올리는 화면이에요'],
+    ['파일 선택 영역', '점선 영역을 탭해서 파일을 선택해요. MP4/MOV, 최대 2GB'],
+    ['올리기 현황', '파일명, 진행률, 용량, 속도가 표시돼요'],
+  ]},
+  'comm-upload-loading': { title: 'COMM-10a 올리기 진행 중 안내', items: [
+    ['페이지 설명', '영상을 올리고 있는 로딩 화면이에요'],
+    ['진행 바', '진행률과 속도가 표시돼요'],
+  ]},
+  'comm-upload-done': { title: 'COMM-10b 올리기 완료 안내', items: [
+    ['페이지 설명', '영상 올리기가 완료된 화면이에요'],
+    ['1단계 (체크)', '"완료되었어요!" 메시지가 1.5초간 표시돼요'],
+    ['2단계 (미리보기)', '미리보기와 공유/다운로드/피드 올리기 버튼이 나타나요'],
+  ]},
+  'comm-merge': { title: 'COMM-11 영상 합치기 안내', items: [
+    ['페이지 설명', '여러 영상을 하나로 합치는 화면이에요'],
+    ['영상 목록', '합칠 영상이 카드로 나열돼요. 드래그로 순서 변경해요'],
+    ['선택 현황', '선택한 영상 수와 총 시간이 표시돼요'],
+    ['합치기 버튼', '탭하면 COMM-11a 합치기 진행 중으로 이동해요'],
+  ]},
+  'comm-merge-loading': { title: 'COMM-11a 합치기 진행 중 안내', items: [
+    ['페이지 설명', '영상을 합치고 있는 로딩 화면이에요'],
+    ['진행 바', '진행률이 표시돼요'],
+  ]},
+  'comm-merge-done': { title: 'COMM-11b 합치기 완료 안내', items: [
+    ['페이지 설명', '영상 합치기가 완료된 화면이에요'],
+    ['1단계 (체크)', '"완료되었어요!" 메시지가 1.5초간 표시돼요'],
+    ['2단계 (미리보기)', '미리보기와 공유/다운로드/피드 올리기 버튼이 나타나요'],
+  ]},
+  'con-02': { title: 'CON-01 로그인 / 회원가입 안내', items: [
+    ['페이지 설명', '소비자 앱의 로그인 화면이에요'],
+    ['카카오/네이버/구글/애플', '소셜 로그인 버튼이에요'],
+    ['이메일 로그인', '이메일+비밀번호로 로그인해요'],
+    ['비밀번호 찾기', '비밀번호 재설정이에요'],
+    ['회원가입', '새 계정을 만들어요'],
+    ['문의하기', '전화번호와 이메일이 펼쳐져요'],
+  ]},
+  'con-01': { title: 'CON-02 온보딩 안내', items: [
+    ['페이지 설명', '소비자 앱 첫 화면이에요. 사용 모드를 선택해요'],
+    ['CAPP!C을 구매했어요', '캡픽 소유자용이에요. 탭하면 CON-03 프로필 설정으로 이동해요'],
+    ['경기 영상만 볼래요', '영상 시청 전용이에요. 탭하면 CON-03 프로필 설정으로 이동해요'],
+  ]},
+  'con-03': { title: 'CON-03 프로필 설정 안내', items: [
+    ['페이지 설명', '소비자 프로필 정보를 입력해요'],
+    ['프로필 사진', '아바타를 탭하면 사진을 변경해요'],
+    ['이름/성별', '이름 입력과 남성/여성 칩 선택이에요'],
+    ['유형 선택', '동호인/선수/학부모 칩이에요'],
+    ['등번호/포지션', 'GK/DF/MF/FW 칩으로 선택해요'],
+    ['완료', '탭하면 CON-05 홈으로 이동해요'],
+  ]},
+  'con-ob1': { title: 'CON-04 캡픽 설정: WiFi 안내', items: [['페이지 설명','WiFi 연결 방법을 안내하는 첫 번째 단계 (1/6)'],['다음','CON-04a로 이동'],['건너뛰기','CON-05 홈으로 이동']]},
+  'con-ob2': { title: 'CON-04a 캡픽 설정: 찾기 안내', items: [['페이지 설명','캡픽 찾는 법 안내 (2/6)'],['다음','CON-04b로 이동']]},
+  'con-ob-register': { title: 'CON-04b 캡픽 설정: 등록 안내', items: [['페이지 설명','캡픽을 내 계정에 등록 (3/6)'],['디바이스 카드','CAPPIC #1, #2가 등록하기 뱃지와 함께 표시돼요'],['다음','CON-04c로 이동']]},
+  'con-ob3': { title: 'CON-04c 캡픽 설정: 설치 안내', items: [['페이지 설명','캡픽 설치 방법 안내 (4/6)'],['설치 방법','벽에 붙이기, 삼각대, 기둥에 묶기 3가지'],['다음','CON-04d로 이동']]},
+  'con-ob-test': { title: 'CON-04d 캡픽 설정: 테스트 안내', items: [['페이지 설명','캡픽 연결 테스트 확인 (5/6)'],['미리보기 카드','영상 수신 미리보기와 연결 성공 상태'],['다음','CON-04e로 이동']]},
+  'con-ob4': { title: 'CON-04e 캡픽 설정: 완료 안내', items: [['페이지 설명','캡픽 초기 설정 완료 (6/6)'],['체크 마크','"준비 완료!" 메시지와 체크 애니메이션'],['시작하기','CON-05 홈으로 이동']]},
+  'con-04': { title: 'CON-05 홈 안내', items: [
+    ['페이지 설명', '소비자 앱의 메인 화면이에요'],
+    ['알림 아이콘', '우측 상단 종 아이콘. 탭하면 CON-13 알림으로 이동해요'],
+    ['내 구장', '등록된 구장 카드. 탭하면 CON-07 경기 목록으로 이동해요'],
+    ['구장 추가', '탭하면 CON-06 구장 추가하기로 이동해요'],
+    ['내 캡픽', '캡픽 연결 상태. 탭하면 CON-16 캡픽 관리로 이동해요'],
+    ['핫한 하이라이트', '인기 쇼츠 가로 스크롤. 탭하면 CON-11 피드로 이동해요'],
+    ['하단 네비게이션', '홈(활성)/탐색/피드/아카이브/마이 5개 탭'],
+  ]},
+  'con-04-empty': { title: 'CON-05e 홈 (빈 상태) 안내', items: [['페이지 설명','구장/캡픽이 없을 때 홈'],['구장 추가하기','CON-06으로 이동'],['캡픽 구매하기','CON-32로 이동']]},
+  'con-05': { title: 'CON-06 구장 추가하기 안내', items: [['페이지 설명','새 구장을 등록하는 화면'],['QR/코드 탭','QR코드 스캔 또는 6자리 코드 입력으로 등록'],['주변 검색 탭','현재 위치 기준 주변 구장 검색']]},
+  'con-06': { title: 'CON-07 경기 목록 안내', items: [['페이지 설명','구장의 경기를 날짜별로 보여줘요'],['경기 카드','경기명, 시간, 상태(REC/종료/대기) 배지'],['카드 탭','수업→CON-08, 일반→CON-08a로 이동']]},
+  'con-06-empty': { title: 'CON-07e 경기 목록 (빈 상태) 안내', items: [['페이지 설명','촬영된 경기가 없을 때'],['빈 상태 안내','"아직 촬영된 경기가 없어요"']]},
+  'con-07': { title: 'CON-08 영상 상세 (학부모) 안내', items: [
+    ['페이지 설명', '학부모가 수업 영상을 확인해요. 무료/유료 구분이 있어요'],
+    ['1분 하이라이트 (무료)', '무료 영상이에요. CON-10 영상 플레이어로 이동해요'],
+    ['선수별 하이라이트', '선수 그리드. 탭하면 구독 CTA로 스크롤돼요'],
+    ['구독 CTA', '"오늘 하루, 우리 아이의 가장 행복한 모습은?" + 월 3,900원 / 건당 990원'],
+  ]},
+  'con-07b': { title: 'CON-08a 영상 상세 (일반) 안내', items: [
+    ['페이지 설명', '일반 사용자가 경기 영상을 확인해요'],
+    ['1분 하이라이트 (무료)', '무료 영상이에요. CON-10 영상 플레이어로 이동해요'],
+    ['선수별 하이라이트', '선수 그리드. 탭하면 구독 CTA로 스크롤돼요'],
+    ['구독 CTA', '"오늘의 MOM은 바로 나?!" + 월 3,900원 / 건당 990원'],
+  ]},
+  'con-player': { title: 'CON-09 선수 상세 안내', items: [['페이지 설명','특정 선수의 하이라이트를 보는 화면'],['이름 입력','선수 이름을 입력하고 저장'],['하이라이트','1분/10분 하이라이트 + Its Your Play/Highlights'],['공유하기','카카오톡/인스타/틱톡/링크복사 + QR 팝업']]},
+  'con-10l': { title: 'CON-10 영상 플레이어 안내', items: [['페이지 설명','영상을 가로 전체화면으로 재생'],['재생 컨트롤','재생/일시정지, -10s/+10s 이동'],['설정','재생 속도(0.5x~2x)와 화질(480p~4K) 선택']]},
+  'con-feed': { title: 'CON-11 피드 (쇼츠) 안내', items: [
+    ['페이지 설명', '세로 영상 피드. 위아래로 밀어서 다음 영상을 봐요'],
+    ['상단 탭', '추천/팔로잉 탭이에요'],
+    ['좋아요 버튼', '하트를 탭하면 빨간색으로 채워져요'],
+    ['더블탭 좋아요', '영상을 빠르게 두 번 탭하면 큰 하트 애니메이션이에요'],
+    ['댓글 버튼', '탭하면 댓글 바텀시트가 올라와요'],
+    ['프로필 아바타', '탭하면 CON-20 다른 사용자 프로필로 이동해요'],
+  ]},
+  'con-publish': { title: 'CON-22 새 게시물 안내', items: [['페이지 설명','영상을 피드에 올리는 화면'],['게시 버튼','우측 상단 민트색 버튼'],['문구 입력','게시물 설명을 적는 곳'],['추천 해시태그','#골모음, #세이브 등 칩을 탭해서 추가'],['함께 공유','카카오톡/인스타/틱톡 토글']]},
+  'con-archive': { title: 'CON-12 내 아카이브 안내', items: [['페이지 설명','내 경기 영상과 하이라이트를 모아 봐요'],['탭: 경기 영상','영상 카드 + 공유/전체보기'],['탭: 하이라이트','에디터/AI 하이라이트 만들기 + 쇼츠 그리드'],['탭: 찜한 영상','저장하기 누른 영상만 모아 보기']]},
+  'con-archive-empty': { title: 'CON-12e 내 아카이브 (빈 상태) 안내', items: [['페이지 설명','저장된 영상이 없을 때'],['영상 올리기 버튼','COMM-10 영상 올리기로 이동']]},
+  'con-09': { title: 'CON-13 알림 안내', items: [['페이지 설명','모든 알림을 시간순으로 보여줘요'],['알림 필터 탭','전체/소셜/시스템 3개 탭'],['모두 읽음 버튼','읽지 않은 알림 배경이 모두 사라져요'],['시스템 알림','하이라이트 준비, 녹화 시작/완료 등'],['소셜 알림','좋아요, 팔로우, 공유 등']]},
+  'con-my': { title: 'CON-14 마이페이지 안내', items: [['페이지 설명','내 프로필과 게시물을 보여줘요'],['프로필 정보','아바타, 경기/하이라이트/팔로워/팔로잉 통계'],['팔로워/팔로잉','숫자 탭하면 CON-21 목록으로 이동'],['활동 배지','10경기 달성 등 활동 배지'],['피드 그리드','게시물이 3열 그리드로 표시']]},
+  'con-settings': { title: 'CON-15 설정 안내', items: [['페이지 설명','소비자 앱 전체 설정'],['계정 관리','프로필 수정, 비밀번호 변경, 구독 관리'],['알림 설정','푸시 알림 토글들'],['영상 설정','화질, 자동 재생 설정'],['기타','구장 관리, 이용약관, 개인정보처리방침'],['로그아웃','CON-01 로그인으로 이동']]},
+  'con-18': { title: 'CON-16 캡픽 관리 안내', items: [['페이지 설명','내 캡픽 상태 확인 및 촬영 관리'],['캡픽 상태','이름, 연결, 배터리, 저장공간, 온도, WiFi 신호'],['촬영 중 프리뷰','REC 표시와 녹화 시간이 있는 실시간 화면'],['녹화 중지','빨간 버튼으로 녹화 중지'],['촬영 설정','CON-18 촬영 설정으로 이동']]},
+  'con-18-empty': { title: 'CON-16e 캡픽 관리 (빈 상태) 안내', items: [['페이지 설명','등록된 캡픽이 없을 때'],['주변에서 캡픽 찾기','ADM-03 캡픽 찾기로 이동'],['일련번호로 등록','CON-16a 캡픽 등록하기로 이동']]},
+  'con-18-register': { title: 'CON-16a 캡픽 등록하기 안내', items: [['페이지 설명','캡픽 일련번호로 등록하는 화면'],['일련번호/이름','일련번호 입력과 선택적 이름 입력'],['등록하기','CON-04 캡픽 설정: WiFi로 이동']]},
+  'con-08': { title: 'CON-17 실시간 중계 안내', items: [['페이지 설명','실시간 스트리밍 설정/관리 화면'],['실시간 화면','LIVE 배지와 시청자 수'],['점수판','홈 vs 어웨이 점수'],['플랫폼/링크','YouTube/Facebook 선택, 링크 복사'],['스트리밍 시작','빨간 버튼으로 시작']]},
+  'con-upload': { title: 'CON-18 촬영 설정 안내', items: [['페이지 설명','새 촬영 전 경기 정보 입력'],['경기 이름/장소/날짜/시간','촬영 정보를 입력'],['촬영하기','촬영 시작, CON-12 내 아카이브에 등록']]},
+  'con-explore': { title: 'CON-19 탐색 안내', items: [['페이지 설명','영상, 선수, 구장, 해시태그 검색 및 인기 콘텐츠'],['검색 입력','선수, 구장, 해시태그 검색'],['PIC STAR','이번 주 가장 주목받는 선수 5명'],['지금 뜨는 영상','2열 그리드 인기 영상'],['인기 구장','인기 구장 3개 카드']]},
+  'con-profile-other': { title: 'CON-20 다른 사용자 프로필 안내', items: [['페이지 설명','다른 사용자의 프로필 보기'],['팔로우 + 공유','팔로우 버튼(토글)과 공유 버튼'],['활동 배지','활동 배지들'],['피드 그리드','게시물 3열 그리드']]},
+  'con-followers': { title: 'CON-21 팔로워/팔로잉 목록 안내', items: [['페이지 설명','팔로워와 팔로잉 목록'],['탭','팔로워/팔로잉 전환'],['팔로우 버튼','탭하면 팔로우 상태 전환']]},
+  'con-pw-reset': { title: 'CON-23 비밀번호 찾기 안내', items: [['페이지 설명','비밀번호 재설정 링크를 받는 화면'],['이메일 입력','가입한 이메일 입력'],['재설정 링크 보내기','이메일 전송 후 로그인 화면으로']]},
+  'con-signup': { title: 'CON-24 회원가입 안내', items: [['페이지 설명','새 계정을 만드는 화면'],['입력 폼','이름, 이메일, 비밀번호, 비밀번호 확인'],['약관 동의','이용약관 및 개인정보처리방침 동의'],['가입하기','가입 완료 후 CON-02 온보딩으로 이동']]},
+  'con-profile-edit': { title: 'CON-25 프로필 수정 안내', items: [['페이지 설명','내 프로필 정보 수정'],['프로필 사진','아바타 탭하면 사진 변경'],['입력 폼','이름, 이메일, 성별, 유형, 자기소개'],['저장','저장 토스트 후 CON-15 설정으로']]},
+  'con-pw-change': { title: 'CON-26 비밀번호 변경 안내', items: [['페이지 설명','로그인 비밀번호 변경'],['입력 폼','현재/새/확인 비밀번호 3개 필드'],['변경하기','변경 완료 토스트 후 CON-15 설정으로']]},
+  'con-subscribe': { title: 'CON-27 구독 관리 안내', items: [['페이지 설명','구독 플랜 선택 및 관리'],['현재 플랜','무료 체험 중 상태와 남은 기간'],['월간 구독','월 3,900원'],['연간 구독','연 39,000원 (17% 할인, 추천)']]},
+  'con-venue-manage': { title: 'CON-28 구장 관리 안내', items: [['페이지 설명','등록된 구장 관리'],['구장 카드','구장명, 주소, 등록일'],['구장 추가하기','CON-06 구장 추가하기로 이동']]},
+  'con-terms': { title: 'CON-29 이용약관 안내', items: [['페이지 설명','서비스 이용약관 전문'],['약관 내용','제1조~제4조까지 약관 조항']]},
+  'con-privacy': { title: 'CON-30 개인정보처리방침 안내', items: [['페이지 설명','개인정보처리방침 전문'],['방침 내용','수집 항목, 이용 목적, 보관 기간, 파기 절차']]},
+  'con-badges': { title: 'CON-31 활동 배지 안내', items: [['페이지 설명','획득한 배지와 도전 중인 배지'],['획득한 배지','4개 배지가 2열 그리드, 민트색 배경'],['도전 중인 배지','4개 잠긴 배지, 회색 배경, 진행 상태']]},
+  'con-purchase': { title: 'CON-32 캡픽 구매 안내', items: [['페이지 설명','캡픽 제품 정보와 구매 페이지'],['제품 정보','CAPP!C 스마트 캠, 490,000원'],['기능 목록','AI 하이라이트, 4K 녹화, WiFi 연결, 방수/방진'],['구매하기','구매 페이지 이동']]},
+  'web-01': { title: 'WEB-01 구장 경기 페이지 안내', items: [['페이지 설명','앱 없이 웹에서 구장 경기 목록 보기'],['경기 카드 (학부모)','"학부모 전용" 표시. WEB-02로 이동'],['경기 카드 (일반)','"일반 경기" 표시. WEB-02a로 이동']]},
+  'web-02': { title: 'WEB-02 1분 하이라이트 (학부모) 안내', items: [['페이지 설명','학부모 대상 웹 하이라이트 페이지'],['1분 하이라이트 (무료)','무료 영상. 전체화면, 공유/내려받기 가능'],['우리 아이 하이라이트','아이들의 이름과 개별 하이라이트 썸네일'],['앱 설치 CTA','"우리 아이의 빛나는 순간" + App Store/Play Store 버튼']]},
+  'web-02a': { title: 'WEB-02a 1분 하이라이트 (일반) 안내', items: [['페이지 설명','일반 경기 대상 웹 하이라이트 페이지'],['1분 하이라이트 (무료)','무료 영상. 전체화면, 공유/내려받기 가능'],['선수별 하이라이트','선수 번호(#1~#6)와 개별 하이라이트 썸네일'],['앱 설치 CTA','"내 플레이를 다시 보고 싶다면?" + App Store/Play Store 버튼']]},
+};
+
+// ========== LAYOUT ==========
+const CW = 140, CH = 280, GX = 70, GY = 50;
+const catColors = {adm:'#FF6B6B',comm:'#FFE66D',con:'#4ECDC4',web:'#A78BFA'};
+const catNames = {adm:'관리자 앱',comm:'공통 기능',con:'소비자 앱',web:'웹'};
+
+// Manual flow-based positions: [col, row] per screen
+const layout = {
+  // ---- Admin ----
+  'adm-login':[0,0],'adm-01':[1,0],'adm-01-empty':[1,1],
+  'adm-04':[2,0],
+  'adm-02':[2,1],'adm-03':[3,1],'adm-05':[4,1],'adm-06':[5,1],
+  'adm-07':[2,2],'adm-07-empty':[2,3],'adm-08':[3,2],'adm-08p':[4,2],'adm-10l':[4,3],
+  'adm-15':[2,4],'adm-15-empty':[2,5],'adm-15a':[3,4],
+  'adm-settings':[2,6],'adm-users':[3,6],'adm-users-add':[4,6],'adm-16':[3,7],
+  // ---- Common ----
+  'editor-1':[7,0],'editor':[8,0],'editor-loading':[9,0],'editor-3':[10,0],
+  'adm-09':[7,1.5],'adm-10':[8,1.5],'adm-11':[9,1.5],'adm-13':[10,1.5],'adm-14':[11,1.5],
+  'comm-upload-vid':[7,3],'comm-upload-loading':[8,3],'comm-upload-done':[9,3],
+  'comm-merge':[7,4.5],'comm-merge-loading':[8,4.5],'comm-merge-done':[9,4.5],
+  'con-publish':[11,3],
+  // ---- Consumer ----
+  'con-02':[0,9],'con-pw-reset':[0,10],'con-signup':[0,11],
+  'con-01':[1,9],'con-03':[2,9],
+  'con-ob1':[3,10],'con-ob2':[4,10],'con-ob-register':[5,10],'con-ob3':[6,10],'con-ob-test':[7,10],'con-ob4':[8,10],
+  'con-04':[3,9],'con-04-empty':[3,11],
+  'con-05':[4,11],'con-purchase':[4,12],
+  'con-06':[5,9],'con-06-empty':[5,11],
+  'con-07':[6,9],'con-07b':[6,11],
+  'con-player':[7,9],'con-10l':[8,9],
+  'con-09':[4,8],'con-explore':[5,8],
+  'con-feed':[6,8],'con-profile-other':[7,8],'con-followers':[8,8],
+  'con-archive':[4,7],'con-archive-empty':[5,7],
+  'con-my':[3,7],'con-badges':[3,8],
+  'con-settings':[2,7],
+  'con-profile-edit':[1,7],'con-pw-change':[1,8],'con-subscribe':[0,7],'con-venue-manage':[0,8],
+  'con-terms':[0,6.3],'con-privacy':[1,6.3],
+  'con-18':[5,12],'con-18-empty':[5,13],'con-18-register':[6,13],
+  'con-08':[6,12],'con-upload':[7,12],
+  // ---- Web ----
+  'web-01':[13,0],'web-02':[14,0],'web-02a':[14,1.5],
+};
+
+// Compute pixel positions
+const OFFSET_X = 80, OFFSET_Y = 80;
+const positions = {};
+screens.forEach(s => {
+  const [col, row] = layout[s.id] || [0, 0];
+  positions[s.id] = { x: OFFSET_X + col * (CW + GX), y: OFFSET_Y + row * (CH + GY) };
+});
+
+// ========== RENDER CANVAS ==========
+const canvas = document.getElementById('canvas');
+
+// Category labels
+const catLabelPositions = {
+  adm: { x: OFFSET_X - 40, y: OFFSET_Y - 40 },
+  comm: { x: OFFSET_X + 7 * (CW + GX) - 40, y: OFFSET_Y - 40 },
+  con: { x: OFFSET_X - 40, y: OFFSET_Y + 6 * (CH + GY) },
+  web: { x: OFFSET_X + 13 * (CW + GX) - 40, y: OFFSET_Y - 40 },
+};
+Object.entries(catLabelPositions).forEach(([cat, pos]) => {
+  const label = document.createElement('div');
+  label.className = 'cat-label';
+  label.style.left = pos.x + 'px';
+  label.style.top = pos.y + 'px';
+  label.style.color = catColors[cat];
+  label.textContent = catNames[cat];
+  canvas.appendChild(label);
+});
+
+// Screen cards
+screens.forEach(s => {
+  const pos = positions[s.id];
+  const card = document.createElement('div');
+  card.className = 'scard';
+  card.id = 'scard-' + s.id;
+  card.style.left = pos.x + 'px';
+  card.style.top = pos.y + 'px';
+  card.innerHTML = `
+    <div class="scard-phone">
+      <span class="scard-badge cat-${s.cat}">${catNames[s.cat].charAt(0)}</span>
+    </div>
+    <div class="scard-code">${s.code}</div>
+    <div class="scard-name">${s.name}</div>
+  `;
+  card.addEventListener('click', () => openOverlay(s.id));
+  canvas.appendChild(card);
+});
+
+// Draw arrows
+function drawArrows() {
+  const svg = document.getElementById('arrowsSvg');
+  // Calculate canvas bounds
+  let maxX = 0, maxY = 0;
+  screens.forEach(s => {
+    const p = positions[s.id];
+    maxX = Math.max(maxX, p.x + CW + 100);
+    maxY = Math.max(maxY, p.y + CH + 100);
+  });
+  svg.setAttribute('width', maxX);
+  svg.setAttribute('height', maxY);
+
+  // Arrow marker
+  svg.innerHTML = `<defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#444"/>
+    </marker>
+  </defs>`;
+
+  connections.forEach(([fromId, toId]) => {
+    const from = positions[fromId];
+    const to = positions[toId];
+    if (!from || !to) return;
+
+    // Determine edge points
+    const fcx = from.x + CW / 2, fcy = from.y + CH / 2;
+    const tcx = to.x + CW / 2, tcy = to.y + CH / 2;
+    const dx = tcx - fcx, dy = tcy - fcy;
+
+    let sx, sy, ex, ey;
+    // Choose which edge to connect from based on direction
+    if (Math.abs(dx) > Math.abs(dy)) {
+      // Horizontal connection
+      if (dx > 0) { sx = from.x + CW; sy = fcy; ex = to.x; ey = tcy; }
+      else { sx = from.x; sy = fcy; ex = to.x + CW; ey = tcy; }
+    } else {
+      // Vertical connection
+      if (dy > 0) { sx = fcx; sy = from.y + CH - 36; ex = tcx; ey = to.y; }
+      else { sx = fcx; sy = from.y; ex = tcx; ey = to.y + CH - 36; }
+    }
+
+    // Cubic bezier
+    const mx = (sx + ex) / 2, my = (sy + ey) / 2;
+    let path;
+    if (Math.abs(dx) > Math.abs(dy)) {
+      path = `M${sx},${sy} C${mx},${sy} ${mx},${ey} ${ex},${ey}`;
+    } else {
+      path = `M${sx},${sy} C${sx},${my} ${ex},${my} ${ex},${ey}`;
+    }
+
+    const el = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    el.setAttribute('d', path);
+    el.setAttribute('stroke', '#333');
+    el.setAttribute('stroke-width', '1.5');
+    el.setAttribute('fill', 'none');
+    el.setAttribute('marker-end', 'url(#arrow)');
+    svg.appendChild(el);
+  });
+}
+drawArrows();
+
+// ========== ZOOM / PAN ==========
+let scale = 0.4, panX = 0, panY = 0;
+let isPanning = false, startX, startY;
+
+function updateTransform() {
+  canvas.style.transform = `translate(${panX}px, ${panY}px) scale(${scale})`;
+  document.getElementById('zoomVal').textContent = Math.round(scale * 100) + '%';
+  updateMinimap();
+}
+
+function zoomBy(delta) {
+  scale = Math.max(0.1, Math.min(1.5, scale + delta));
+  updateTransform();
+}
+
+function zoomFit() {
+  let maxX = 0, maxY = 0;
+  screens.forEach(s => {
+    const p = positions[s.id];
+    maxX = Math.max(maxX, p.x + CW);
+    maxY = Math.max(maxY, p.y + CH + 40);
+  });
+  const vp = document.getElementById('viewport');
+  const sx = vp.clientWidth / (maxX + 100);
+  const sy = vp.clientHeight / (maxY + 100);
+  scale = Math.min(sx, sy, 1);
+  panX = 20;
+  panY = 20;
+  updateTransform();
+}
+
+const viewport = document.getElementById('viewport');
+viewport.addEventListener('mousedown', e => {
+  if (e.target.closest('.scard')) return;
+  isPanning = true;
+  startX = e.clientX - panX;
+  startY = e.clientY - panY;
+  viewport.classList.add('grabbing');
+});
+window.addEventListener('mousemove', e => {
+  if (!isPanning) return;
+  panX = e.clientX - startX;
+  panY = e.clientY - startY;
+  updateTransform();
+});
+window.addEventListener('mouseup', () => {
+  isPanning = false;
+  viewport.classList.remove('grabbing');
+});
+viewport.addEventListener('wheel', e => {
+  e.preventDefault();
+  const rect = viewport.getBoundingClientRect();
+  const mx = e.clientX - rect.left;
+  const my = e.clientY - rect.top;
+  const oldScale = scale;
+  const delta = e.deltaY > 0 ? -0.05 : 0.05;
+  scale = Math.max(0.1, Math.min(1.5, scale + delta));
+  // Zoom toward cursor
+  panX = mx - (mx - panX) * (scale / oldScale);
+  panY = my - (my - panY) * (scale / oldScale);
+  updateTransform();
+}, {passive:false});
+
+// ========== MINIMAP ==========
+function updateMinimap() {
+  const mm = document.getElementById('minimap');
+  let maxX = 0, maxY = 0;
+  screens.forEach(s => {
+    const p = positions[s.id];
+    maxX = Math.max(maxX, p.x + CW);
+    maxY = Math.max(maxY, p.y + CH + 40);
+  });
+  const mmW = 180, mmH = 120;
+  const mmScale = Math.min(mmW / maxX, mmH / maxY) * 0.9;
+
+  let dots = '';
+  screens.forEach(s => {
+    const p = positions[s.id];
+    const x = p.x * mmScale + 5;
+    const y = p.y * mmScale + 5;
+    const w = CW * mmScale;
+    const h = (CH - 40) * mmScale;
+    dots += `<div class="minimap-dot" style="left:${x}px;top:${y}px;width:${w}px;height:${h}px;background:${catColors[s.cat]};opacity:.5;"></div>`;
+  });
+
+  // Viewport rect
+  const vp = document.getElementById('viewport');
+  const vpW = vp.clientWidth / scale * mmScale;
+  const vpH = vp.clientHeight / scale * mmScale;
+  const vpX = -panX / scale * mmScale + 5;
+  const vpY = -panY / scale * mmScale + 5;
+  dots += `<div class="minimap-viewport" style="left:${vpX}px;top:${vpY}px;width:${vpW}px;height:${vpH}px;"></div>`;
+
+  mm.innerHTML = dots;
+}
+
+// ========== SEARCH ==========
+document.getElementById('searchInput').addEventListener('input', e => {
+  const q = e.target.value.toLowerCase().trim();
+  document.querySelectorAll('.scard').forEach(card => {
+    const id = card.id.replace('scard-', '');
+    const s = screens.find(x => x.id === id);
+    if (!s) return;
+    const match = !q || s.name.toLowerCase().includes(q) || s.code.toLowerCase().includes(q);
+    card.style.opacity = match ? '1' : '0.15';
+    card.classList.toggle('highlight', match && q.length > 0);
+  });
+});
+
+// ========== OVERLAY (DETAIL VIEW) ==========
+let currentScreen = null;
+
+// ========== DEVICE PRESETS ==========
+const devices = [
+  { id:'s24',      name:'Galaxy S24',    w:360, h:780,  r:32, border:6 },
+  { id:'iphone15', name:'iPhone 15',     w:393, h:852,  r:44, border:6 },
+  { id:'iphone-pm',name:'iPhone Pro Max',w:430, h:932,  r:50, border:6 },
+  { id:'ultra',    name:'Galaxy Ultra',  w:412, h:900,  r:32, border:6 },
+  { id:'flip',     name:'Galaxy Flip',   w:360, h:748,  r:24, border:5 },
+  { id:'ipad',     name:'iPad',          w:820, h:1180, r:20, border:5 },
+  { id:'tab',      name:'Galaxy Tab',    w:800, h:1280, r:16, border:5 },
+  { id:'web',      name:'Desktop',       w:1280,h:800,  r:8,  border:4 },
+];
+let currentDevice = devices[0]; // default Galaxy S24
+
+function buildDeviceTabs() {
+  const container = document.getElementById('deviceTabs');
+  container.innerHTML = devices.map(d =>
+    `<button class="device-tab ${d.id===currentDevice.id?'active':''}" data-device="${d.id}" onclick="switchDevice('${d.id}')">${d.name}<span class="dt-size">${d.w}×${d.h}</span></button>`
+  ).join('');
+}
+
+function switchDevice(deviceId) {
+  const d = devices.find(x => x.id === deviceId);
+  if (!d) return;
+  currentDevice = d;
+  // Update tab active
+  document.querySelectorAll('.device-tab').forEach(t => t.classList.toggle('active', t.dataset.device === deviceId));
+  // Resize phone frame
+  applyDeviceSize();
+}
+
+function applyDeviceSize() {
+  const phone = document.getElementById('overlayPhone');
+  const wrap = document.getElementById('overlayPhoneWrap');
+  const iframe = document.getElementById('overlayIframe');
+  if (!phone || !wrap || !iframe) return;
+
+  const isLandscape = currentScreen && currentScreen.landscape;
+  const dw = isLandscape ? currentDevice.h : currentDevice.w;
+  const dh = isLandscape ? currentDevice.w : currentDevice.h;
+  const bw = currentDevice.border;
+
+  const wrapW = wrap.clientWidth;
+  const wrapH = wrap.clientHeight;
+  if (wrapW <= 0 || wrapH <= 0) return;
+
+  // Available space = wrap minus margin, minus border (both sides)
+  const margin = 24;
+  const availW = wrapW - margin * 2 - bw * 2;
+  const availH = wrapH - margin * 2 - bw * 2;
+
+  const scale = Math.min(1, availW / dw, availH / dh);
+  const visW = Math.round(dw * scale);
+  const visH = Math.round(dh * scale);
+
+  // Total phone size including border
+  const totalW = visW + bw * 2;
+  const totalH = visH + bw * 2;
+
+  // Exact center
+  phone.style.left = Math.round((wrapW - totalW) / 2) + 'px';
+  phone.style.top = Math.round((wrapH - totalH) / 2) + 'px';
+  phone.style.width = visW + 'px';
+  phone.style.height = visH + 'px';
+  phone.style.borderRadius = Math.round(currentDevice.r * scale) + 'px';
+  phone.style.border = bw + 'px solid #333';
+
+  // iframe = actual device size, CSS transform scales to fit
+  iframe.style.width = dw + 'px';
+  iframe.style.height = dh + 'px';
+  iframe.style.transform = `scale(${scale})`;
+}
+
+// Resize on window resize
+window.addEventListener('resize', () => {
+  if (document.getElementById('overlay').classList.contains('show')) {
+    applyDeviceSize();
+  }
+});
+
+// Build sidebar once
+let sidebarBuilt = false;
+function buildSidebar() {
+  if (sidebarBuilt) return;
+  sidebarBuilt = true;
+  const sb = document.getElementById('overlaySidebar');
+  const groups = [
+    { key:'adm', label:'관리자 앱' },
+    { key:'comm', label:'공통 기능' },
+    { key:'con', label:'소비자 앱' },
+    { key:'web', label:'웹' },
+  ];
+  let html = '';
+  groups.forEach(g => {
+    html += `<div class="os-group">${g.label}</div>`;
+    screens.filter(s => s.cat === g.key).forEach(s => {
+      html += `<button class="os-item" data-sid="${s.id}" onclick="openOverlay('${s.id}')"><span class="os-code">${s.code}</span>${s.name}</button>`;
+    });
+  });
+  sb.innerHTML = html;
+}
+
+function updateSidebarActive(screenId) {
+  document.querySelectorAll('.os-item').forEach(b => b.classList.toggle('active', b.dataset.sid === screenId));
+  const active = document.querySelector('.os-item.active');
+  if (active) active.scrollIntoView({ block:'nearest', behavior:'smooth' });
+}
+
+function openOverlay(screenId) {
+  const s = screens.find(x => x.id === screenId);
+  if (!s) return;
+  currentScreen = s;
+  history.replaceState(null, '', '#' + screenId);
+
+  document.getElementById('overlayTitle').textContent = `${s.code} ${s.name}`;
+
+  // Build sidebar (once), update active
+  buildSidebar();
+  updateSidebarActive(screenId);
+
+  // Device tabs & phone frame
+  buildDeviceTabs();
+  const iframe = document.getElementById('overlayIframe');
+  iframe.src = 'index.html?embed=1&screen=' + screenId;
+
+  // Description panel (from local data)
+  const descEl = document.getElementById('overlayDesc');
+  let html = '';
+  const d = descriptions[screenId];
+  if (d) {
+    html += `<div class="desc-title">${d.title}</div>`;
+    d.items.forEach(([label, text]) => {
+      html += `<div class="desc-item"><div class="desc-label">${label}</div><div class="desc-text">${text}</div></div>`;
+    });
+  }
+
+  // Connected screens
+  const outgoing = connections.filter(c => c[0] === screenId).map(c => c[1]);
+  const incoming = connections.filter(c => c[1] === screenId).map(c => c[0]);
+  if (outgoing.length > 0) {
+    html += '<div class="nav-section"><div class="nav-title">이동할 수 있는 화면</div>';
+    outgoing.forEach(tid => {
+      const ts = screens.find(x => x.id === tid);
+      if (ts) html += `<a class="nav-link" onclick="openOverlay('${tid}')">${ts.code} ${ts.name}</a>`;
+    });
+    html += '</div>';
+  }
+  if (incoming.length > 0) {
+    html += '<div class="nav-section"><div class="nav-title">이 화면으로 오는 화면</div>';
+    incoming.forEach(tid => {
+      const ts = screens.find(x => x.id === tid);
+      if (ts) html += `<a class="nav-link" onclick="openOverlay('${tid}')">${ts.code} ${ts.name}</a>`;
+    });
+    html += '</div>';
+  }
+  descEl.innerHTML = html;
+  descEl.scrollTop = 0;
+
+  document.getElementById('overlay').classList.add('show');
+  // Apply device size AFTER overlay is visible so wrap has dimensions
+  requestAnimationFrame(() => applyDeviceSize());
+}
+
+function closeOverlay() {
+  document.getElementById('overlay').classList.remove('show');
+  currentScreen = null;
+  history.replaceState(null, '', location.pathname);
+}
+
+function prevScreen() {
+  if (!currentScreen) return;
+  const idx = screens.findIndex(s => s.id === currentScreen.id);
+  if (idx > 0) openOverlay(screens[idx - 1].id);
+}
+function nextScreen() {
+  if (!currentScreen) return;
+  const idx = screens.findIndex(s => s.id === currentScreen.id);
+  if (idx < screens.length - 1) openOverlay(screens[idx + 1].id);
+}
+
+// ========== EXTRACT ==========
+function extractPNG() {
+  if (!currentScreen) return;
+  const iframe = document.getElementById('overlayIframe');
+  try {
+    const doc = iframe.contentDocument;
+    const el = doc.getElementById(currentScreen.id);
+    if (!el) { showToast('화면을 찾을 수 없습니다'); return; }
+    showToast('PNG 추출 중...');
+    const body = el.querySelector('.screen-body') || el;
+    html2canvas(body, { useCORS:true, backgroundColor:'#fff', scale:2, width:375, height:812 }).then(c => {
+      const a = document.createElement('a');
+      a.download = `${currentScreen.code}_${currentScreen.name}.png`;
+      a.href = c.toDataURL('image/png');
+      a.click();
+      showToast('PNG 저장 완료!');
+    }).catch(() => showToast('PNG 추출 실패'));
+  } catch(e) { showToast('PNG 추출 실패 (로컬 서버에서 실행해주세요)'); }
+}
+
+function extractHTML() {
+  if (!currentScreen) return;
+  const iframe = document.getElementById('overlayIframe');
+  try {
+    const doc = iframe.contentDocument;
+    const el = doc.getElementById(currentScreen.id);
+    if (!el) { showToast('화면을 찾을 수 없습니다'); return; }
+    let css = '';
+    doc.querySelectorAll('style').forEach(s => css += s.textContent + '\n');
+    const code = `<!DOCTYPE html>\n<html lang="ko">\n<head>\n<meta charset="UTF-8">\n<meta name="viewport" content="width=device-width,initial-scale=1.0">\n<title>${currentScreen.code} ${currentScreen.name}</title>\n<style>\n${css}\n#${currentScreen.id}{display:block!important;}\n.screen-content{display:none;}\n</style>\n</head>\n<body>\n${el.outerHTML}\n</body>\n</html>`;
+    document.getElementById('codeContent').textContent = code;
+    document.getElementById('codeModalTitle').textContent = `${currentScreen.code} ${currentScreen.name}`;
+    document.getElementById('codeModal').classList.add('show');
+  } catch(e) { showToast('HTML 추출 실패 (로컬 서버에서 실행해주세요)'); }
+}
+
+function copyCode() {
+  navigator.clipboard.writeText(document.getElementById('codeContent').textContent).then(() => showToast('복사 완료!'));
+}
+function downloadCode() {
+  if (!currentScreen) return;
+  const blob = new Blob([document.getElementById('codeContent').textContent], {type:'text/html'});
+  const a = document.createElement('a');
+  a.download = `${currentScreen.code}_${currentScreen.name}.html`;
+  a.href = URL.createObjectURL(blob);
+  a.click();
+  showToast('다운로드 완료!');
+}
+function closeCode() { document.getElementById('codeModal').classList.remove('show'); }
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(t._t);
+  t._t = setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+// ========== KEYBOARD ==========
+document.addEventListener('keydown', e => {
+  if (e.target.tagName === 'INPUT') return;
+  if (e.key === 'Escape') {
+    if (document.getElementById('codeModal').classList.contains('show')) closeCode();
+    else if (document.getElementById('overlay').classList.contains('show')) closeOverlay();
+  }
+  if (document.getElementById('overlay').classList.contains('show')) {
+    if (e.key === 'ArrowLeft') prevScreen();
+    if (e.key === 'ArrowRight') nextScreen();
+  }
+});
+
+// ========== INIT ==========
+zoomFit();
+
+// Load from hash
+if (location.hash) {
+  const id = location.hash.slice(1);
+  if (screens.find(s => s.id === id)) openOverlay(id);
+}
+
+// Lazy load thumbnails with IntersectionObserver
+const thumbObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const card = entry.target;
+      const screenId = card.id.replace('scard-', '');
+      loadThumb(screenId, card);
+      thumbObserver.unobserve(card);
+    }
+  });
+}, { root: viewport, rootMargin: '500px' });
+
+document.querySelectorAll('.scard').forEach(card => thumbObserver.observe(card));
+
+function loadThumb(screenId, card) {
+  const phoneEl = card.querySelector('.scard-phone');
+  const iframe = document.createElement('iframe');
+  iframe.className = 'scard-phone-inner';
+  iframe.src = 'index.html?embed=1&screen=' + screenId;
+  phoneEl.appendChild(iframe);
+}
+</script>
+</body>
+</html>
