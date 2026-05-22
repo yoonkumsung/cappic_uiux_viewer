@@ -106,48 +106,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 /* Arrows SVG */
 .arrows-svg{position:absolute;top:0;left:0;pointer-events:none;overflow:visible;}
 
-/* ============ DETAIL OVERLAY ============ */
-.overlay{position:fixed;inset:0;background:#0a0a0a;z-index:300;display:none;flex-direction:column;}
-.overlay.show{display:flex;}
-.overlay-header{display:flex;align-items:center;gap:12px;padding:10px 20px;background:#111;border-bottom:1px solid #222;flex-shrink:0;}
-.overlay-back{background:none;border:1px solid #333;color:#ccc;padding:5px 14px;border-radius:6px;cursor:pointer;font-size:12px;display:flex;align-items:center;gap:6px;}
-.overlay-back:hover{border-color:#4ECDC4;color:#fff;}
-.overlay-title{font-size:15px;font-weight:700;flex:1;}
-.overlay-nav{display:flex;gap:4px;}
-.overlay-nav button{background:#1a1a1a;border:1px solid #333;color:#aaa;width:30px;height:30px;border-radius:6px;cursor:pointer;font-size:13px;}
-.overlay-nav button:hover{border-color:#4ECDC4;color:#fff;}
-.extract-btns{display:flex;gap:4px;}
-.extract-btns button{background:#1a1a1a;border:1px solid #333;color:#aaa;padding:5px 12px;border-radius:6px;cursor:pointer;font-size:11px;font-weight:600;}
-.extract-btns button:hover{border-color:#4ECDC4;color:#4ECDC4;}
-.overlay-body{flex:1;display:flex;overflow:hidden;}
-
-/* Left sidebar in overlay */
-.overlay-sidebar{width:260px;background:#111;border-right:1px solid #222;overflow-y:auto;padding:12px 0;flex-shrink:0;}
-.overlay-sidebar::-webkit-scrollbar{width:4px;}
-.overlay-sidebar::-webkit-scrollbar-thumb{background:#333;border-radius:2px;}
-.overlay-sidebar .os-group{color:#666;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;padding:14px 16px 6px;}
-.overlay-sidebar .os-item{display:flex;align-items:center;gap:8px;padding:7px 16px;color:#999;font-size:12px;cursor:pointer;transition:background .15s;border:none;background:none;width:100%;text-align:left;}
-.overlay-sidebar .os-item:hover{background:rgba(255,255,255,.05);color:#ccc;}
-.overlay-sidebar .os-item.active{background:#4ECDC4;color:#fff;font-weight:600;}
-.overlay-sidebar .os-item .os-code{font-size:9px;opacity:.6;min-width:50px;font-weight:600;}
-
-.overlay-phone-area{flex:1;background:#0d0d0d;overflow:hidden;min-width:0;min-height:0;display:flex;}
-
-/* Device tabs - in header */
-.device-tabs{display:flex;gap:4px;flex-wrap:wrap;align-items:center;}
-.device-tab{padding:4px 12px;border:1px solid #333;background:none;color:#888;border-radius:6px;cursor:pointer;font-size:11px;transition:all .15s;white-space:nowrap;}
-.device-tab:hover{border-color:#555;color:#ccc;}
-.device-tab.active{border-color:#4ECDC4;color:#4ECDC4;background:rgba(78,205,196,.08);}
-.device-tab .dt-size{font-size:9px;color:#555;margin-left:4px;}
-.device-tab.active .dt-size{color:rgba(78,205,196,.5);}
-
-/* Phone frame */
-.overlay-phone-wrap{flex:1;min-width:0;min-height:0;overflow:hidden;position:relative;}
-.overlay-phone{position:absolute;overflow:hidden;background:#000;box-shadow:0 12px 48px rgba(0,0,0,.6);box-sizing:content-box;}
-.overlay-phone iframe{border:none;display:block;transform-origin:top left;}
-.overlay-desc{width:380px;min-width:380px;background:#111;border-left:1px solid #222;overflow-y:auto;padding:24px;flex-shrink:0;}
-.overlay-desc::-webkit-scrollbar{width:4px;}
-.overlay-desc::-webkit-scrollbar-thumb{background:#333;border-radius:2px;}
+/* Description items (used in zi-desc) */
 .desc-title{font-size:15px;font-weight:800;color:#fff;margin-bottom:16px;padding-bottom:10px;border-bottom:1px solid #222;}
 .desc-item{padding:10px 12px;margin-bottom:6px;background:#1a1a1a;border-radius:8px;}
 .desc-label{font-size:10px;font-weight:700;color:#4ECDC4;margin-bottom:3px;text-transform:uppercase;letter-spacing:.3px;}
@@ -156,6 +115,13 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .nav-title{font-size:11px;font-weight:700;color:#666;margin-bottom:10px;text-transform:uppercase;letter-spacing:.5px;}
 .nav-link{display:inline-block;padding:4px 10px;margin:3px;background:#1a1a1a;border:1px solid #333;border-radius:6px;font-size:11px;color:#4ECDC4;cursor:pointer;transition:all .2s;}
 .nav-link:hover{background:#0d2a28;border-color:#4ECDC4;}
+
+/* Device tabs */
+.device-tab{padding:4px 10px;border:1px solid #333;background:none;color:#888;border-radius:6px;cursor:pointer;font-size:10px;transition:all .15s;white-space:nowrap;}
+.device-tab:hover{border-color:#555;color:#ccc;}
+.device-tab.active{border-color:#4ECDC4;color:#4ECDC4;background:rgba(78,205,196,.08);}
+.device-tab .dt-size{font-size:8px;color:#555;margin-left:3px;}
+.device-tab.active .dt-size{color:rgba(78,205,196,.5);}
 
 /* ========== ZOOM-IN PANEL (single click) ========== */
 .zi-sidebar{position:fixed;left:0;top:44px;bottom:0;width:240px;background:#111;border-right:1px solid #222;overflow-y:auto;z-index:50;transform:translateX(-100%);transition:transform .3s ease;}
@@ -173,12 +139,18 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .zi-desc::-webkit-scrollbar{width:4px;}
 .zi-desc::-webkit-scrollbar-thumb{background:#333;border-radius:2px;}
 
-.zi-device-bar{position:fixed;top:44px;left:240px;right:360px;z-index:50;display:none;justify-content:center;gap:4px;padding:8px 12px;background:rgba(10,10,10,.85);backdrop-filter:blur(8px);border-bottom:1px solid #222;}
-.zi-device-bar.show{display:flex;}
-
-.zi-close{position:fixed;top:52px;right:368px;z-index:51;background:#222;border:1px solid #333;color:#aaa;width:28px;height:28px;border-radius:6px;cursor:pointer;font-size:14px;display:none;align-items:center;justify-content:center;}
-.zi-close.show{display:flex;}
+.zi-topbar{position:fixed;top:44px;left:240px;right:360px;z-index:50;display:none;align-items:center;justify-content:center;gap:6px;padding:6px 12px;background:rgba(10,10,10,.9);backdrop-filter:blur(8px);border-bottom:1px solid #222;}
+.zi-topbar.show{display:flex;}
+.zi-topbar .zi-extract{display:flex;gap:4px;position:absolute;right:12px;}
+.zi-topbar .zi-extract button{background:#1a1a1a;border:1px solid #333;color:#aaa;padding:4px 10px;border-radius:6px;cursor:pointer;font-size:10px;font-weight:600;}
+.zi-topbar .zi-extract button:hover{border-color:#4ECDC4;color:#4ECDC4;}
+.zi-close{position:absolute;left:12px;background:#222;border:1px solid #333;color:#aaa;width:26px;height:26px;border-radius:6px;cursor:pointer;font-size:12px;display:flex;align-items:center;justify-content:center;}
 .zi-close:hover{border-color:#4ECDC4;color:#fff;}
+
+/* Live preview floating over canvas */
+.zi-preview{position:fixed;z-index:45;overflow:hidden;background:#000;box-shadow:0 12px 48px rgba(0,0,0,.6);box-sizing:content-box;display:none;}
+.zi-preview.show{display:block;}
+.zi-preview iframe{border:none;display:block;transform-origin:top left;}
 
 /* Code modal */
 .modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:400;justify-content:center;align-items:center;backdrop-filter:blur(4px);}
@@ -238,10 +210,17 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 
 <div class="minimap" id="minimap"></div>
 
-<!-- Zoom-in panels (single click) -->
+<!-- Zoom-in panels -->
 <div class="zi-sidebar" id="ziSidebar"></div>
-<div class="zi-device-bar" id="ziDeviceBar"></div>
-<button class="zi-close" id="ziClose" onclick="closeZoomIn()">&times;</button>
+<div class="zi-topbar" id="ziTopbar">
+  <button class="zi-close" onclick="closeZoomIn()">&times;</button>
+  <div id="ziDeviceTabs" style="display:flex;gap:4px;flex-wrap:wrap;"></div>
+  <div class="zi-extract">
+    <button onclick="ziExtractPNG()">PNG 추출</button>
+    <button onclick="ziExtractHTML()">HTML 코드</button>
+  </div>
+</div>
+<div class="zi-preview" id="ziPreview"><iframe id="ziIframe"></iframe></div>
 <div class="zi-desc" id="ziDesc"></div>
 
 <!-- Tokens view -->
@@ -279,33 +258,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   </div>
 </div>
 
-<!-- Detail overlay -->
-<div class="overlay" id="overlay">
-  <div class="overlay-header">
-    <button class="overlay-back" onclick="closeOverlay()">&#9664; 돌아가기</button>
-    <span class="overlay-title" id="overlayTitle"></span>
-    <div class="device-tabs" id="deviceTabs"></div>
-    <div class="overlay-nav">
-      <button onclick="prevScreen()" title="이전 (←)">&#9664;</button>
-      <button onclick="nextScreen()" title="다음 (→)">&#9654;</button>
-    </div>
-    <div class="extract-btns">
-      <button onclick="extractPNG()">PNG 추출</button>
-      <button onclick="extractHTML()">HTML 코드</button>
-    </div>
-  </div>
-  <div class="overlay-body">
-    <div class="overlay-sidebar" id="overlaySidebar"></div>
-    <div class="overlay-phone-area">
-      <div class="overlay-phone-wrap" id="overlayPhoneWrap">
-        <div class="overlay-phone" id="overlayPhone">
-          <iframe id="overlayIframe"></iframe>
-        </div>
-      </div>
-    </div>
-    <div class="overlay-desc" id="overlayDesc"></div>
-  </div>
-</div>
 
 <div class="modal-bg" id="codeModal">
   <div class="modal">
@@ -880,10 +832,6 @@ screens.forEach(s => {
     e.stopPropagation();
     openZoomIn(s.id);
   });
-  card.addEventListener('dblclick', (e) => {
-    e.stopPropagation();
-    openOverlay(s.id);
-  });
   canvas.appendChild(card);
 });
 
@@ -1058,9 +1006,6 @@ document.getElementById('searchInput').addEventListener('input', e => {
   });
 });
 
-// ========== OVERLAY (DETAIL VIEW) ==========
-let currentScreen = null;
-
 // ========== DEVICE PRESETS ==========
 const devices = [
   { id:'s24',      name:'Galaxy S24',    w:360, h:780,  r:32, border:6 },
@@ -1072,218 +1017,52 @@ const devices = [
   { id:'tab',      name:'Galaxy Tab',    w:800, h:1280, r:16, border:5 },
   { id:'web',      name:'Desktop',       w:1280,h:800,  r:8,  border:4 },
 ];
-let currentDevice = devices[0]; // default Galaxy S24
-
-function buildDeviceTabs() {
-  const container = document.getElementById('deviceTabs');
-  container.innerHTML = devices.map(d =>
-    `<button class="device-tab ${d.id===currentDevice.id?'active':''}" data-device="${d.id}" onclick="switchDevice('${d.id}')">${d.name}<span class="dt-size">${d.w}×${d.h}</span></button>`
-  ).join('');
-}
-
-function switchDevice(deviceId) {
-  const d = devices.find(x => x.id === deviceId);
-  if (!d) return;
-  currentDevice = d;
-  // Update tab active
-  document.querySelectorAll('.device-tab').forEach(t => t.classList.toggle('active', t.dataset.device === deviceId));
-  // Resize phone frame
-  applyDeviceSize();
-}
-
-function applyDeviceSize() {
-  const phone = document.getElementById('overlayPhone');
-  const wrap = document.getElementById('overlayPhoneWrap');
-  const iframe = document.getElementById('overlayIframe');
-  if (!phone || !wrap || !iframe) return;
-
-  const isLandscape = currentScreen && currentScreen.landscape;
-  const dw = isLandscape ? currentDevice.h : currentDevice.w;
-  const dh = isLandscape ? currentDevice.w : currentDevice.h;
-  const bw = currentDevice.border;
-
-  const wrapW = wrap.clientWidth;
-  const wrapH = wrap.clientHeight;
-  if (wrapW <= 0 || wrapH <= 0) return;
-
-  // Available space = wrap minus margin, minus border (both sides)
-  const margin = 24;
-  const availW = wrapW - margin * 2 - bw * 2;
-  const availH = wrapH - margin * 2 - bw * 2;
-
-  const scale = Math.min(1, availW / dw, availH / dh);
-  const visW = Math.round(dw * scale);
-  const visH = Math.round(dh * scale);
-
-  // Total phone size including border
-  const totalW = visW + bw * 2;
-  const totalH = visH + bw * 2;
-
-  // Exact center
-  phone.style.left = Math.round((wrapW - totalW) / 2) + 'px';
-  phone.style.top = Math.round((wrapH - totalH) / 2) + 'px';
-  phone.style.width = visW + 'px';
-  phone.style.height = visH + 'px';
-  phone.style.borderRadius = Math.round(currentDevice.r * scale) + 'px';
-  phone.style.border = bw + 'px solid #333';
-
-  // iframe = actual device size, CSS transform scales to fit
-  iframe.style.width = dw + 'px';
-  iframe.style.height = dh + 'px';
-  iframe.style.transform = `scale(${scale})`;
-}
-
-// Resize on window resize
-window.addEventListener('resize', () => {
-  if (document.getElementById('overlay').classList.contains('show')) {
-    applyDeviceSize();
-  }
-});
-
-// Build sidebar once
-let sidebarBuilt = false;
-function buildSidebar() {
-  if (sidebarBuilt) return;
-  sidebarBuilt = true;
-  const sb = document.getElementById('overlaySidebar');
-  const groups = [
-    { key:'adm', label:'관리자 앱' },
-    { key:'comm', label:'공통 기능' },
-    { key:'con', label:'소비자 앱' },
-    { key:'web', label:'웹' },
-  ];
-  let html = '';
-  groups.forEach(g => {
-    html += `<div class="os-group">${g.label}</div>`;
-    screens.filter(s => s.cat === g.key).forEach(s => {
-      html += `<button class="os-item" data-sid="${s.id}" onclick="openOverlay('${s.id}')"><span class="os-code">${s.code}</span>${s.name}</button>`;
-    });
-  });
-  sb.innerHTML = html;
-}
-
-function updateSidebarActive(screenId) {
-  document.querySelectorAll('.os-item').forEach(b => b.classList.toggle('active', b.dataset.sid === screenId));
-  const active = document.querySelector('.os-item.active');
-  if (active) active.scrollIntoView({ block:'nearest', behavior:'smooth' });
-}
-
-function openOverlay(screenId) {
-  const s = screens.find(x => x.id === screenId);
-  if (!s) return;
-  currentScreen = s;
-  history.replaceState(null, '', '#' + screenId);
-
-  document.getElementById('overlayTitle').textContent = `${s.code} ${s.name}`;
-
-  // Build sidebar (once), update active
-  buildSidebar();
-  updateSidebarActive(screenId);
-
-  // Device tabs & phone frame
-  buildDeviceTabs();
-  const iframe = document.getElementById('overlayIframe');
-  iframe.src = 'index.html?embed=1&screen=' + screenId;
-
-  // Description panel (from local data)
-  const descEl = document.getElementById('overlayDesc');
-  let html = '';
-  const d = descriptions[screenId];
-  if (d) {
-    html += `<div class="desc-title">${d.title}</div>`;
-    d.items.forEach(([label, text]) => {
-      html += `<div class="desc-item"><div class="desc-label">${label}</div><div class="desc-text">${text}</div></div>`;
-    });
-  }
-
-  // Connected screens
-  const outgoing = connections.filter(c => c[0] === screenId).map(c => c[1]);
-  const incoming = connections.filter(c => c[1] === screenId).map(c => c[0]);
-  if (outgoing.length > 0) {
-    html += '<div class="nav-section"><div class="nav-title">이동할 수 있는 화면</div>';
-    outgoing.forEach(tid => {
-      const ts = screens.find(x => x.id === tid);
-      if (ts) html += `<a class="nav-link" onclick="openOverlay('${tid}')">${ts.code} ${ts.name}</a>`;
-    });
-    html += '</div>';
-  }
-  if (incoming.length > 0) {
-    html += '<div class="nav-section"><div class="nav-title">이 화면으로 오는 화면</div>';
-    incoming.forEach(tid => {
-      const ts = screens.find(x => x.id === tid);
-      if (ts) html += `<a class="nav-link" onclick="openOverlay('${tid}')">${ts.code} ${ts.name}</a>`;
-    });
-    html += '</div>';
-  }
-  descEl.innerHTML = html;
-  descEl.scrollTop = 0;
-
-  document.getElementById('overlay').classList.add('show');
-  // Apply device size AFTER overlay is visible so wrap has dimensions
-  requestAnimationFrame(() => applyDeviceSize());
-}
-
-function closeOverlay() {
-  document.getElementById('overlay').classList.remove('show');
-  currentScreen = null;
-  history.replaceState(null, '', location.pathname);
-}
-
-function prevScreen() {
-  if (!currentScreen) return;
-  const idx = screens.findIndex(s => s.id === currentScreen.id);
-  if (idx > 0) openOverlay(screens[idx - 1].id);
-}
-function nextScreen() {
-  if (!currentScreen) return;
-  const idx = screens.findIndex(s => s.id === currentScreen.id);
-  if (idx < screens.length - 1) openOverlay(screens[idx + 1].id);
-}
+let currentDevice = devices[0];
 
 // ========== EXTRACT ==========
-function extractPNG() {
-  if (!currentScreen) return;
-  const iframe = document.getElementById('overlayIframe');
+function ziExtractPNG() {
+  if (!ziScreen) return;
+  const iframe = document.getElementById('ziIframe');
   try {
     const doc = iframe.contentDocument;
-    const el = doc.getElementById(currentScreen.id);
+    const el = doc.getElementById(ziScreen.id);
     if (!el) { showToast('화면을 찾을 수 없습니다'); return; }
     showToast('PNG 추출 중...');
     const body = el.querySelector('.screen-body') || el;
-    html2canvas(body, { useCORS:true, backgroundColor:'#fff', scale:2, width:375, height:812 }).then(c => {
+    html2canvas(body, { useCORS:true, backgroundColor:'#fff', scale:2, width:currentDevice.w, height:currentDevice.h }).then(c => {
       const a = document.createElement('a');
-      a.download = `${currentScreen.code}_${currentScreen.name}.png`;
+      a.download = `${ziScreen.code}_${ziScreen.name}.png`;
       a.href = c.toDataURL('image/png');
       a.click();
       showToast('PNG 저장 완료!');
     }).catch(() => showToast('PNG 추출 실패'));
-  } catch(e) { showToast('PNG 추출 실패 (로컬 서버에서 실행해주세요)'); }
+  } catch(e) { showToast('PNG 추출 실패 (GitHub Pages에서 실행해주세요)'); }
 }
 
-function extractHTML() {
-  if (!currentScreen) return;
-  const iframe = document.getElementById('overlayIframe');
+function ziExtractHTML() {
+  if (!ziScreen) return;
+  const iframe = document.getElementById('ziIframe');
   try {
     const doc = iframe.contentDocument;
-    const el = doc.getElementById(currentScreen.id);
+    const el = doc.getElementById(ziScreen.id);
     if (!el) { showToast('화면을 찾을 수 없습니다'); return; }
     let css = '';
     doc.querySelectorAll('style').forEach(s => css += s.textContent + '\n');
-    const code = `<!DOCTYPE html>\n<html lang="ko">\n<head>\n<meta charset="UTF-8">\n<meta name="viewport" content="width=device-width,initial-scale=1.0">\n<title>${currentScreen.code} ${currentScreen.name}</title>\n<style>\n${css}\n#${currentScreen.id}{display:block!important;}\n.screen-content{display:none;}\n</style>\n</head>\n<body>\n${el.outerHTML}\n</body>\n</html>`;
+    const code = `<!DOCTYPE html>\n<html lang="ko">\n<head>\n<meta charset="UTF-8">\n<meta name="viewport" content="width=device-width,initial-scale=1.0">\n<title>${ziScreen.code} ${ziScreen.name}</title>\n<style>\n${css}\n#${ziScreen.id}{display:block!important;}\n.screen-content{display:none;}\n</style>\n</head>\n<body>\n${el.outerHTML}\n</body>\n</html>`;
     document.getElementById('codeContent').textContent = code;
-    document.getElementById('codeModalTitle').textContent = `${currentScreen.code} ${currentScreen.name}`;
+    document.getElementById('codeModalTitle').textContent = `${ziScreen.code} ${ziScreen.name}`;
     document.getElementById('codeModal').classList.add('show');
-  } catch(e) { showToast('HTML 추출 실패 (로컬 서버에서 실행해주세요)'); }
+  } catch(e) { showToast('HTML 추출 실패 (GitHub Pages에서 실행해주세요)'); }
 }
 
 function copyCode() {
   navigator.clipboard.writeText(document.getElementById('codeContent').textContent).then(() => showToast('복사 완료!'));
 }
 function downloadCode() {
-  if (!currentScreen) return;
+  if (!ziScreen) return;
   const blob = new Blob([document.getElementById('codeContent').textContent], {type:'text/html'});
   const a = document.createElement('a');
-  a.download = `${currentScreen.code}_${currentScreen.name}.html`;
+  a.download = `${ziScreen.code}_${ziScreen.name}.html`;
   a.href = URL.createObjectURL(blob);
   a.click();
   showToast('다운로드 완료!');
@@ -1303,16 +1082,11 @@ document.addEventListener('keydown', e => {
   if (e.target.tagName === 'INPUT') return;
   if (e.key === 'Escape') {
     if (document.getElementById('codeModal').classList.contains('show')) closeCode();
-    else if (document.getElementById('overlay').classList.contains('show')) closeOverlay();
     else if (ziActive) closeZoomIn();
-  }
-  if (document.getElementById('overlay').classList.contains('show')) {
-    if (e.key === 'ArrowLeft') prevScreen();
-    if (e.key === 'ArrowRight') nextScreen();
   }
 });
 
-// ========== ZOOM-IN MODE (single click) ==========
+// ========== ZOOM-IN MODE ==========
 let ziActive = false;
 let ziScreen = null;
 let ziSidebarBuilt = false;
@@ -1321,12 +1095,7 @@ function buildZiSidebar() {
   if (ziSidebarBuilt) return;
   ziSidebarBuilt = true;
   const sb = document.getElementById('ziSidebar');
-  const groups = [
-    { key:'adm', label:'관리자 앱' },
-    { key:'comm', label:'공통 기능' },
-    { key:'con', label:'소비자 앱' },
-    { key:'web', label:'웹' },
-  ];
+  const groups = [{key:'adm',label:'관리자 앱'},{key:'comm',label:'공통 기능'},{key:'con',label:'소비자 앱'},{key:'web',label:'웹'}];
   let html = '';
   groups.forEach(g => {
     html += `<div class="os-group">${g.label}</div>`;
@@ -1337,6 +1106,24 @@ function buildZiSidebar() {
   sb.innerHTML = html;
 }
 
+function buildZiDeviceTabs() {
+  const c = document.getElementById('ziDeviceTabs');
+  if (c.children.length > 0) {
+    c.querySelectorAll('.device-tab').forEach(t => t.classList.toggle('active', t.dataset.dev === currentDevice.id));
+    return;
+  }
+  c.innerHTML = devices.map(d =>
+    `<button class="device-tab ${d.id===currentDevice.id?'active':''}" data-dev="${d.id}" onclick="switchZiDevice('${d.id}')">${d.name}<span class="dt-size">${d.w}x${d.h}</span></button>`
+  ).join('');
+}
+
+function switchZiDevice(deviceId) {
+  const d = devices.find(x => x.id === deviceId);
+  if (!d) return;
+  currentDevice = d;
+  document.querySelectorAll('[data-dev]').forEach(t => t.classList.toggle('active', t.dataset.dev === deviceId));
+  if (ziScreen) applyZiPreview();
+}
 
 function openZoomIn(screenId) {
   const s = screens.find(x => x.id === screenId);
@@ -1344,97 +1131,115 @@ function openZoomIn(screenId) {
   ziScreen = s;
   ziActive = true;
 
-  // Build sidebar
   buildZiSidebar();
+  buildZiDeviceTabs();
 
   // Show panels
   document.getElementById('ziSidebar').classList.add('show');
   document.getElementById('ziDesc').classList.add('show');
-  document.getElementById('ziClose').classList.add('show');
+  document.getElementById('ziTopbar').classList.add('show');
 
-  // Adjust viewport margins FIRST so zoom calculation uses correct viewport size
+  // Viewport margins
   const vp = document.getElementById('viewport');
   vp.style.marginLeft = '240px';
   vp.style.marginRight = '360px';
+  vp.style.marginTop = '38px';
 
-  // Update sidebar active
+  // Sidebar active
   document.querySelectorAll('[data-zisid]').forEach(b => b.classList.toggle('active', b.dataset.zisid === screenId));
-  const activeBtn = document.querySelector('[data-zisid].active');
-  if (activeBtn) activeBtn.scrollIntoView({ block:'nearest', behavior:'smooth' });
+  const ab = document.querySelector('[data-zisid].active');
+  if (ab) ab.scrollIntoView({block:'nearest',behavior:'smooth'});
 
   // Highlight card
   document.querySelectorAll('.scard').forEach(c => c.classList.toggle('highlight', c.id === 'scard-' + screenId));
 
-  // Fill description
+  // Load live preview
+  const iframe = document.getElementById('ziIframe');
+  iframe.src = 'index.html?embed=1&screen=' + screenId;
+
+  // Description
   fillZiDesc(screenId);
 
-  // Zoom canvas to card AFTER margins are applied (next frame)
-  requestAnimationFrame(() => zoomToCard(screenId));
+  // Zoom + position preview
+  requestAnimationFrame(() => {
+    zoomToCard(screenId);
+    applyZiPreview();
+  });
 }
 
 function zoomToCard(screenId) {
   const pos = positions[screenId];
   if (!pos) return;
   const vp = document.getElementById('viewport');
-  // Force reflow to get correct dimensions after margin change
   const vpW = vp.offsetWidth;
   const vpH = vp.offsetHeight;
 
-  // Zoom level that shows the card large enough to read
-  const targetScale = 0.8;
-  const cardCenterX = pos.x + CW / 2;
-  const cardCenterY = pos.y + CH / 2;
+  scale = 0.7;
+  panX = vpW / 2 - (pos.x + CW / 2) * scale;
+  panY = vpH / 2 - (pos.y + CH / 2) * scale;
 
-  scale = targetScale;
-  panX = vpW / 2 - cardCenterX * scale;
-  panY = vpH / 2 - cardCenterY * scale;
-
-  // Smooth animated transition
-  canvas.style.transition = 'transform 0.5s cubic-bezier(0.4, 0, 0.2, 1)';
+  canvas.style.transition = 'transform 0.5s cubic-bezier(0.4,0,0.2,1)';
   updateTransform();
   setTimeout(() => { canvas.style.transition = ''; }, 500);
 }
 
+function applyZiPreview() {
+  const preview = document.getElementById('ziPreview');
+  const iframe = document.getElementById('ziIframe');
+  if (!preview || !iframe || !ziScreen) return;
+
+  const isLand = ziScreen.landscape;
+  const dw = isLand ? currentDevice.h : currentDevice.w;
+  const dh = isLand ? currentDevice.w : currentDevice.h;
+  const bw = currentDevice.border;
+
+  // Available area between panels
+  const areaLeft = 240;
+  const areaTop = 44 + 38;
+  const areaW = window.innerWidth - 240 - 360;
+  const areaH = window.innerHeight - areaTop;
+  const pad = 30;
+
+  const sc = Math.min(1, (areaW - pad*2) / dw, (areaH - pad*2) / dh);
+  const visW = Math.round(dw * sc);
+  const visH = Math.round(dh * sc);
+
+  preview.style.left = Math.round(areaLeft + (areaW - visW) / 2) + 'px';
+  preview.style.top = Math.round(areaTop + (areaH - visH) / 2) + 'px';
+  preview.style.width = visW + 'px';
+  preview.style.height = visH + 'px';
+  preview.style.borderRadius = Math.round(currentDevice.r * sc) + 'px';
+  preview.style.border = bw + 'px solid #333';
+
+  iframe.style.width = dw + 'px';
+  iframe.style.height = dh + 'px';
+  iframe.style.transform = `scale(${sc})`;
+
+  preview.classList.add('show');
+}
+
 function fillZiDesc(screenId) {
   const descEl = document.getElementById('ziDesc');
-  const s = screens.find(x => x.id === screenId);
   let html = '';
-
   const d = descriptions[screenId];
   if (d) {
     html += `<div class="desc-title">${d.title}</div>`;
     d.items.forEach(([label, text]) => {
       html += `<div class="desc-item"><div class="desc-label">${label}</div><div class="desc-text">${text}</div></div>`;
     });
-  } else if (s) {
-    html += `<div class="desc-title">${s.code} ${s.name}</div>`;
   }
-
-  // Connected screens
   const outgoing = connections.filter(c => c[0] === screenId).map(c => c[1]);
   const incoming = connections.filter(c => c[1] === screenId).map(c => c[0]);
   if (outgoing.length > 0) {
     html += '<div class="nav-section"><div class="nav-title">이동할 수 있는 화면</div>';
-    outgoing.forEach(tid => {
-      const ts = screens.find(x => x.id === tid);
-      if (ts) html += `<a class="nav-link" onclick="openZoomIn('${tid}')">${ts.code} ${ts.name}</a>`;
-    });
+    outgoing.forEach(tid => { const ts = screens.find(x=>x.id===tid); if(ts) html+=`<a class="nav-link" onclick="openZoomIn('${tid}')">${ts.code} ${ts.name}</a>`; });
     html += '</div>';
   }
   if (incoming.length > 0) {
     html += '<div class="nav-section"><div class="nav-title">이 화면으로 오는 화면</div>';
-    incoming.forEach(tid => {
-      const ts = screens.find(x => x.id === tid);
-      if (ts) html += `<a class="nav-link" onclick="openZoomIn('${tid}')">${ts.code} ${ts.name}</a>`;
-    });
+    incoming.forEach(tid => { const ts = screens.find(x=>x.id===tid); if(ts) html+=`<a class="nav-link" onclick="openZoomIn('${tid}')">${ts.code} ${ts.name}</a>`; });
     html += '</div>';
   }
-
-  // Double click hint
-  html += `<div style="margin-top:24px;padding:12px;background:#1a1a1a;border-radius:8px;border:1px solid #222;text-align:center;">
-    <div style="font-size:11px;color:#888;">카드를 <strong style="color:#4ECDC4;">더블클릭</strong>하면 전체화면 프리뷰</div>
-  </div>`;
-
   descEl.innerHTML = html;
   descEl.scrollTop = 0;
 }
@@ -1445,29 +1250,22 @@ function closeZoomIn() {
 
   document.getElementById('ziSidebar').classList.remove('show');
   document.getElementById('ziDesc').classList.remove('show');
-  document.getElementById('ziClose').classList.remove('show');
+  document.getElementById('ziTopbar').classList.remove('show');
+  document.getElementById('ziPreview').classList.remove('show');
 
   document.querySelectorAll('.scard').forEach(c => c.classList.remove('highlight'));
 
-  // Reset viewport margins
   const vp = document.getElementById('viewport');
   vp.style.marginLeft = '';
   vp.style.marginRight = '';
+  vp.style.marginTop = '';
 
-  // Smooth zoom back to fit
-  canvas.style.transition = 'transform 0.5s cubic-bezier(0.4, 0, 0.2, 1)';
-  requestAnimationFrame(() => {
-    zoomFit();
-    setTimeout(() => { canvas.style.transition = ''; }, 500);
-  });
+  canvas.style.transition = 'transform 0.5s cubic-bezier(0.4,0,0.2,1)';
+  requestAnimationFrame(() => { zoomFit(); setTimeout(()=>{canvas.style.transition='';},500); });
 }
 
-// Close zoom-in when clicking empty canvas area
-document.getElementById('viewport').addEventListener('click', (e) => {
-  if (ziActive && !e.target.closest('.scard')) {
-    closeZoomIn();
-  }
-});
+// Resize preview on window resize
+window.addEventListener('resize', () => { if (ziActive) applyZiPreview(); });
 
 // ========== MAIN TAB SWITCH ==========
 function switchMainTab(tab) {
@@ -1579,7 +1377,7 @@ zoomFit();
 // Load from hash
 if (location.hash) {
   const id = location.hash.slice(1);
-  if (screens.find(s => s.id === id)) openOverlay(id);
+  if (screens.find(s => s.id === id)) openZoomIn(id);
 }
 
 // Lazy load thumbnails with IntersectionObserver
