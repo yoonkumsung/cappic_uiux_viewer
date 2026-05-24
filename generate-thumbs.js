@@ -22,7 +22,7 @@ const DIR = path.join(__dirname, 'thumbs');
     const id = screens[i];
     const isLandscape = data.screens.find(s => s.id === id)?.landscape;
     try {
-      await page.goto(`${BASE}/index.html?screen=${id}`, { waitUntil: 'networkidle0', timeout: 10000 });
+      await page.goto(`${BASE}/app.html?screen=${id}`, { waitUntil: 'networkidle0', timeout: 10000 });
       await page.evaluate((sid) => { if (typeof go === 'function') go(sid); }, id);
       await new Promise(r => setTimeout(r, 500));
 
