@@ -134,7 +134,6 @@ const connections = [
 const descriptions = {
   'adm-login': { title: 'ADM-01 로그인', items: [
     ['사용자 시나리오', '풋살장 운영자가 아침에 출근해서 관리자 앱을 열면 로그인 화면이 나와요. 이메일과 비밀번호를 넣고 "로그인" 버튼을 누르면 홈 화면으로 들어가요. 비밀번호를 잊어버렸으면 "비밀번호를 잊으셨나요?"를 눌러서 다시 받을 수 있고, 앱 사용이 처음이라 도움이 필요하면 "문의하기"를 눌러 전화번호나 이메일을 확인할 수 있어요.'],
-    ['화면 개요', '관리자 전용 로그인 화면. 운영자 계정 인증을 통해 관리자 앱에 진입한다.'],
     ['레이아웃', '상단: StatusBar / 중앙: 로고 + 로그인 폼 (수직 중앙 정렬) / 하단: 문의하기 영역'],
     ['주요 컴포넌트', 'TextInput(email), TextInput(password), Button(Primary, full-width), Button(Outline, full-width), ContactRow(phone), ContactRow(email)'],
     ['인터랙션', '로그인 Button(Primary) 탭 시 adm-01(ADM-02 홈)로 push 이동 / "비밀번호를 잊으셨나요?" 탭 시 con-pw-reset으로 이동 / 문의하기 Button(Outline) 탭 시 contactInfo 토글 표시 / 전화번호·이메일 탭 시 클립보드 복사'],
@@ -143,7 +142,6 @@ const descriptions = {
   ]},
   'adm-01': { title: 'ADM-02 홈', items: [
     ['사용자 시나리오', '축구교실 코치가 로그인하면 제일 먼저 보는 홈 화면이에요. 우리 구장에 설치된 캡픽(카메라)이 지금 어떤 상태인지 한눈에 볼 수 있어요. A구장 1번 캡픽은 녹화 중이고, B구장 1번은 저장공간이 부족하다는 경고가 떠 있고, B구장 2번은 꺼져 있네요. 각 캡픽 카드를 누르면 자세한 촬영 화면으로 이동하고, "업데이트 하기" 버튼을 누르면 캡픽 정보를 새로 불러와요.'],
-    ['화면 개요', '관리자 앱의 메인 대시보드. 연결된 모든 캡픽의 상태를 카드 리스트로 실시간 모니터링한다.'],
     ['레이아웃', '상단: StatusBar + TopBar(시설명 좌측, 알림 아이콘 우측) / 중앙: WiFi 배너 + 캡픽 Card 리스트 + Button(Primary) / 하단: BottomNav(4탭)'],
     ['주요 컴포넌트', 'TopBar(title: 캡틴FC 용인점), IconButton(bell, badge-dot-error), WiFiBanner(status-dot-ok), Card(camera-card) x4, Badge(error: REC / success: 대기 / warning: 경고 / muted: 꺼짐), Button(Primary, full-width: 업데이트 하기), BottomNav(홈·아카이브·일정·설정)'],
     ['인터랙션', '알림 아이콘 탭 시 con-09로 push 이동 / 캡픽 Card 탭 시 adm-02(ADM-04 촬영 관리)로 push 이동 / "업데이트 하기" 탭 시 텍스트 "업데이트 완료!"로 변경 후 1.5s 후 복원 / BottomNav: adm-07(아카이브), adm-15(일정), adm-settings(설정)로 전환'],
@@ -152,7 +150,6 @@ const descriptions = {
   ]},
   'adm-01-empty': { title: 'ADM-02e 홈 (빈 상태)', items: [
     ['사용자 시나리오', '풋살장 운영자가 캡픽을 처음 설치하기 전에 앱을 열면 이 화면이 보여요. "연결된 캡픽이 없어요"라는 안내와 함께 "디바이스 찾기" 버튼이 나와요. 이 버튼을 누르면 주변에 있는 캡픽을 자동으로 찾아주는 화면으로 이동해요.'],
-    ['화면 개요', '연결된 캡픽이 없을 때 표시되는 홈 빈 상태 화면. 디바이스 검색을 유도한다.'],
     ['레이아웃', '상단: StatusBar + TopBar(시설명, 알림 아이콘) / 중앙: WiFiBanner + EmptyState(아이콘, 제목, 설명, 버튼) / 하단: BottomNav(4탭)'],
     ['주요 컴포넌트', 'TopBar, IconButton(bell, badge-dot-error), WiFiBanner(status-dot-ok), EmptyState(icon: 캡픽 SVG, title: "연결된 캡픽이 없어요", desc: "캡픽을 찾아볼까요?"), Button(Primary, full-width: 디바이스 찾기), BottomNav(홈·아카이브·일정·설정)'],
     ['인터랙션', '"디바이스 찾기" Button 탭 시 adm-04(ADM-03 캡픽 찾기)로 push 이동 / BottomNav를 통해 adm-07, adm-15, adm-settings로 전환'],
@@ -161,7 +158,6 @@ const descriptions = {
   ]},
   'adm-04': { title: 'ADM-03 캡픽 찾기', items: [
     ['사용자 시나리오', '풋살장 운영자가 새 캡픽을 설치한 후 연결하려고 할 때 사용하는 화면이에요. 화면을 열면 주변에 있는 캡픽을 자동으로 찾아서 목록으로 보여줘요. "캡픽 #1" 옆의 "연결하기" 버튼을 누르면 바로 연결되고, 이미 연결된 캡픽은 "이미 연결됨"이라고 표시돼요. 다 연결했으면 "완료" 버튼을 눌러서 홈 화면으로 돌아가요.'],
-    ['화면 개요', '주변 네트워크의 캡픽 디바이스를 자동 검색하여 연결하는 화면이다.'],
     ['레이아웃', '상단: StatusBar + TopBar(뒤로가기, "디바이스 찾기") / 중앙: pulse 애니메이션 + 발견된 캡픽 Card 리스트 + Button(Primary) / 하단: 없음'],
     ['주요 컴포넌트', 'TopBar(back → adm-01), Spinner(pulse 2s ease-in-out infinite + 캡픽 SVG), Card(camera-card) x3, Badge(success: 연결하기), Badge(accent: 이미 연결됨), Button(Primary, full-width: 완료)'],
     ['인터랙션', '뒤로가기 탭 시 adm-01로 pop 이동 / "연결하기" Badge 탭 시 텍스트 "연결됨 ✓"로 변경 + 스타일 전환 / "완료" Button 탭 시 adm-01로 push 이동'],
@@ -170,7 +166,6 @@ const descriptions = {
   ]},
   'adm-02': { title: 'ADM-04 촬영 관리', items: [
     ['사용자 시나리오', '축구교실 코치가 홈 화면에서 "A구장 1번 캡픽"을 눌러서 들어온 촬영 관리 화면이에요. 지금 녹화가 진행 중이고 경과 시간(01:23:45)이 보여요. 촬영 화질, 저장공간 등 상태를 확인하고, 문제가 있으면 "촬영 상태" 버튼을 열어서 CPU, 온도, 스티칭 상태 같은 세부 정보를 볼 수 있어요. "녹화 중지하기"를 누르면 확인 팝업이 뜨고, 중지하면 영상이 자동으로 저장돼요.'],
-    ['화면 개요', '선택한 캡픽의 실시간 촬영 프리뷰와 하드웨어 상태를 모니터링하고, 녹화를 중지하는 화면이다.'],
     ['레이아웃', '상단: StatusBar + TopBar(back, "촬영 관리") / 중앙: VideoCard(실시간 프리뷰) + Chip(촬영·영상·저장) + 촬영 상태 토글 패널 + 액션 버튼 영역 / 하단: BottomNav(4탭)'],
     ['주요 컴포넌트', 'TopBar(back → adm-01), VideoCard(REC 오버레이, 타임코드 Badge(error)), IconButton(전체화면 → adm-03), Chip x3(촬영 4K, 영상 6K, 저장 45%), Toggle(촬영 상태: 정상), MetricPanel(CPU/GPU/NPU/RAM/온도/저장공간 ProgressBar + 업로드·AI·스티칭 상태), Button(Outline: 스티칭 개선하기), Button(Danger: 녹화 중지하기), Modal(stopConfirm), Modal(reportPopup), BottomNav'],
     ['인터랙션', '전체화면 버튼 탭 시 adm-03(ADM-04a 촬영 미리보기)로 push 이동 / "촬영 상태: 정상" 토글 탭 시 MetricPanel 펼침·접힘 / "스티칭 개선하기" 탭 시 stitchConfirm Modal 표시 / "녹화 중지하기" 탭 시 stopConfirm Modal 표시 → "중지 및 저장" 탭 시 adm-05로 push 이동 / "문제가 발생했어요" 탭 시 reportPopup Modal 표시 → 전송 완료 시 bounceIn 0.6s 체크 애니메이션'],
@@ -179,7 +174,6 @@ const descriptions = {
   ]},
   'adm-03': { title: 'ADM-04a 촬영 미리보기', items: [
     ['사용자 시나리오', '코치가 촬영 관리 화면에서 전체화면 버튼을 눌러서 들어온 화면이에요. 구장 전체가 큰 화면으로 보이고, 위에 REC 표시와 녹화 시간이 나와요. 화면을 한번 터치하면 조작 버튼이 나타나고, 오른쪽 위 메뉴 버튼을 누르면 촬영 상태(CPU, GPU, 온도 등)를 옆에서 확인할 수 있어요. 아래의 "녹화 중지" 버튼으로 바로 녹화를 끝낼 수도 있어요.'],
-    ['화면 개요', '촬영 중인 영상을 가로(landscape) 전체화면으로 모니터링하는 화면이다.'],
     ['레이아웃', '전체: 가로 모드 풀스크린 비디오 영역 / 오버레이 상단: 뒤로가기 + REC dot + 캡픽명 + 타임코드 Badge(error) + 메뉴 버튼 / 오버레이 하단: Button(Danger, pill) / 우측: MetricDrawer(슬라이드)'],
     ['주요 컴포넌트', 'IconButton(back → adm-02), StatusDot(REC), Badge(error: 01:23:45), IconButton(햄버거 → MetricDrawer), MetricDrawer(촬영/영상 화질, CPU/GPU/NPU/온도/저장공간/RAM ProgressBar, 업로드·AI·스티칭 상태, Button: 문제가 발생했어요), Button(Danger, pill: 녹화 중지)'],
     ['인터랙션', '화면 탭 시 오버레이 토글(표시·숨김, opacity 0.25s transition) / 뒤로가기 탭 시 adm-02로 pop 이동 / 메뉴 버튼 탭 시 MetricDrawer translateX 0.25s slide-in / "녹화 중지" 탭 시 adm-05로 push 이동'],
@@ -188,7 +182,6 @@ const descriptions = {
   ]},
   'adm-10l': { title: 'ADM-08b 영상 플레이어', items: [
     ['사용자 시나리오', '코치가 아카이브에서 저장된 영상을 재생할 때 보는 플레이어 화면이에요. 가로 전체화면으로 영상이 나오고, 재생/일시정지 버튼, 10초 앞뒤로 이동 버튼이 있어요. 아래의 타임라인을 끌어서 원하는 부분으로 이동할 수 있고, 설정 버튼을 누르면 재생 속도(0.5x~2x)와 화질(480p~4K)을 바꿀 수 있어요.'],
-    ['화면 개요', '관리자용 아카이브 영상을 가로(landscape) 전체화면으로 재생하는 플레이어 화면이다.'],
     ['레이아웃', '전체: 가로 모드 풀스크린 / 좌측 상단: IconButton(back) / 중앙: 재생 컨트롤(-10s, play/pause, +10s) / 하단: ProgressBar(시크 바) + 설정 버튼'],
     ['주요 컴포넌트', 'IconButton(back → adm-08), Button(circle, 재생/일시정지), Button(ghost: -10s), Button(ghost: +10s), SeekBar(draggable thumb, 3:24/10:00), IconButton(gear → SettingsPopup), SettingsPopup(재생 속도: 0.5x/0.75x/1x/1.25x/1.5x/2x, 화질: 480p/720p/1080p/4K)'],
     ['인터랙션', '뒤로가기 탭 시 adm-08로 pop 이동 / 중앙 버튼 탭 시 재생·일시정지 토글 / -10s/+10s 탭 시 toast 표시 / SeekBar 드래그로 재생 위치 이동 / 설정 버튼 탭 시 SettingsPopup 표시 → 재생 속도·화질 서브패널 전환'],
@@ -197,7 +190,6 @@ const descriptions = {
   ]},
   'adm-05': { title: 'ADM-05 저장 중', items: [
     ['사용자 시나리오', '코치가 녹화를 중지한 뒤 영상이 저장되고 있는 동안 보이는 화면이에요. 동그란 로딩 표시와 함께 "영상을 저장하고 있어요"라는 메시지가 나오고, 저장 진행률(45%)이 표시돼요. 기다리기 싫으면 아래의 "홈으로 돌아가기"를 눌러서 다른 작업을 할 수 있어요.'],
-    ['화면 개요', '녹화 중지 후 영상 파일을 서버에 저장하는 로딩 화면이다.'],
     ['레이아웃', '상단: StatusBar / 중앙: Spinner + 메시지 + ProgressBar / 하단: 텍스트 링크(홈으로 돌아가기)'],
     ['주요 컴포넌트', 'Spinner(border-top spin 1s linear infinite), Heading("영상을 저장하고 있어요"), Description("조금만 기다려주세요"), ProgressBar(45%), TextLink("홈으로 돌아가기" → adm-01)'],
     ['인터랙션', '"홈으로 돌아가기" 탭 시 adm-01로 이동 / 저장 완료 시 adm-06으로 자동 전환'],
@@ -206,7 +198,6 @@ const descriptions = {
   ]},
   'adm-06': { title: 'ADM-06 저장 완료', items: [
     ['사용자 시나리오', '영상 저장이 끝나면 나오는 완료 화면이에요. 체크 표시와 함께 "영상이 저장되었어요!"라는 메시지가 잠깐 보이고, 곧바로 영상 미리보기와 함께 공유, 다운로드, 아카이브에서 보기, 홈으로 가기 버튼이 나타나요. 코치는 여기서 바로 학부모에게 영상 링크를 공유하거나, 아카이브로 이동해서 영상을 관리할 수 있어요.'],
-    ['화면 개요', '영상 저장 완료 후 2단계 전환 애니메이션과 함께 결과물을 미리보기하는 화면이다.'],
     ['레이아웃', 'Phase1: 중앙 체크 아이콘 + 완료 메시지 / Phase2: 타이틀 + 16:9 VideoPreview + ActionIcon 4개 가로 배치'],
     ['주요 컴포넌트', 'Phase1: CheckIcon(bounceIn 0.6s), Heading("영상이 저장되었어요!"), Description(파일명·용량) / Phase2: Title("It\'s Your Highlights!"), VideoPreview(16:9, 파일명·타임코드 오버레이), ActionIcon(공유·다운로드·아카이브·홈으로) x4'],
     ['인터랙션', 'Phase1 → 1.5s 후 fade-out → Phase2 opacity 0.5s ease-out 전환 / 공유 ActionIcon 탭 시 링크 클립보드 복사 + toast / 다운로드 탭 시 toast / 아카이브 탭 시 adm-07로 push 이동 / 홈으로 탭 시 adm-01로 push 이동'],
@@ -215,7 +206,6 @@ const descriptions = {
   ]},
   'adm-07': { title: 'ADM-07 아카이브', items: [
     ['사용자 시나리오', '코치가 하단 메뉴에서 "아카이브"를 눌러 들어오는 영상 목록 화면이에요. 녹화된 모든 영상이 날짜, 구장, 시간별로 정리되어 카드 형태로 보여요. "전체 영상" 탭에서는 녹화 중인 영상과 완료된 영상을 모두 볼 수 있고, "찜한 영상" 탭에서는 저장해둔 선수별 하이라이트를 볼 수 있어요. 각 카드에서 "공유하기"를 눌러 학부모에게 보내거나, "전체보기"를 눌러 상세 화면으로 이동해요.'],
-    ['화면 개요', '녹화된 모든 영상을 시간순으로 관리하는 아카이브 화면이다. 전체 영상과 찜한 영상 탭으로 구분된다.'],
     ['레이아웃', '상단: StatusBar + TopBar("아카이브", 동기화 상태) + TabBar(전체 영상 / 찜한 영상) / 중앙: Card 리스트 (영상 카드 + 액션 버튼) / 하단: BottomNav(4탭, 아카이브 활성)'],
     ['주요 컴포넌트', 'TopBar(title: 아카이브, 동기화 완료 아이콘), TabBar(전체 영상·찜한 영상), Card(title, date·venue·time 메타, VideoCard 16:9 썸네일, Badge(error: REC / success: 완료), 조회수, Button(Outline: 공유하기·전체보기)), Button(Outline: 영상 올리기·영상 합치기), BottomNav'],
     ['인터랙션', '탭 전환: 전체 영상 ↔ 찜한 영상 / "공유하기" 탭 시 링크 클립보드 복사 + toast / "전체보기" 탭 시 adm-08로 push 이동 / "영상 올리기" 탭 시 comm-upload-vid로 push 이동 / "영상 합치기" 탭 시 comm-merge로 push 이동 / 찜한 영상 탭: 북마크 아이콘 토글(accent ↔ gray)'],
@@ -224,7 +214,6 @@ const descriptions = {
   ]},
   'adm-07-empty': { title: 'ADM-07e 아카이브 (빈 상태)', items: [
     ['사용자 시나리오', '캡픽을 처음 설치하고 아직 녹화를 한 번도 안 했을 때 아카이브에 들어오면 보이는 화면이에요. "아직 녹화된 영상이 없어요"라는 안내와 함께 "촬영 시작하기" 버튼이 있어서, 바로 촬영 화면으로 이동할 수 있어요.'],
-    ['화면 개요', '녹화된 영상이 없을 때 표시되는 아카이브 빈 상태 화면이다.'],
     ['레이아웃', '상단: StatusBar + TopBar("아카이브") / 중앙: EmptyState(아이콘, 제목, 설명, 버튼) / 하단: BottomNav(4탭, 아카이브 활성)'],
     ['주요 컴포넌트', 'TopBar, EmptyState(icon: 영화 이모지, title: "아직 녹화된 영상이 없어요", desc: "경기를 녹화하면 여기에 표시돼요"), Button(Primary: 촬영 시작하기), BottomNav'],
     ['인터랙션', '"촬영 시작하기" Button 탭 시 adm-02(ADM-04 촬영 관리)로 push 이동'],
@@ -233,7 +222,6 @@ const descriptions = {
   ]},
   'adm-08': { title: 'ADM-08 영상 상세', items: [
     ['사용자 시나리오', '코치가 아카이브에서 특정 경기("A구장 7세반 수업")를 눌러 들어온 상세 화면이에요. 1분 하이라이트, 선수별 하이라이트(#1~#6 썸네일), 10분 하이라이트, 전체 경기 영상이 순서대로 나열돼요. 각 영상마다 조회수, 공유 수, 저장 수가 표시되고, 공유하기/저장하기/다운로드 버튼이 있어요. 맨 아래 "전체 다운로드" 버튼을 누르면 모든 영상을 한번에 내려받을 수 있어요.'],
-    ['화면 개요', '특정 경기 세션의 모든 영상(1분/10분 하이라이트, 선수별, 전체 경기)을 확인하고 공유·다운로드하는 상세 화면이다.'],
     ['레이아웃', '상단: StatusBar + TopBar(back, 세션명) / 중앙: SessionTag 행 + Card(1분 하이라이트) + Card(선수별 그리드 3열) + Card(10분 하이라이트) + Card(전체 경기) + Button(Primary: 전체 다운로드) / 하단: 없음'],
     ['주요 컴포넌트', 'TopBar(back → adm-07), SessionTag(날짜·구장·시간) x3, VideoCard(16:9, 타임코드 Badge, 전체화면 → adm-10l), 조회수·좋아요·공유 InfoRow, Button(Outline: 공유하기·저장하기), Button(Outline accent: 다운로드), Grid(3열 4:5 선수 썸네일 → adm-08p), Button(Primary: 전체 다운로드), Modal(dlQuality: 480p/720p/1080p/4K), Modal(bulkDlPopup: zip 다운로드 확인)'],
     ['인터랙션', '뒤로가기 탭 시 adm-07로 pop 이동 / VideoCard 또는 전체화면 버튼 탭 시 adm-10l로 push 이동 / 선수 썸네일 탭 시 adm-08p로 push 이동 / "공유하기" 탭 시 링크 클립보드 복사 + toast / "저장하기" 탭 시 북마크 토글 / "다운로드" 탭 시 dlQuality Modal 표시 / "전체 다운로드" 탭 시 bulkDlPopup Modal 표시'],
@@ -242,7 +230,6 @@ const descriptions = {
   ]},
   'adm-08p': { title: 'ADM-08a 선수 상세', items: [
     ['사용자 시나리오', '코치가 아카이브 상세에서 선수 한 명(#1)의 썸네일을 눌러 들어온 개인 하이라이트 화면이에요. 위에서 선수 이름을 입력하고 저장할 수 있고, 그 아래로 1분 하이라이트, 10분 하이라이트, 전체 경기 속 해당 선수 모습("It\'s Your Play")이 차례로 나와요. 맨 아래에는 쇼츠 클립이 격자로 보이는데, 원하는 클립을 골라서 한꺼번에 내려받을 수 있어요.'],
-    ['화면 개요', '특정 선수의 1분/10분 하이라이트, It\'s Your Play, 쇼츠 클립을 모아 보고 관리하는 화면이다.'],
     ['레이아웃', '상단: StatusBar + TopBar(back, "#1") / 중앙: Card(이름 입력) + Card(1분 하이라이트 VideoCard) + Card(10분 하이라이트 VideoCard) + Card(It\'s Your Play VideoCard) + Grid(It\'s Your Highlights 3열 4:5) + Button(Primary: 선택한 클립 내려받기) / 하단: 없음'],
     ['주요 컴포넌트', 'TopBar(back → adm-08), Avatar(48px, accent border), TextInput(placeholder: 이름을 입력하세요), Button(Outline: 저장), VideoCard(16:9) x3(1분·10분·전체 경기, 각각 전체화면 → adm-10l), 조회수·좋아요·공유 InfoRow, Button(Outline: 공유하기·저장하기), Button(Outline accent: 다운로드), ShortsClip Grid(3열 x3행, clip-circle 체크 토글), Button(Primary: 선택한 클립 내려받기), Modal(dlQuality2)'],
     ['인터랙션', '뒤로가기 탭 시 adm-08로 pop 이동 / "저장" 버튼 탭 시 toast("저장되었습니다") / VideoCard 또는 전체화면 버튼 탭 시 adm-10l로 push 이동 / 쇼츠 클립 탭 시 체크 토글 + 하단 카운트 업데이트 / "전체 선택" 탭 시 모든 클립 체크 / "다운로드" 탭 시 dlQuality2 Modal 표시'],
@@ -251,7 +238,6 @@ const descriptions = {
   ]},
   'adm-15': { title: 'ADM-09 일정', items: [
     ['사용자 시나리오', '코치가 하단 메뉴에서 "일정"을 눌러 들어오는 달력 화면이에요. 5월 달력에 수업과 대관 일정이 있는 날에 점이 찍혀 있고, 오늘 날짜가 강조돼요. 달력 아래에는 "오늘의 일정" 목록이 나와서 "A구장 수업 (7세반) 14:00~15:00" 같은 일정을 한눈에 볼 수 있어요. "일정 추가하기" 버튼을 눌러서 새 수업이나 대관 일정을 등록할 수 있어요.'],
-    ['화면 개요', '월간 캘린더와 오늘의 일정 리스트를 표시하여 촬영 일정을 관리하는 화면이다.'],
     ['레이아웃', '상단: StatusBar + TopBar("일정") / 중앙: Card(월간 캘린더 7열 그리드) + Card(오늘의 일정 리스트) + Button(Primary: 일정 추가하기) / 하단: BottomNav(4탭, 일정 활성)'],
     ['주요 컴포넌트', 'TopBar(title: 일정), CalendarGrid(7열, day-cell: today·has-event 클래스, 좌우 화살표 월 이동), Card(오늘의 일정: 일정명 + 시간 리스트, 각 항목 → adm-15a), Button(Primary, full-width: 일정 추가하기), BottomNav'],
     ['인터랙션', '캘린더 좌우 화살표 탭 시 toast("달력 탐색은 프리뷰에서 지원하지 않아요") / 일정 항목 탭 시 adm-15a로 push 이동 / "일정 추가하기" 탭 시 adm-15a로 push 이동'],
@@ -260,7 +246,6 @@ const descriptions = {
   ]},
   'adm-15-empty': { title: 'ADM-09e 일정 (빈 상태)', items: [
     ['사용자 시나리오', '풋살장 운영자가 아직 일정을 하나도 등록하지 않았을 때 보이는 빈 일정 화면이에요. 달력에 아무 표시가 없고, "등록된 일정이 없어요"라는 안내와 함께 "일정 추가하기" 버튼이 보여요. 이 버튼을 누르면 바로 일정을 만들 수 있어요.'],
-    ['화면 개요', '등록된 일정이 없을 때 표시되는 일정 빈 상태 화면이다.'],
     ['레이아웃', '상단: StatusBar + TopBar("일정") / 중앙: Card(월간 캘린더, has-event 없음) + EmptyState(아이콘, 제목, 설명, 버튼) / 하단: BottomNav(4탭, 일정 활성)'],
     ['주요 컴포넌트', 'TopBar, CalendarGrid(이벤트 점 없음), EmptyState(icon: 클립보드 이모지, title: "등록된 일정이 없어요", desc: "일정을 추가해볼까요?"), Button(Primary, full-width: 일정 추가하기), BottomNav'],
     ['인터랙션', '"일정 추가하기" Button 탭 시 adm-15a로 push 이동'],
@@ -269,7 +254,6 @@ const descriptions = {
   ]},
   'adm-15a': { title: 'ADM-09a 일정 추가', items: [
     ['사용자 시나리오', '코치가 새로운 수업이나 대관 일정을 등록할 때 사용하는 화면이에요. 일정 이름, 구장(A/B), 유형(수업/대관/레슨/기타), 시작과 종료 시간을 입력해요. 요일별 반복 설정도 할 수 있고, "캡픽 자동 녹화"를 켜두면 수업 시작 시간에 맞춰 알아서 녹화가 시작돼요. 담당 운영자를 지정하면 그 사람에게 알림이 가고, 메모도 남길 수 있어요.'],
-    ['화면 개요', '새 촬영 일정을 등록하는 폼 입력 화면이다. 캡픽 자동 녹화 및 담당 운영자 지정 기능을 포함한다.'],
     ['레이아웃', '상단: StatusBar + TopBar(back, "일정 추가") / 중앙: FormGroup(이름·구장·유형·시간·반복·캡픽 자동 녹화·담당 운영자·메모) + Button(Primary: 저장) / 하단: 없음'],
     ['주요 컴포넌트', 'TopBar(back → adm-15), TextInput(일정 이름), Chip(A구장·B구장, 토글), Chip(수업·대관·레슨·기타, 토글), TimeInput(시작·종료), Chip(일~토, 요일 반복 멀티 토글), CamSelectItem(A구장 캡픽: selected, B구장 캡픽: unselected), Chip(김코치·박코치·이매니저, 멀티 토글), TextInput(메모), Button(Primary, full-width: 저장)'],
     ['인터랙션', '뒤로가기 탭 시 adm-15로 pop 이동 / Chip 탭 시 active 토글 / CamSelectItem 탭 시 선택·해제 전환 / "저장" Button 탭 시 adm-15로 push 이동'],
@@ -278,7 +262,6 @@ const descriptions = {
   ]},
   'adm-settings': { title: 'ADM-10 설정', items: [
     ['사용자 시나리오', '코치가 하단 메뉴에서 "설정"을 눌러 들어오는 화면이에요. "운영자 관리"에서 코치와 스태프 계정을 관리하고, "네트워크 상태"에서 캡픽 연결 문제를 확인할 수 있어요. 시설 정보(시설명, 캡픽 수, 구장 수)와 내 계정 정보(이메일, 역할)도 볼 수 있고, "AI 하이라이트 만들기"나 "나만의 하이라이트 만들기" 같은 고급 기능도 여기서 들어가요. 맨 아래 "로그아웃" 버튼으로 로그인 화면으로 돌아갈 수 있어요.'],
-    ['화면 개요', '관리자 앱의 전체 설정 화면. 운영자 관리, 네트워크, 시설 정보, 고급 기능 진입점을 제공한다.'],
     ['레이아웃', '상단: StatusBar + TopBar("설정") / 중앙: SectionHeader(관리) + Card(운영자 관리·네트워크 상태) + SectionHeader(시설 정보) + Card(InfoRow x3) + SectionHeader(계정) + Card(InfoRow x2) + SectionHeader(고급 기능) + Card(AI 하이라이트·나만의 하이라이트) + Button(Danger outline: 로그아웃) / 하단: BottomNav(4탭, 설정 활성)'],
     ['주요 컴포넌트', 'TopBar, ListItem(icon + title + sub + chevron: 운영자 관리 → adm-users, 네트워크 상태 → adm-16), InfoRow(시설명·캡픽 수·구장 수), InfoRow(이메일·역할 Badge(accent: admin)), ListItem(AI 하이라이트 → adm-09, 나만의 하이라이트 → editor-1), Button(Danger outline, full-width: 로그아웃 → adm-login), BottomNav'],
     ['인터랙션', '"운영자 관리" 탭 시 adm-users로 push 이동 / "네트워크 상태" 탭 시 adm-16으로 push 이동 / "AI 하이라이트 만들기" 탭 시 adm-09로 push 이동 / "나만의 하이라이트 만들기" 탭 시 editor-1로 push 이동 / "로그아웃" 탭 시 adm-login으로 이동'],
@@ -287,7 +270,6 @@ const descriptions = {
   ]},
   'adm-16': { title: 'ADM-10c 네트워크 상태', items: [
     ['사용자 시나리오', '코치가 캡픽이 연결이 안 될 때 설정에서 "네트워크 상태"를 눌러 들어오는 화면이에요. 현재 네트워크 연결 상태(Wi-Fi, 유선)와 IP 주소, 서브넷 정보가 보여요. "클립보드에 복사" 버튼을 누르면 이 정보를 복사할 수 있고, "문의하기" 버튼을 누르면 고객센터에 오류 정보를 바로 보낼 수 있어요.'],
-    ['화면 개요', '캡픽 연결 문제 진단을 위한 네트워크 인터페이스 정보 및 서브넷 설정을 표시하는 디버그 화면이다.'],
     ['레이아웃', '상단: StatusBar + TopBar(back, "네트워크 상태") / 중앙: SectionHeader(네트워크 인터페이스) + Card(wlan0·eth0) + Divider + SectionHeader(감지된 서브넷) + InfoRow x4 + Button 행(Outline: 클립보드에 복사, Primary: 문의하기) / 하단: 없음'],
     ['주요 컴포넌트', 'TopBar(back → adm-settings), Card(NetworkItem: avatar(W/E) + iface명 + IP/서브넷 + Badge(success: 활성 / muted: 비활성)) x2, InfoRow(선택된 IP·서브넷·스캔 범위·사설 IP 필터), Button(Outline: 클립보드에 복사), Button(Primary: 문의하기)'],
     ['인터랙션', '뒤로가기 탭 시 adm-settings로 pop 이동 / "클립보드에 복사" 탭 시 네트워크 정보 텍스트 navigator.clipboard.writeText + toast / "문의하기" 탭 시 toast("오류 정보가 전송되었습니다")'],
@@ -296,7 +278,6 @@ const descriptions = {
   ]},
   'adm-users': { title: 'ADM-10a 운영자 관리', items: [
     ['사용자 시나리오', '풋살장 운영자(김대표)가 설정에서 "운영자 관리"를 눌러 들어온 화면이에요. 현재 등록된 운영자 목록이 카드로 보여요. 김대표는 admin, 박코치는 coach, 이스탭은 staff 역할이고, 각 카드에서 전화번호나 이메일을 바로 복사할 수 있어요. 새로운 코치나 스태프를 추가하려면 아래의 "운영자 추가하기" 버튼을 눌러요.'],
-    ['화면 개요', '시설에 등록된 운영자(admin/coach/staff) 계정 목록을 관리하는 화면이다.'],
     ['레이아웃', '상단: StatusBar + TopBar(back, "운영자 관리") / 중앙: Card(운영자 정보) x3 + Button(Primary: 운영자 추가하기) / 하단: 없음'],
     ['주요 컴포넌트', 'TopBar(back → adm-settings), Card(Avatar(이니셜) + 이름 + Badge(accent: admin / success: coach / muted: staff) + ContactRow(phone, 복사) + ContactRow(email, 복사)) x3, Button(Primary, full-width: 운영자 추가하기)'],
     ['인터랙션', '뒤로가기 탭 시 adm-settings로 pop 이동 / ContactRow 탭 시 전화번호·이메일 클립보드 복사 + toast / 운영자 Card 탭 시 toast("운영자 상세 정보에요") / "운영자 추가하기" 탭 시 adm-users-add로 push 이동'],
@@ -305,7 +286,6 @@ const descriptions = {
   ]},
   'adm-users-add': { title: 'ADM-10b 운영자 추가', items: [
     ['사용자 시나리오', '풋살장 운영자가 새로운 코치를 팀에 추가할 때 사용하는 화면이에요. 이름, 이메일, 전화번호를 입력하고, 역할(admin/coach/staff)을 선택한 뒤 "초대하기" 버튼을 누르면 초대 링크가 만들어져요. 이 링크를 복사해서 카카오톡이나 문자로 보내면, 새 코치가 링크를 통해 바로 가입할 수 있어요.'],
-    ['화면 개요', '새 운영자를 초대하기 위한 정보 입력 폼 화면이다. 초대 링크를 생성하여 공유한다.'],
     ['레이아웃', '상단: StatusBar + TopBar(back, "운영자 추가") / 중앙: FormGroup(이름·이메일·전화번호·역할) + Button(Primary: 초대하기) / 하단: 없음'],
     ['주요 컴포넌트', 'TopBar(back → adm-users), TextInput(이름), TextInput(email), TextInput(tel), Chip(admin·coach·staff, 토글, coach 기본 선택), Button(Primary, full-width: 초대하기), Modal(invitePopup: CheckIcon bounceIn 0.6s + "초대 링크가 생성되었어요" + Button(Outline: 링크 복사) + Button(Secondary: 닫기))'],
     ['인터랙션', '뒤로가기 탭 시 adm-users로 pop 이동 / Chip 탭 시 active 토글 / "초대하기" 탭 시 invitePopup Modal 표시 / "링크 복사" 탭 시 클립보드 복사 + toast + Modal 닫힘'],
@@ -314,7 +294,6 @@ const descriptions = {
   ]},
   'editor-1': { title: 'COMM-01 편집: 구간 선택', items: [
     ['사용자 시나리오', '선수(또는 학부모)가 자기 아카이브에 저장된 쇼츠 클립과 경기 영상 중에서 하이라이트에 넣고 싶은 영상을 골라담는 화면이에요. 썸네일을 탭하면 체크 표시가 생기고, 현재 4개(0:41)가 선택된 상태에서 "다음" 버튼을 누르면 2단계(순서 정하기)로 넘어가요.'],
-    ['화면 개요', '나만의 하이라이트 만들기 1단계. 아카이브에서 쇼츠 클립과 경기 영상을 선택하는 화면이다.'],
     ['레이아웃', '상단: StatusBar + TopBar(back → con-archive, "나만의 하이라이트 만들기") + StepBar(1/2, accent fill) / 중앙: Grid(쇼츠 클립 4열 9:16) + ListItem(경기 영상) + 선택 현황 텍스트 + Button(Primary: 다음) / 하단: 없음'],
     ['주요 컴포넌트', 'TopBar(back → con-archive), ProgressStep(1단계 활성, 2단계 비활성), ShortsClip Grid(4열, 9:16, 체크 circle 토글, 타임코드 Badge), ListItem(썸네일 + 경기명 + 시간), SelectionCounter("4개 선택됨 · 0:41"), Button(Primary, full-width: 다음)'],
     ['인터랙션', '뒤로가기 탭 시 con-archive로 pop 이동 / 쇼츠 클립 탭 시 체크 circle 토글(accent fill + check SVG ↔ border only) / "다음" Button 탭 시 editor(COMM-02 편집: 상세 조정)로 push 이동'],
@@ -323,7 +302,6 @@ const descriptions = {
   ]},
   'editor': { title: 'COMM-02 편집: 상세 조정', items: [
     ['사용자 시나리오', '선수(또는 학부모)가 1단계에서 고른 클립 4개의 순서를 드래그로 바꾸고, 텍스트/음악/스티커/필터/비율 등 편집 도구로 꾸미는 화면이에요. 미리보기 영상을 재생해서 확인한 뒤, "완성!" 버튼을 누르면 영상 생성이 시작돼요. 클립을 더 추가하고 싶으면 "+ 추가" 버튼으로 아카이브에서 추가 선택할 수 있어요.'],
-    ['화면 개요', '나만의 하이라이트 만들기 2단계. 클립 순서를 조정하고 편집 도구를 적용하는 화면이다.'],
     ['레이아웃', '상단: StatusBar + TopBar(back → con-archive, "나만의 하이라이트 만들기") + StepBar(2/2, 양쪽 accent) / 중앙: VideoPreview(9:16) + SeekBar + ClipTray(가로 스크롤) + 클립 카운트 + Button(Primary: 완성!) / 하단: EditToolBar(5개 아이콘)'],
     ['주요 컴포넌트', 'TopBar(back → con-archive), ProgressStep(2단계 활성), VideoPreview(9:16, 비율 badge, 탭 시 재생·일시정지), SeekBar(0:00~0:36, draggable), ClipTray(가로 스크롤, 9:16 썸네일 x4 + 추가 dashed 버튼, 번호 circle, 타임코드, long-press drag 순서 변경), Button(Outline: + 추가 → editorLoadPopup), Button(Primary: 완성! → editor-loading), EditToolBar(텍스트·음악·스티커·필터·비율, 각 탭 시 toast), BottomSheet(editorLoadPopup: 클립 추가 Grid + Button: 선택한 클립 추가하기)'],
     ['인터랙션', '뒤로가기 탭 시 con-archive로 pop 이동 / VideoPreview 탭 시 재생·일시정지 토글 / ClipTray long-press로 순서 변경 / "+ 추가" 탭 시 editorLoadPopup BottomSheet 표시 / "완성!" Button 탭 시 editor-loading(COMM-03)으로 push 이동 / 편집 도구 탭 시 각각 toast 표시'],
@@ -332,7 +310,6 @@ const descriptions = {
   ]},
   'editor-loading': { title: 'COMM-03 편집: 만들기 중', items: [
     ['사용자 시나리오', '선수(또는 학부모)가 편집을 마치고 "완성!" 버튼을 누른 뒤, 영상이 만들어지는 동안 기다리는 화면이에요. 회전하는 로딩 아이콘과 "영상을 만들고 있어요"라는 메시지, 진행률(60%)이 표시되며, 완료되면 자동으로 완성 화면으로 넘어가요.'],
-    ['화면 개요', '나만의 하이라이트 영상을 생성하는 로딩 화면이다.'],
     ['레이아웃', '상단: StatusBar / 중앙: Spinner + 메시지 + ProgressBar / 하단: TextLink(돌아가기)'],
     ['주요 컴포넌트', 'Spinner(border-top spin 1s linear infinite), Heading("영상을 만들고 있어요"), Description("조금만 기다려주세요"), ProgressBar(60%), TextLink("돌아가기" → editor)'],
     ['인터랙션', '"돌아가기" 탭 시 editor로 이동 / 생성 완료 시 editor-3(COMM-04)로 자동 전환'],
@@ -341,7 +318,6 @@ const descriptions = {
   ]},
   'editor-3': { title: 'COMM-04 편집: 영상 완성', items: [
     ['사용자 시나리오', '영상 생성이 끝나면 체크 아이콘과 함께 "영상이 완성되었어요!"라는 메시지가 먼저 뜨고, 잠시 후 미리보기 영상과 4개 버튼(공유/다운로드/피드 올리기/홈으로)이 나타나요. 선수(또는 학부모)는 여기서 완성된 하이라이트를 바로 공유하거나, 다운로드하거나, "피드 올리기"를 눌러 게시 화면으로 이동할 수 있어요.'],
-    ['화면 개요', '나만의 하이라이트 영상 생성 완료 후 2단계 전환 애니메이션과 결과물 미리보기를 제공하는 화면이다.'],
     ['레이아웃', 'Phase1: 중앙 CheckIcon + 완료 메시지 / Phase2: Title("It\'s Your Highlights!") + VideoPreview(9:16) + ActionIcon 4개 가로 배치'],
     ['주요 컴포넌트', 'Phase1: CheckIcon(bounceIn 0.6s), Heading("영상이 완성되었어요!"), Description("4개 클립 · 0:36") / Phase2: Title, VideoPreview(9:16, 비율·타임코드 badge, 탭 시 재생·일시정지), ActionIcon(공유 → 링크 복사, 다운로드 → toast, 피드 올리기 → con-publish, 홈으로 → con-04) x4'],
     ['인터랙션', 'Phase1 → 1.5s 후 fade-out → Phase2 opacity 0.5s ease-out 전환 / 공유 ActionIcon 탭 시 링크 클립보드 복사 + toast / 다운로드 탭 시 toast / "피드 올리기" 탭 시 con-publish(CON-22)로 push 이동 / "홈으로" 탭 시 con-04로 push 이동'],
@@ -350,7 +326,6 @@ const descriptions = {
   ]},
   'adm-09': { title: 'COMM-05 하이라이트: 영상 선택', items: [
     ['사용자 시나리오', '코치(관리자)가 AI 하이라이트를 만들기 위해 원본 영상을 선택하는 1단계 화면이에요. "아카이브에서 선택"(기존 녹화 영상)과 "기기에서 선택"(내 폰/PC 영상) 두 가지 방법 중 하나를 골라 탭하면 2단계(선수 선택)로 넘어가요.'],
-    ['화면 개요', 'AI 하이라이트 만들기 1단계. 영상 소스(아카이브 또는 기기)를 선택하는 화면이다.'],
     ['레이아웃', '상단: StatusBar + TopBar(back → adm-settings, "AI 하이라이트 만들기") / 중앙: StepIndicator(3단계, 1 활성) + Card(아카이브에서 선택) + Card(기기에서 선택) / 하단: 없음'],
     ['주요 컴포넌트', 'TopBar(back → adm-settings), StepIndicator(circle 1·2·3, 1=accent 활성, 2·3=gray), Card(icon + "아카이브에서 선택" + sub → adm-10), Card(icon + "기기에서 선택" + sub → adm-10)'],
     ['인터랙션', '뒤로가기 탭 시 adm-settings로 pop 이동 / "아카이브에서 선택" Card 탭 시 adm-10(COMM-06)으로 push 이동 / "기기에서 선택" Card 탭 시 adm-10으로 push 이동'],
@@ -359,7 +334,6 @@ const descriptions = {
   ]},
   'adm-10': { title: 'COMM-06 하이라이트: 선수 선택', items: [
     ['사용자 시나리오', '코치(관리자)가 선택한 영상에서 AI가 자동으로 감지한 인물(선수) 목록을 보고, 하이라이트를 만들 선수를 선택하는 2단계 화면이에요. 영상 프레임 위에 색깔 테두리로 감지된 인물이 표시되고, 아래쪽 6명의 인물 썸네일 중 원하는 선수를 체크한 뒤 "다음"을 누르면 3단계(설정)로 넘어가요.'],
-    ['화면 개요', 'AI 하이라이트 만들기 2단계. AI가 감지한 인물 중 하이라이트 대상 선수를 선택하는 화면이다.'],
     ['레이아웃', '상단: StatusBar + TopBar(back → adm-09, "AI 하이라이트 만들기") / 중앙: StepIndicator(3단계, 1 완료 체크, 2 활성) + FrameCanvas(16:9, 인물 바운딩 박스) + Grid(감지된 인물 3열 4:5) + Button(Primary: 다음) / 하단: 없음'],
     ['주요 컴포넌트', 'TopBar(back → adm-09), StepIndicator(1=success 체크, 2=accent, 3=gray), FrameCanvas(16:9 dark, BoundingBox(accent·warning·error border) x3), SectionLabel("감지된 인물"), Grid(3열, 4:5 썸네일 + #번호 Badge + clip-circle 체크 토글) x6, Button(Primary, full-width: 다음)'],
     ['인터랙션', '뒤로가기 탭 시 adm-09로 pop 이동 / clip-circle 탭 시 선택·해제 토글(accent fill + check SVG ↔ border only) / "다음" Button 탭 시 adm-11(COMM-07)로 push 이동'],
@@ -368,7 +342,6 @@ const descriptions = {
   ]},
   'adm-11': { title: 'COMM-07 하이라이트: 설정', items: [
     ['사용자 시나리오', '코치(관리자)가 AI 하이라이트의 세부 설정을 조정하는 3단계 화면이에요. 점수 정확도, 매칭 정확도 슬라이더와 출력 FPS, 비트레이트 입력, 디버그 모드 토글, 영상 비율(16:9, 4:3, 1:1, 9:16, 3:4) 선택이 있으며, "영상 만들기" 버튼을 누르면 AI 처리가 시작돼요.'],
-    ['화면 개요', 'AI 하이라이트 만들기 3단계. 출력 영상의 정확도, FPS, 비트레이트, 비율 등 세부 옵션을 설정하는 화면이다.'],
     ['레이아웃', '상단: StatusBar + TopBar(back → adm-10, "AI 하이라이트 만들기") / 중앙: StepIndicator(1·2 완료 체크, 3 활성) + FormGroup(점수 정확도 Slider, 매칭 정확도 Slider, FPS TextInput, 비트레이트 TextInput, 디버그 모드 Toggle, 영상 비율 Chip 행) + Button(Primary: 영상 만들기) / 하단: 없음'],
     ['주요 컴포넌트', 'TopBar(back → adm-10), StepIndicator(1·2=success, 3=accent), Slider(점수 정확도: 0.6), Slider(매칭 정확도: 0.5), TextInput(number, FPS: 30), TextInput(number, 비트레이트: 4000), Toggle(디버그 모드), Chip(16:9·4:3·1:1·9:16·3:4, single-select, 16:9 기본 활성), Button(Primary, full-width: 영상 만들기)'],
     ['인터랙션', '뒤로가기 탭 시 adm-10으로 pop 이동 / Slider 드래그로 값 조정 / Chip 탭 시 single-select 전환(기존 active 해제) / Toggle 탭 시 상태 전환 / "영상 만들기" Button 탭 시 adm-13(COMM-08)으로 push 이동'],
@@ -377,7 +350,6 @@ const descriptions = {
   ]},
   'adm-13': { title: 'COMM-08 하이라이트: 만들기 중', items: [
     ['사용자 시나리오', 'AI가 하이라이트 영상을 만들고 있는 동안 코치(관리자)가 기다리는 로딩 화면이에요. "AI 하이라이트를 만들고 있어요"라는 메시지와 함께 "1단계: 선수 찾는 중..." 같은 현재 처리 단계, 진행률 바(30%)가 표시돼요. 완료되면 자동으로 완성 화면으로 넘어가요.'],
-    ['화면 개요', 'AI가 하이라이트 영상을 생성하는 로딩 화면이다. 단계별 진행 상태를 표시한다.'],
     ['레이아웃', '상단: StatusBar / 중앙: Spinner + 메시지 + 단계 텍스트 + ProgressBar / 하단: TextLink(홈으로 돌아가기)'],
     ['주요 컴포넌트', 'Spinner(border-top spin 1s linear infinite), Heading("AI 하이라이트를 만들고 있어요"), Description("조금만 기다려주세요"), StepText("1단계: 선수 찾는 중..."), ProgressBar(30%), TextLink("홈으로 돌아가기" → adm-01)'],
     ['인터랙션', '"홈으로 돌아가기" 탭 시 adm-01로 이동 / 생성 완료 시 adm-14(COMM-09)로 자동 전환'],
@@ -386,7 +358,6 @@ const descriptions = {
   ]},
   'adm-14': { title: 'COMM-09 하이라이트: 완성', items: [
     ['사용자 시나리오', 'AI 하이라이트 생성이 완료된 화면이에요. 체크 아이콘과 "AI 하이라이트가 완성되었어요!"가 먼저 뜨고, 잠시 후 16:9 비율의 미리보기 영상(2:34)과 4개 버튼(공유/다운로드/피드 올리기/홈으로)이 나타나요. 코치(관리자)는 여기서 결과물을 확인하고 바로 공유하거나 피드에 게시할 수 있어요.'],
-    ['화면 개요', 'AI 하이라이트 생성 완료 후 2단계 전환 애니메이션과 결과물 미리보기를 제공하는 화면이다.'],
     ['레이아웃', 'Phase1: 중앙 CheckIcon + 완료 메시지 / Phase2: Title("It\'s Your Highlights!") + VideoPreview(16:9) + ActionIcon 4개 가로 배치'],
     ['주요 컴포넌트', 'Phase1: CheckIcon(bounceIn 0.6s), Heading("AI 하이라이트가 완성되었어요!"), Description("2명 · 16:9") / Phase2: Title, VideoPreview(16:9, 비율·타임코드 badge), ActionIcon(공유 → 링크 복사, 다운로드 → toast, 피드 올리기 → con-publish, 홈으로 → adm-01) x4'],
     ['인터랙션', 'Phase1 → 1.5s 후 fade-out → Phase2 opacity 0.5s ease-out 전환 / 공유 탭 시 링크 클립보드 복사 + toast / 다운로드 탭 시 toast / "피드 올리기" 탭 시 con-publish(CON-22)로 push 이동 / "홈으로" 탭 시 adm-01로 push 이동'],
@@ -395,7 +366,6 @@ const descriptions = {
   ]},
   'comm-upload-vid': { title: 'COMM-10 영상 올리기', items: [
     ['사용자 시나리오', '코치(관리자)가 경기 영상 파일을 서버에 올리는 화면이에요. 점선 영역을 탭해서 파일(MP4, MOV, 최대 2GB)을 선택하면 업로드가 시작되고, 아래쪽에 현재 업로드 중인 파일(7세반_경기.mp4)의 진행률(64%), 속도(12.4 MB/s)가 실시간으로 표시돼요.'],
-    ['화면 개요', '기기에 저장된 영상 파일을 서버에 업로드하는 화면이다. 파일 선택과 업로드 현황을 표시한다.'],
     ['레이아웃', '상단: StatusBar + TopBar(back → adm-07, "영상 올리기") / 중앙: DashedDropZone(아이콘 + 안내 + Button) + Card(업로드 현황: 파일명, ProgressBar, 용량/속도) / 하단: 없음'],
     ['주요 컴포넌트', 'TopBar(back → adm-07), DashedDropZone(border: 2px dashed, icon: 폴더, title: "영상 파일을 선택해주세요", sub: "MP4, MOV · 최대 2GB", Button(Primary: 파일 선택하기)), Card(파일명: 7세반_경기.mp4, ProgressBar(64%), 용량: 820MB / 1.28GB, 속도: 12.4 MB/s)'],
     ['인터랙션', '뒤로가기 탭 시 adm-07로 pop 이동 / "파일 선택하기" Button 탭 시 comm-upload-loading(COMM-10a)으로 push 이동'],
@@ -404,7 +374,6 @@ const descriptions = {
   ]},
   'comm-upload-loading': { title: 'COMM-10a 올리기 진행 중', items: [
     ['사용자 시나리오', '코치(관리자)가 영상 파일을 올리는 중에 보는 대기 화면이에요. 회전하는 로딩 아이콘과 "영상을 올리고 있어요"라는 메시지, 파일명(7세반_경기.mp4), 진행률(64%)과 속도(12.4 MB/s)가 표시되며, 완료되면 자동으로 완성 화면으로 넘어가요.'],
-    ['화면 개요', '영상 파일 업로드가 진행 중인 로딩 화면이다.'],
     ['레이아웃', '상단: StatusBar / 중앙: Spinner + 메시지 + ProgressBar(진행률 + 속도) / 하단: TextLink(홈으로 돌아가기)'],
     ['주요 컴포넌트', 'Spinner(border-top spin 1s linear infinite), Heading("영상을 올리고 있어요"), Description("7세반_경기.mp4"), ProgressBar(64%), InfoRow(64% / 12.4 MB/s), TextLink("홈으로 돌아가기" → adm-01)'],
     ['인터랙션', '"홈으로 돌아가기" 탭 시 adm-01로 이동 / 업로드 완료 시 comm-upload-done(COMM-10b)으로 자동 전환'],
@@ -413,7 +382,6 @@ const descriptions = {
   ]},
   'comm-upload-done': { title: 'COMM-10b 올리기 완료', items: [
     ['사용자 시나리오', '영상 올리기가 완료된 화면이에요. 체크 아이콘과 "영상 올리기가 완료되었어요!"가 먼저 뜨고(파일명: 7세반_경기.mp4, 1.28GB), 잠시 후 미리보기와 4개 버튼(공유/다운로드/피드 올리기/홈으로)이 나타나요. 코치(관리자)는 올린 영상을 바로 피드에 게시하거나 다운로드할 수 있어요.'],
-    ['화면 개요', '영상 업로드 완료 후 2단계 전환 애니메이션과 결과물 미리보기를 제공하는 화면이다.'],
     ['레이아웃', 'Phase1: 중앙 CheckIcon + 완료 메시지 / Phase2: Title("It\'s Your Highlights!") + VideoPreview(16:9, 파일명·용량 badge) + ActionIcon 4개 가로 배치'],
     ['주요 컴포넌트', 'Phase1: CheckIcon(bounceIn 0.6s), Heading("영상 올리기가 완료되었어요!"), Description("7세반_경기.mp4 · 1.28GB") / Phase2: Title, VideoPreview(16:9), ActionIcon(공유 → 링크 복사, 다운로드 → toast, 피드 올리기 → con-publish, 홈으로 → adm-01) x4'],
     ['인터랙션', 'Phase1 → 1.5s 후 fade-out → Phase2 opacity 0.5s ease-out 전환 / 공유 탭 시 링크 복사 + toast / 다운로드 탭 시 toast / "피드 올리기" 탭 시 con-publish로 push 이동 / "홈으로" 탭 시 adm-01로 push 이동'],
@@ -422,7 +390,6 @@ const descriptions = {
   ]},
   'comm-merge': { title: 'COMM-11 영상 합치기', items: [
     ['사용자 시나리오', '코치(관리자)가 여러 개의 영상을 하나로 합치는 화면이에요. 전반전/후반전/연장전 등 영상이 순서대로 나열되어 있고, 드래그 핸들로 순서를 바꾸거나 체크 해제로 제외할 수 있어요. 현재 3개 영상(총 60분)이 선택된 상태에서 "합치기" 버튼을 누르면 처리가 시작돼요.'],
-    ['화면 개요', '여러 영상 파일을 하나로 병합하는 화면이다. 드래그로 순서를 변경하고 선택·해제할 수 있다.'],
     ['레이아웃', '상단: StatusBar + TopBar(back → adm-07, "영상 합치기") / 중앙: 안내 텍스트 + Card(영상 항목: 드래그 핸들 + 썸네일 + 파일명/시간 + 순번 badge) x4 + 선택 현황 + Button(Primary: 합치기) / 하단: 없음'],
     ['주요 컴포넌트', 'TopBar(back → adm-07), Card(DragHandle(hamburger icon) + VideoThumb(60x34) + 파일명 + 시간 + OrderBadge(accent, 1·2·3)) x3(선택됨) + Card(미선택: circle border, 탭 시 토글) x1, SelectionCounter("3개 영상 선택됨 · 총 60분"), Button(Primary, full-width: 합치기)'],
     ['인터랙션', '뒤로가기 탭 시 adm-07로 pop 이동 / DragHandle로 순서 변경 / 미선택 영상의 circle 탭 시 선택·해제 토글 / "합치기" Button 탭 시 comm-merge-loading(COMM-11a)으로 push 이동'],
@@ -431,7 +398,6 @@ const descriptions = {
   ]},
   'comm-merge-loading': { title: 'COMM-11a 합치기 진행 중', items: [
     ['사용자 시나리오', '코치(관리자)가 영상 합치기를 실행한 뒤 기다리는 로딩 화면이에요. "영상을 합치고 있어요"라는 메시지와 함께 3개 영상, 총 60분이라는 정보, 진행률(45%)이 표시되며, 완료되면 자동으로 완성 화면으로 넘어가요.'],
-    ['화면 개요', '영상 파일 병합이 진행 중인 로딩 화면이다.'],
     ['레이아웃', '상단: StatusBar / 중앙: Spinner + 메시지 + ProgressBar(진행률) / 하단: TextLink(홈으로 돌아가기)'],
     ['주요 컴포넌트', 'Spinner(border-top spin 1s linear infinite), Heading("영상을 합치고 있어요"), Description("3개 영상 · 총 60분"), ProgressBar(45%), InfoRow(45% / 조금만 기다려주세요), TextLink("홈으로 돌아가기" → adm-01)'],
     ['인터랙션', '"홈으로 돌아가기" 탭 시 adm-01로 이동 / 병합 완료 시 comm-merge-done(COMM-11b)으로 자동 전환'],
@@ -440,7 +406,6 @@ const descriptions = {
   ]},
   'comm-merge-done': { title: 'COMM-11b 합치기 완료', items: [
     ['사용자 시나리오', '영상 합치기가 완료된 화면이에요. 체크 아이콘과 "영상 합치기가 완료되었어요!"가 먼저 뜨고(3개 영상, 60:00), 잠시 후 합쳐진 16:9 미리보기 영상과 4개 버튼(공유/다운로드/피드 올리기/홈으로)이 나타나요. 코치(관리자)는 합쳐진 영상을 바로 활용할 수 있어요.'],
-    ['화면 개요', '영상 병합 완료 후 2단계 전환 애니메이션과 결과물 미리보기를 제공하는 화면이다.'],
     ['레이아웃', 'Phase1: 중앙 CheckIcon + 완료 메시지 / Phase2: Title("It\'s Your Highlights!") + VideoPreview(16:9, 합침 정보·타임코드 badge) + ActionIcon 4개 가로 배치'],
     ['주요 컴포넌트', 'Phase1: CheckIcon(bounceIn 0.6s), Heading("영상 합치기가 완료되었어요!"), Description("3개 영상 · 60:00") / Phase2: Title, VideoPreview(16:9), ActionIcon(공유 → 링크 복사, 다운로드 → toast, 피드 올리기 → con-publish, 홈으로 → adm-01) x4'],
     ['인터랙션', 'Phase1 → 1.5s 후 fade-out → Phase2 opacity 0.5s ease-out 전환 / 공유 탭 시 링크 복사 + toast / 다운로드 탭 시 toast / "피드 올리기" 탭 시 con-publish로 push 이동 / "홈으로" 탭 시 adm-01로 push 이동'],
@@ -449,7 +414,6 @@ const descriptions = {
   ]},
   'con-02': { title: 'CON-01 로그인 / 회원가입', items: [
     ['사용자 시나리오', '학부모, 동호인, 선수 누구나 앱을 처음 열면 이 화면을 만나요. 카카오, 네이버, 구글, 애플 중 하나를 골라서 로그인하거나, 이메일과 비밀번호를 직접 입력해서 로그인해요. 비밀번호를 잊었으면 "비밀번호를 잊으셨나요?"를 누르고, 아직 계정이 없으면 "회원가입"을 눌러요.'],
-    ['화면 개요', '소비자 앱 진입점으로 소셜 로그인 및 이메일 로그인을 제공하는 화면.'],
     ['레이아웃', '상단 CAPP!C 로고 / 중앙 소셜 로그인 4종 + 이메일 폼 / 하단 문의하기'],
     ['주요 컴포넌트', 'Button(Primary) "로그인", Button(Social) x4 카카오·네이버·구글·애플, TextInput x2 이메일·비밀번호, Button(Outline) "문의하기"'],
     ['인터랙션', '소셜 로그인 버튼 탭 시 CON-02로 push 이동 / 로그인 버튼 탭 시 CON-02로 push 이동 / 비밀번호 찾기 탭 시 CON-23으로 push 이동 / 회원가입 탭 시 CON-24로 push 이동 / 문의하기 탭 시 연락처 영역 토글 표시'],
@@ -458,7 +422,6 @@ const descriptions = {
   ]},
   'con-01': { title: 'CON-02 온보딩', items: [
     ['사용자 시나리오', '로그인을 마친 사용자가 처음 만나는 화면이에요. "캡픽을 직접 구매했어요"와 "경기 영상만 볼래요" 중 하나를 골라요. 캡픽을 가지고 있는 사람은 위쪽을, 영상만 보고 싶은 사람은 아래쪽을 누르면 프로필 설정으로 넘어가요.'],
-    ['화면 개요', '로그인 후 최초 진입 시 사용 모드(캡픽 소유자 / 영상 시청자)를 선택하는 화면.'],
     ['레이아웃', '상단 CAPP!C 로고 + "시작하기" 라벨 / 중앙 선택 Card 2장 세로 배치 / 하단 전환 가능 안내 텍스트'],
     ['주요 컴포넌트', 'Card(선택형) x2 "CAPP!C을 구매했어요", "경기 영상만 볼래요"'],
     ['인터랙션', '어느 Card든 탭 시 CON-03으로 push 이동'],
@@ -467,7 +430,6 @@ const descriptions = {
   ]},
   'con-03': { title: 'CON-03 프로필 설정', items: [
     ['사용자 시나리오', '사용자가 처음 가입한 뒤 자기 정보를 입력하는 화면이에요. 이름, 성별, 유형(동호인/선수/학부모)을 고르고, 학부모면 아이 이름도 써요. 등번호와 포지션은 안 써도 돼요. 다 쓰면 "완료" 버튼을 눌러서 홈으로 가요.'],
-    ['화면 개요', '온보딩 직후 사용자 프로필 정보를 입력받는 폼 화면.'],
     ['레이아웃', '상단 TopBar "프로필 설정" / 중앙 폼 영역(아바타, 입력 필드, 칩 그룹) / 하단 완료 버튼'],
     ['주요 컴포넌트', 'Avatar(lg), TextInput "이름", Chip(toggle) 남성·여성, Chip(toggle) 동호인·선수·학부모, TextInput "아이 이름"(학부모 선택 시 표시), TextInput "등번호", Chip(toggle) GK·DF·MF·FW, Button(Primary) "완료"'],
     ['인터랙션', '유형에서 학부모 칩 탭 시 아이 이름 필드 표시 / 완료 버튼 탭 시 CON-05로 push 이동'],
@@ -476,7 +438,6 @@ const descriptions = {
   ]},
   'con-ob1': { title: 'CON-04 캡픽 설정: WiFi', items: [
     ['사용자 시나리오', '캡픽을 처음 설정하는 사용자(주로 학부모나 코치)가 보는 첫 번째 단계예요. 캡픽 전원을 켜고, 초록색 LED가 켜지는지 확인하고, 휴대폰에서 "CAPPIC_XX" WiFi를 선택해요. "다음"을 누르면 캡픽 찾기 단계로 넘어가요.'],
-    ['화면 개요', '캡픽 초기 설정 온보딩 첫 번째 단계(1/6)로, 캡픽과 동일 WiFi 연결을 유도한다.'],
     ['레이아웃', '상단 스텝 표시(1/6) / 중앙 WiFi 일러스트 + 제목 + 3단계 연결 가이드 카드 / 하단 DotIndicator + 버튼 영역'],
     ['주요 컴포넌트', 'StepIndicator, Illustration(WiFi), InstructionCard(numbered-list), DotIndicator(6dot), Button(primary, full-width), TextLink(건너뛰기)'],
     ['인터랙션', '다음 탭 → con-ob2 push 이동 / 건너뛰기 탭 → con-04 push 이동'],
@@ -485,7 +446,6 @@ const descriptions = {
   ]},
   'con-ob2': { title: 'CON-04a 캡픽 설정: 찾기', items: [
     ['사용자 시나리오', '캡픽 설정 2단계예요. 캡픽의 전원을 켜면 앱이 자동으로 근처에 있는 캡픽을 찾아줘요. 찾는 동안 잠시 기다리면 되고, 찾으면 "다음"을 눌러서 등록 단계로 넘어가요.'],
-    ['화면 개요', '온보딩 두 번째 단계(2/6)로, 전원을 켜고 근처 캡픽을 자동 탐색하도록 유도한다.'],
     ['레이아웃', '상단 스텝 표시(2/6) / 중앙 캡픽 일러스트 + 제목 + 설명 텍스트 / 하단 DotIndicator + 버튼 영역'],
     ['주요 컴포넌트', 'StepIndicator, Illustration(캡픽), DotIndicator(6dot), Button(primary, full-width), TextLink(건너뛰기)'],
     ['인터랙션', '다음 탭 → con-ob-register push 이동 / 건너뛰기 탭 → con-04 push 이동'],
@@ -494,7 +454,6 @@ const descriptions = {
   ]},
   'con-ob-register': { title: 'CON-04b 캡픽 설정: 등록', items: [
     ['사용자 시나리오', '캡픽 설정 3단계예요. 앱이 찾아낸 캡픽 목록(CAPPIC #1, #2)이 나타나요. 내가 쓸 캡픽 옆에 "등록하기"를 눌러서 내 계정에 연결하고, "다음"을 누르면 설치 방법 안내로 넘어가요.'],
-    ['화면 개요', '온보딩 세 번째 단계(3/6)로, 발견된 캡픽 디바이스를 계정에 등록한다.'],
     ['레이아웃', '상단 스텝 표시(3/6) / 중앙 캡픽 일러스트 + 제목 + 디바이스 카드 리스트 / 하단 DotIndicator + 버튼 영역'],
     ['주요 컴포넌트', 'StepIndicator, Illustration(캡픽), DeviceCard(CAPPIC #1, #2) + Badge(등록하기, success), DotIndicator(6dot), Button(primary, full-width), TextLink(건너뛰기)'],
     ['인터랙션', '다음 탭 → con-ob3 push 이동 / 건너뛰기 탭 → con-04 push 이동'],
@@ -503,7 +462,6 @@ const descriptions = {
   ]},
   'con-ob3': { title: 'CON-04c 캡픽 설정: 설치', items: [
     ['사용자 시나리오', '캡픽 설정 4단계예요. 캡픽을 어디에 놓을지 안내해줘요. 자석으로 벽에 붙이기, 삼각대에 올리기, 기둥에 묶기 중에 골라서 설치하고, "다음"을 누르면 연결 테스트로 넘어가요.'],
-    ['화면 개요', '온보딩 네 번째 단계(4/6)로, 캡픽의 물리적 설치 방법 3가지를 제시한다.'],
     ['레이아웃', '상단 스텝 표시(4/6) / 중앙 기둥 설치 일러스트 + 제목 + 설치 옵션 3개 카드 / 하단 DotIndicator + 버튼 영역'],
     ['주요 컴포넌트', 'StepIndicator, Illustration(기둥 설치), OptionCard(벽에 붙이기, 삼각대 설치, 기둥에 묶기) x3, DotIndicator(6dot), Button(primary, full-width), TextLink(건너뛰기)'],
     ['인터랙션', '다음 탭 → con-ob-test push 이동 / 건너뛰기 탭 → con-04 push 이동'],
@@ -512,7 +470,6 @@ const descriptions = {
   ]},
   'con-ob-test': { title: 'CON-04d 캡픽 설정: 테스트', items: [
     ['사용자 시나리오', '캡픽 설정 5단계예요. 설치한 캡픽이 잘 작동하는지 확인하는 화면이에요. 영상이 잘 보이고 "연결 성공!"이라고 뜨면 정상이에요. WiFi 신호 강도도 "좋음"으로 표시되면 안심하고 "다음"을 눌러요.'],
-    ['화면 개요', '온보딩 다섯 번째 단계(5/6)로, 캡픽 영상 수신 및 WiFi 신호를 테스트한다.'],
     ['레이아웃', '상단 스텝 표시(5/6) / 중앙 성공 체크 아이콘 + 제목 + 프리뷰 카드(영상+연결 상태) + 신호 강도 바 / 하단 DotIndicator + 버튼 영역'],
     ['주요 컴포넌트', 'StepIndicator, SuccessIcon(check, animated), PreviewCard(video-placeholder + 연결 성공 상태), SignalBar(좋음), DotIndicator(6dot), Button(primary, full-width), TextLink(건너뛰기)'],
     ['인터랙션', '다음 탭 → con-ob4 push 이동 / 건너뛰기 탭 → con-04 push 이동'],
@@ -521,7 +478,6 @@ const descriptions = {
   ]},
   'con-ob4': { title: 'CON-04e 캡픽 설정: 완료', items: [
     ['사용자 시나리오', '캡픽 설정의 마지막 6단계예요. "준비 완료!"라는 메시지가 나오면서 캡픽 설정이 끝났다고 알려줘요. "시작하기" 버튼을 누르면 앱의 홈 화면으로 이동해서 바로 사용할 수 있어요.'],
-    ['화면 개요', '온보딩 마지막 단계(6/6)로, 초기 설정 완료를 알리고 홈으로 진입시킨다.'],
     ['레이아웃', '상단 스텝 표시(6/6) / 중앙 체크 애니메이션 + "준비 완료!" 텍스트 / 하단 DotIndicator(전체 활성) + 시작하기 버튼'],
     ['주요 컴포넌트', 'StepIndicator, SuccessIcon(check, bounceIn animation), DotIndicator(6dot, all-active), Button(primary, full-width, "시작하기")'],
     ['인터랙션', '시작하기 탭 → con-04 push 이동'],
@@ -530,7 +486,6 @@ const descriptions = {
   ]},
   'con-04': { title: 'CON-05 홈', items: [
     ['사용자 시나리오', '앱에 들어오면 맨 처음 보이는 홈 화면이에요. 내가 등록한 구장(강남 풋살 아레나, 송파 스포츠센터)과 내 캡픽 상태가 보여요. 지금 뜨는 하이라이트 영상도 가로로 넘기면서 구경할 수 있고, "나만의 하이라이트 만들기"나 "AI 하이라이트 만들기"를 눌러서 영상을 편집할 수도 있어요.'],
-    ['화면 개요', '소비자 앱의 메인 대시보드로 구장, 캡픽, 인기 하이라이트를 한눈에 보여주는 화면.'],
     ['레이아웃', '상단 TopBar(CAPP!C 로고 + 알림 아이콘) / 중앙 스크롤 영역(내 구장 Card 목록, 구장 추가 버튼, 내 캡픽 Card, 핫한 하이라이트 가로 스크롤, 하이라이트 만들기 Card 2종) / 하단 BottomNav(5탭: 홈/탐색/피드/아카이브/마이)'],
     ['주요 컴포넌트', 'Card x2 구장, Button(Outline) "구장 추가", Card(캡픽 상태) Badge(연결됨), Card(쇼츠 썸네일) x4 가로 스크롤, Card "나만의 하이라이트 만들기", Card "AI 하이라이트 만들기", BottomNav(5탭: 홈/탐색/피드/아카이브/마이)'],
     ['인터랙션', '알림 아이콘 탭 시 CON-13으로 push 이동 / 구장 Card 탭 시 CON-07로 push 이동 / 구장 추가 버튼 탭 시 CON-06으로 push 이동 / 캡픽 Card 탭 시 CON-16으로 push 이동 / 쇼츠 썸네일 탭 시 CON-11로 push 이동 / 하이라이트 만들기 탭 시 COMM-01로 push 이동 / AI 하이라이트 탭 시 COMM-05로 push 이동'],
@@ -539,7 +494,6 @@ const descriptions = {
   ]},
   'con-04-empty': { title: 'CON-05e 홈 (빈 상태)', items: [
     ['사용자 시나리오', '아직 구장도 없고, 캡픽도 연결 안 한 새 사용자가 보는 홈 화면이에요. "구장 추가하기"를 눌러서 자주 가는 구장을 등록하거나, "캡픽 구매하기"를 눌러서 캡픽을 사면 돼요. 하이라이트 영상도 아직 없다고 나와요.'],
-    ['화면 개요', '구장·캡픽 미등록 시 표시되는 홈 화면의 빈 상태 변형.'],
     ['레이아웃', '상단 TopBar(CAPP!C 로고 + 알림 아이콘) / 중앙 빈 상태 EmptyState x2(내 구장, 내 캡픽) + 하이라이트 빈 텍스트 / 하단 BottomNav(5탭: 홈/탐색/피드/아카이브/마이)'],
     ['주요 컴포넌트', 'EmptyState "등록된 구장이 없어요" + Button(Primary) "구장 추가하기", EmptyState "연결된 캡픽이 없어요" + Button(Outline) "캡픽 구매하기", BottomNav(5탭: 홈/탐색/피드/아카이브/마이)'],
     ['인터랙션', '구장 추가하기 버튼 탭 시 CON-06으로 push 이동 / 캡픽 구매하기 버튼 탭 시 CON-32로 push 이동'],
@@ -548,7 +502,6 @@ const descriptions = {
   ]},
   'con-05': { title: 'CON-06 구장 추가하기', items: [
     ['사용자 시나리오', '구장을 새로 등록하고 싶을 때 오는 화면이에요. 구장에 붙어 있는 QR코드를 카메라로 찍거나, 6자리 코드를 직접 입력해요. QR코드가 없으면 "주변 검색" 탭을 눌러서 내 위치 근처의 구장을 찾아 등록할 수도 있어요.'],
-    ['화면 개요', 'QR 스캔, 코드 입력, 주변 검색 3가지 방식으로 구장을 등록하는 화면.'],
     ['레이아웃', '상단 TopBar(뒤로가기 + "구장 추가하기") / 탭 바(QR/코드, 주변 검색) / QR 탭: 카메라 뷰 + 6자리 코드 입력 / 주변 검색 탭: 지도 + 구장 목록'],
     ['주요 컴포넌트', 'TabBar(QR/코드, 주변 검색), QR 카메라 뷰, TextInput "6자리 코드 입력", Button(Primary) "등록하기", Card(구장 검색 결과) x3 + Button(Primary) "등록하기"'],
     ['인터랙션', '등록하기 버튼 탭 시 토스트 표시 후 CON-05로 push 이동 / 뒤로가기 탭 시 CON-05로 pop 이동'],
@@ -557,7 +510,6 @@ const descriptions = {
   ]},
   'con-06': { title: 'CON-07 경기 목록', items: [
     ['사용자 시나리오', '홈에서 구장 이름을 누르면 오는 화면이에요. 그 구장에서 촬영된 경기 목록이 날짜별로 나와요. "7세반 수업"이나 "슛타트업 vs FC축신" 같은 경기를 눌러서 영상을 볼 수 있어요. 경기 상태가 REC(촬영 중), 경기 종료, 대기 중으로 표시돼요.'],
-    ['화면 개요', '특정 구장의 경기를 날짜별로 시간순 정렬하여 보여주는 목록 화면.'],
     ['레이아웃', '상단 TopBar(뒤로가기 + 구장명) / 중앙 날짜 섹션 헤더 + Card 목록(stagger 애니메이션) / 하단 BottomNav(5탭: 홈/탐색/피드/아카이브/마이)'],
     ['주요 컴포넌트', 'SectionHeader(날짜), Card(경기) 경기명 + 시간 + Badge(REC/경기 종료/대기 중), BottomNav(5탭: 홈/탐색/피드/아카이브/마이)'],
     ['인터랙션', '수업 경기 Card 탭 시 CON-08로 push 이동 / 일반 경기 Card 탭 시 CON-08a로 push 이동'],
@@ -566,7 +518,6 @@ const descriptions = {
   ]},
   'con-06-empty': { title: 'CON-07e 경기 목록 (빈 상태)', items: [
     ['사용자 시나리오', '등록한 구장에 아직 촬영된 경기가 하나도 없을 때 보이는 화면이에요. "아직 촬영된 경기가 없어요"라는 안내 메시지가 나오고, "홈으로 돌아가기" 버튼을 누르면 홈으로 갈 수 있어요.'],
-    ['화면 개요', '해당 구장에 촬영된 경기가 없을 때 표시되는 경기 목록의 빈 상태 변형.'],
     ['레이아웃', '상단 TopBar(뒤로가기 + 구장명) / 중앙 EmptyState / 하단 BottomNav(5탭: 홈/탐색/피드/아카이브/마이)'],
     ['주요 컴포넌트', 'EmptyState "아직 촬영된 경기가 없어요" + Button(Primary) "홈으로 돌아가기", BottomNav(5탭: 홈/탐색/피드/아카이브/마이)'],
     ['인터랙션', '홈으로 돌아가기 버튼 탭 시 CON-05로 push 이동'],
@@ -575,7 +526,6 @@ const descriptions = {
   ]},
   'con-07': { title: 'CON-08 영상 상세 (학부모)', items: [
     ['사용자 시나리오', '학부모가 아이의 수업 경기를 보러 온 화면이에요. 1분 하이라이트는 무료로 바로 볼 수 있고, 선수별 하이라이트에서 우리 아이 번호를 찾아 누를 수 있어요. 10분 하이라이트와 전체 경기 영상은 구독하면 볼 수 있어서, "월 3,900원으로 모두 보기"나 "이 경기만 990원에 보기"를 선택해요.'],
-    ['화면 개요', '학부모 사용자가 수업 경기의 영상 및 선수별 하이라이트를 확인하고 구독을 유도하는 화면.'],
     ['레이아웃', '상단 TopBar(뒤로가기 + 경기명) / 세션 정보 바(날짜·구장·시간) / 1분 하이라이트 Card(무료) / 선수별 하이라이트 3열 그리드 / 10분 하이라이트 + 전체 경기 영상(페이드 오버레이) / 하단 구독 CTA'],
     ['주요 컴포넌트', 'SessionInfoBar(Tag x3), Card(VideoPlayer) Badge "1:00 무료", 선수 썸네일 Grid(3열 x2행) Badge "#N 무료", Card(VideoPlayer) "10분 하이라이트" + "전체 경기 영상" 페이드 처리, Button(Primary) "월 3,900원으로 모두 보기", 텍스트 링크 "이 경기만 990원에 보기"'],
     ['인터랙션', '1분 하이라이트 썸네일 탭 시 CON-10으로 push 이동 / 선수 #1 썸네일 탭 시 CON-09로 push 이동 / 구독 버튼 탭 시 CON-27로 push 이동'],
@@ -584,7 +534,6 @@ const descriptions = {
   ]},
   'con-07b': { title: 'CON-08a 영상 상세 (일반)', items: [
     ['사용자 시나리오', '동호인이 자기 팀 경기(슛타트업 vs FC축신) 영상을 보러 온 화면이에요. 1분 하이라이트를 무료로 보고, 선수별 하이라이트에서 내 번호를 찾아 눌러요. 더 긴 영상(10분, 전체 경기)을 보려면 구독하거나 건별로 결제할 수 있어요.'],
-    ['화면 개요', '일반(동호인/선수) 사용자가 경기 영상과 선수별 하이라이트를 확인하고 구독을 유도하는 화면.'],
     ['레이아웃', '상단 TopBar(뒤로가기 + 경기명) / 세션 정보 바(날짜·구장·시간) / 1분 하이라이트 Card(무료) / 선수별 하이라이트 3열 그리드 / 10분 하이라이트 + 전체 경기 영상(페이드 오버레이) / 하단 구독 CTA'],
     ['주요 컴포넌트', 'SessionInfoBar(Tag x3), Card(VideoPlayer) Badge "1:00 무료", 선수 썸네일 Grid(3열 x2행) Badge "#N 무료", Card(VideoPlayer) "10분 하이라이트" + "전체 경기 영상" 페이드 처리, Button(Primary) "월 3,900원으로 모두 보기", 텍스트 링크 "이 경기만 990원에 보기"'],
     ['인터랙션', '1분 하이라이트 썸네일 탭 시 CON-10으로 push 이동 / 선수 #1 썸네일 탭 시 CON-09로 push 이동 / 구독 버튼 탭 시 CON-27로 push 이동'],
@@ -593,7 +542,6 @@ const descriptions = {
   ]},
   'con-player': { title: 'CON-09 선수 상세', items: [
     ['사용자 시나리오', '특정 선수(#7)의 하이라이트만 모아 보는 화면이에요. 1분 하이라이트, 10분 하이라이트, 전체 경기 영상을 볼 수 있고, 각 영상마다 공유하기, 저장하기, 다운로드 버튼이 있어요. "It\'s Your Highlights" 섹션에서 최고의 순간 클립을 골라서 한꺼번에 다운로드할 수도 있어요.'],
-    ['화면 개요', '특정 선수의 개인 하이라이트 영상(1분/10분/전체)과 클립을 확인·공유·다운로드하는 화면.'],
     ['레이아웃', '상단 TopBar(뒤로가기 + 등번호) / 이름 입력 Card / 1분·10분 하이라이트 Card(VideoPlayer) / It\'s Your Play Card / It\'s Your Highlights 3열 클립 그리드 / 하단 다운로드 버튼'],
     ['주요 컴포넌트', 'Avatar + TextInput "이름 입력" + Button(Outline) "저장", Card(VideoPlayer) x3 1분·10분·전체 경기, Button(Outline) "공유하기"·"저장하기"·"다운로드" x3세트, 클립 Grid(3열 x3행) 선택 원형 체크, Button(Primary) "선택한 클립 다운로드", Modal(공유) 카카오톡·인스타·틱톡·링크복사 + Chip(영상 비율) 9:16·1:1·16:9, Modal(화질) 480p·720p·1080p·4K'],
     ['인터랙션', '영상 썸네일 탭 시 CON-10으로 push 이동 / 공유하기 버튼 탭 시 공유 Modal 표시 / 다운로드 버튼 탭 시 화질 선택 Modal 표시'],
@@ -602,7 +550,6 @@ const descriptions = {
   ]},
   'con-10l': { title: 'CON-10 영상 플레이어', items: [
     ['사용자 시나리오', '경기 영상을 실제로 재생하는 플레이어 화면이에요. 가운데 재생 버튼을 누르면 영상이 나오고, -10초, +10초로 앞뒤로 이동할 수 있어요. 톱니바퀴를 누르면 재생 속도(0.5x~2x)와 화질(480p~4K)을 바꿀 수 있어요.'],
-    ['화면 개요', '영상을 가로 전체 화면(landscape)으로 재생하는 전용 플레이어 화면.'],
     ['레이아웃', '좌상단 뒤로가기 버튼 / 중앙 재생 컨트롤(-10s, 재생/일시정지, +10s) / 하단 시크바 + 설정 아이콘'],
     ['주요 컴포넌트', 'Button(뒤로가기), Button(원형) 재생/일시정지, Button "-10s"·"+10s", SeekBar(진행 바 + 핸들), Button(설정 기어), Popup(재생 속도) 0.5x·0.75x·1x·1.25x·1.5x·2x, Popup(화질) 480p·720p·1080p·4K'],
     ['인터랙션', '뒤로가기 탭 시 CON-08로 pop 이동 / 설정 기어 탭 시 설정 Popup 토글 / 속도·화질 항목 탭 시 해당 값 적용'],
@@ -611,7 +558,6 @@ const descriptions = {
   ]},
   'con-feed': { title: 'CON-11 피드 (쇼츠)', items: [
     ['사용자 시나리오', '다른 사람들이 올린 축구 영상을 위아래로 넘기면서 보는 피드 화면이에요. 추천 탭과 팔로잉 탭을 오갈 수 있어요. 오른쪽에 하트(좋아요), 댓글, 저장, 공유 버튼이 있고, 영상 아래에는 올린 사람 이름과 해시태그가 보여요. 댓글을 누르면 아래에서 댓글창이 올라와요.'],
-    ['화면 개요', '세로(9:16) 숏폼 영상을 스와이프하며 소비하는 피드 화면이다.'],
     ['레이아웃', '상단: StatusBar(투명) + 추천/팔로잉 TabBar(고정) / 중앙: 풀스크린 영상 영역 + 우측 인터랙션 사이드바 + 하단 오버레이(작성자·캡션·해시태그·구장·조회수) / 하단: BottomNav(5탭, 피드 활성, 다크 배경)'],
     ['주요 컴포넌트', 'TabBar(추천·팔로잉, 활성 탭 하단 border), Avatar(40px, gradient, + 버튼 → con-profile-other), IconButton(heart 토글, 좋아요 수 234), IconButton(comment → feedCommentSheet BottomSheet), IconButton(bookmark 토글), IconButton(share → globalShareSheet), MusicDisc(spin 3s), BottomSheet(feedCommentSheet: 댓글 리스트 + 입력 필드 + 게시 버튼), BottomNav(다크)'],
     ['인터랙션', 'heart 아이콘 탭 시 fill red 토글 / 영상 더블탭 시 heartPop 0.8s 애니메이션 / comment 버튼 탭 시 feedCommentSheet BottomSheet 표시 / bookmark 탭 시 fill accent 토글 + bookmarkBounce / share 탭 시 globalShareSheet 표시 / 프로필 아바타 "+" 탭 시 con-profile-other로 push 이동 / @username 탭 시 con-profile-other로 push 이동 / 해시태그 탭 시 con-explore로 push 이동 / 구장명 탭 시 con-06으로 push 이동'],
@@ -620,7 +566,6 @@ const descriptions = {
   ]},
   'con-publish': { title: 'CON-22 새 게시물', items: [
     ['사용자 시나리오', '선수/학부모/코치 누구든 완성된 영상을 피드에 게시하는 화면이에요. 영상 미리보기 아래에 문구 입력란, 추천 해시태그(#골모음, #세이브, #드리블 등), 위치 추가, 공개 범위(전체 공개/팔로워만/비공개) 설정이 있고, 카카오톡/인스타그램/틱톡으로 동시 공유할지 토글로 선택한 뒤 "게시" 버튼을 누르면 피드에 올라가요.'],
-    ['화면 개요', '영상을 피드에 게시하기 위해 캡션·해시태그·공개 범위·외부 공유를 설정하는 화면이다.'],
     ['레이아웃', '상단: StatusBar + TopBar(back → editor-3, "새 게시물", Button(Primary: 게시)) / 중앙: VideoPreview(16:9) + TextArea(문구 입력) + ChipGroup(추천 해시태그) + ListItem(위치 추가) + ListItem(공개 범위) + ToggleList(함께 공유하기: 카카오톡·인스타그램·틱톡) / 하단: 없음'],
     ['주요 컴포넌트', 'TopBar(back → editor-3), Button(Primary, pill: 게시), VideoPreview(16:9, 타임코드 0:42), TextArea(placeholder: 문구를 입력하세요...), Chip(#골모음·#세이브·#드리블·#하이라이트·#캡픽, 토글 active), ListItem(위치 추가, chevron, 탭 시 텍스트 토글), ListItem(공개 범위: 전체 공개/팔로워만/비공개, 탭 시 순환), Toggle(카카오톡: on), Toggle(인스타그램: off), Toggle(틱톡: off)'],
     ['인터랙션', '"게시" Button 탭 시 toast("게시되었습니다!") 후 1s 뒤 con-feed로 push 이동 / Chip 탭 시 active 토글 / 위치 추가 탭 시 텍스트 토글(위치 추가 ↔ 강남 풋살 아레나) / 공개 범위 탭 시 전체 공개 → 팔로워만 → 비공개 순환 / Toggle 탭 시 on/off 전환'],
@@ -629,7 +574,6 @@ const descriptions = {
   ]},
   'con-archive': { title: 'CON-12 내 아카이브', items: [
     ['사용자 시나리오', '내가 촬영하거나 저장한 영상을 모아 보는 아카이브 화면이에요. "경기 영상", "하이라이트", "찜한 영상" 세 탭으로 나뉘어 있어서, 원하는 영상을 찾아서 보거나 공유할 수 있어요. 하이라이트 탭에서는 "나만의 하이라이트 만들기"나 "AI 하이라이트 만들기"를 시작할 수도 있어요.'],
-    ['화면 개요', '사용자의 경기 영상, 하이라이트, 찜한 영상을 탭으로 분류하여 관리하는 아카이브 화면이다.'],
     ['레이아웃', '상단: StatusBar + TopBar("내 아카이브", 알림 아이콘 → con-09) + TabBar(경기 영상 / 하이라이트 / 찜한 영상) / 중앙: 탭별 콘텐츠 영역 / 하단: BottomNav(5탭, 아카이브 활성)'],
     ['주요 컴포넌트', 'TopBar(title: 내 아카이브), IconButton(bell → con-09), TabBar(경기 영상·하이라이트·찜한 영상), Card(영상 제목 + 날짜·구장·시간 메타 + VideoCard 16:9 + Badge(error: REC / success: 완료) + 조회수·좋아요·공유 + Button(Outline: 공유하기·전체보기)), Button(Outline: 영상 올리기 → comm-upload-vid, 영상 합치기 → comm-merge), ListItem(나만의 하이라이트 만들기 → editor-1, AI 하이라이트 만들기 → adm-09), Grid(3열 4:5 쇼츠), Card(찜한 영상: Avatar + 영상명 + bookmark 토글), BottomNav'],
     ['인터랙션', '탭 전환: 경기 영상 ↔ 하이라이트 ↔ 찜한 영상 / "공유하기" 탭 시 링크 클립보드 복사 + toast / "전체보기" 탭 시 con-07 또는 con-07b로 push 이동 / "영상 올리기" 탭 시 comm-upload-vid로 push 이동 / "영상 합치기" 탭 시 comm-merge로 push 이동 / 쇼츠 그리드 탭 시 con-feed로 push 이동 / 찜한 영상 bookmark 탭 시 accent/gray 토글'],
@@ -638,7 +582,6 @@ const descriptions = {
   ]},
   'con-archive-empty': { title: 'CON-12e 내 아카이브 (빈 상태)', items: [
     ['사용자 시나리오', '아카이브에 아직 영상이 하나도 없을 때 보이는 화면이에요. "저장된 영상이 없어요"라는 안내가 나오고, "영상 올리기" 버튼을 눌러서 직접 영상을 올릴 수 있어요.'],
-    ['화면 개요', '저장된 영상이 없을 때 표시되는 아카이브 빈 상태 화면이다.'],
     ['레이아웃', '상단: StatusBar + TopBar("내 아카이브") + TabBar(경기 영상 / 하이라이트 / 찜한 영상) / 중앙: EmptyState(아이콘, 제목, 설명, 버튼) / 하단: BottomNav(5탭, 아카이브 활성)'],
     ['주요 컴포넌트', 'TopBar, TabBar(경기 영상 활성), EmptyState(icon: 폴더 이모지, title: "저장된 영상이 없어요", desc: "경기 영상과 하이라이트가 여기에 모여요"), Button(Primary, full-width: 영상 올리기), BottomNav'],
     ['인터랙션', '"영상 올리기" Button 탭 시 comm-upload-vid(COMM-10)로 push 이동'],
@@ -647,7 +590,6 @@ const descriptions = {
   ]},
   'con-09': { title: 'CON-13 알림', items: [
     ['사용자 시나리오', '알림 화면이에요. 새 하이라이트가 만들어졌거나, 경기 녹화가 시작됐거나, 누군가 내 영상에 좋아요를 눌렀을 때 알림이 와요. "전체", "소셜", "시스템" 탭으로 나눠서 볼 수 있고, "모두 읽음"을 누르면 다 읽은 걸로 처리돼요.'],
-    ['화면 개요', '시스템 알림과 소셜 알림을 시간순 리스트로 표시하는 알림 화면이다.'],
     ['레이아웃', '상단: StatusBar + TopBar(back → con-04, "알림") + FilterBar(전체/소셜/시스템 3탭) + "모두 읽음" 텍스트 버튼 / 중앙: NotificationItem 리스트(stagger 애니메이션) / 하단: BottomNav(5탭, 홈 활성)'],
     ['주요 컴포넌트', 'TopBar(back → con-04), FilterBar(전체·소셜·시스템, active 탭 하단 accent border), Button(text: 모두 읽음), NotificationItem(icon + noti-title + noti-desc + noti-time, unread 시 accent-light 배경) x11, BottomNav'],
     ['인터랙션', '필터 탭 전환: 전체 ↔ 소셜 ↔ 시스템(active 스타일 전환) / "모두 읽음" 탭 시 모든 unread 클래스 제거 후 텍스트 "완료!" 변경 / 시스템 알림 탭: con-07(하이라이트), adm-07(녹화 시작), con-07b(하이라이트 완성), con-archive(녹화 완료), con-18(연결 끊김)로 각각 push 이동 / 소셜 알림 탭: con-feed(좋아요·조회·댓글), con-profile-other(팔로우), con-my(공유·MVP)로 각각 push 이동'],
@@ -656,7 +598,6 @@ const descriptions = {
   ]},
   'con-my': { title: 'CON-14 마이페이지', items: [
     ['사용자 시나리오', '내 프로필을 보는 마이페이지예요. 내 사진, 이름, 경기 수, 하이라이트 수, 팔로워/팔로잉 수가 보여요. 내가 올린 하이라이트 영상이 격자 모양으로 나열되고, 프로필 공유나 프로필 수정 버튼을 누를 수 있어요. 활동 배지도 확인할 수 있어요.'],
-    ['화면 개요', '로그인 사용자의 프로필, 활동 통계, 배지, 게시물 그리드를 표시하는 마이페이지 화면이다.'],
     ['레이아웃', '상단: StatusBar + TopBar(닉네임, 설정 아이콘 → con-settings) / 중앙: Avatar(64px) + StatRow(경기·하이라이트·팔로워·팔로잉) + 프로필 정보(이름·@ID·해시태그·자기소개) + Button 행(프로필 공유·프로필 수정) + Badge 칩 + ProfileTabBar(그리드·좋아요) + Grid(3열 4:5) / 하단: BottomNav(5탭, 마이 활성)'],
     ['주요 컴포넌트', 'TopBar(title: 김민지(서준맘)), IconButton(gear → con-settings), Avatar(64px), StatRow(경기 8, 하이라이트 24, 팔로워 156 → con-followers, 팔로잉 89 → con-followers), Badge(accent-light: 10경기 달성, warning-light: 3주 연속 업로드), TextLink("활동 배지 4개 >" → con-badges), Button(Outline: 프로필 공유 → globalShareSheet, 프로필 수정 → con-profile-edit), ProfileTabBar(그리드 아이콘·하트 아이콘), Grid(3열 4:5 썸네일 + 조회수 오버레이, 각 → con-feed), BottomNav'],
     ['인터랙션', '설정 아이콘 탭 시 con-settings로 push 이동 / 팔로워·팔로잉 수 탭 시 con-followers로 push 이동 / "프로필 공유" 탭 시 globalShareSheet 표시 / "프로필 수정" 탭 시 con-profile-edit로 push 이동 / "활동 배지" 탭 시 con-badges로 push 이동 / 게시물 그리드 탭 시 con-feed로 push 이동'],
@@ -665,7 +606,6 @@ const descriptions = {
   ]},
   'con-settings': { title: 'CON-15 설정', items: [
     ['사용자 시나리오', '설정 화면이에요. 프로필 수정, 비밀번호 변경, 구독 관리 등 계정 관련 설정과, 푸시 알림, 하이라이트 완성 알림 같은 알림 설정, 영상 화질이나 자동 재생 같은 영상 설정을 바꿀 수 있어요. 구장 관리, 이용약관, 개인정보처리방침도 여기서 볼 수 있고, 로그아웃이나 계정 삭제도 할 수 있어요.'],
-    ['화면 개요', '소비자 앱의 전체 설정 화면. 계정·알림·영상·기타 설정 항목과 로그아웃 기능을 제공한다.'],
     ['레이아웃', '상단: StatusBar + TopBar(back → con-my, "설정") / 중앙: SectionHeader(계정 관리) + ListItem x3(프로필 수정·비밀번호 변경·구독 관리) + SectionHeader(알림 설정) + Toggle x3(푸시·하이라이트·새 영상) + SectionHeader(영상 설정) + InfoRow x2(화질 WiFi·데이터) + Toggle(자동 재생) + SectionHeader(기타) + ListItem x3(구장 관리·이용약관·개인정보처리방침) + InfoRow(앱 버전 1.0.0) + Button(Danger outline: 로그아웃) + TextLink(계정 삭제) / 하단: 없음'],
     ['주요 컴포넌트', 'TopBar(back → con-my), ListItem(icon + title + sub + chevron: 프로필 수정 → con-profile-edit, 비밀번호 변경 → con-pw-change, 구독 관리 → con-subscribe), Toggle(푸시 알림: on, 하이라이트 완성 알림: on, 새 영상 알림: on), InfoRow(화질 WiFi: 1080p, 화질 데이터: 720p), Toggle(자동 재생: on), ListItem(구장 관리 → con-venue-manage, 이용약관 → con-terms, 개인정보처리방침 → con-privacy), InfoRow(앱 버전: 1.0.0), Button(Danger outline: 로그아웃 → con-02), TextLink(계정 삭제 → toast)'],
     ['인터랙션', '뒤로가기 탭 시 con-my로 pop 이동 / 각 ListItem 탭 시 해당 화면으로 push 이동 / Toggle 탭 시 on/off 전환 / "로그아웃" 탭 시 con-02로 push 이동 / "계정 삭제" 탭 시 toast("계정 삭제는 설정 > 고객센터를 통해 요청해주세요")'],
@@ -674,7 +614,6 @@ const descriptions = {
   ]},
   'con-18': { title: 'CON-16 캡픽 관리', items: [
     ['사용자 시나리오', '내 캡픽의 상태를 확인하고 관리하는 화면이에요. 배터리(78%), 저장공간(45%), 온도(58도), WiFi 신호(강함)가 한눈에 보여요. 지금 촬영 중인 영상 미리보기도 있고, 녹화 중지, 촬영 설정, 실시간 중계 버튼을 누를 수 있어요. 문제가 생기면 "?" 버튼으로 고객센터에 신고할 수도 있어요.'],
-    ['화면 개요', '등록된 캡픽의 하드웨어 상태를 모니터링하고, 실시간 촬영 프리뷰 확인 및 녹화 중지·촬영 설정을 수행하는 화면이다.'],
     ['레이아웃', '상단: StatusBar + TopBar(back → con-04, "캡픽 관리") / 중앙: Card(캡픽 상태 2x2 그리드: 배터리·저장공간·온도·WiFi) + 촬영 중 프리뷰(VideoCard 16:9, REC 오버레이) + Button 영역(녹화 중지·스티칭 개선·촬영 설정·실시간 중계) / Modal(conStopConfirm, conReportPopup) / 하단: 없음'],
     ['주요 컴포넌트', 'TopBar(back → con-04), Card(캡픽 SVG + 이름 + StatusDot(ok: 연결됨) + IconButton(? → conReportPopup)), MetricGrid(배터리 78% success, 저장공간 45%, 온도 58C warning, WiFi 강함 success), VideoCard(16:9, REC dot + 타임코드 Badge(error: 01:23:45) + 전체화면 → con-10l), Button(Danger: 녹화 중지하기 → conStopConfirm Modal), Button(Outline: 스티칭 개선하기 → toast), Button(Primary: 촬영 설정 → con-upload), Button(Outline: 실시간 중계 → con-08), Modal(conStopConfirm: 확인 → adm-05), Modal(conReportPopup: 전송 → bounceIn 체크 애니메이션)'],
     ['인터랙션', '뒤로가기 탭 시 con-04로 pop 이동 / "녹화 중지하기" 탭 시 conStopConfirm Modal 표시 → "중지하기" 탭 시 adm-05로 push 이동 / "?" 버튼 탭 시 conReportPopup Modal 표시 → "전송하기" 탭 시 bounceIn 체크 애니메이션 / 전체화면 버튼 탭 시 con-10l로 push 이동'],
@@ -683,7 +622,6 @@ const descriptions = {
   ]},
   'con-18-empty': { title: 'CON-16e 캡픽 관리 (빈 상태)', items: [
     ['사용자 시나리오', '캡픽이 아직 등록되어 있지 않은 상태의 화면이에요. "등록된 캡픽이 없어요"라는 안내가 나오고, "주변에서 캡픽 찾기" 또는 "일련번호로 등록하기" 버튼을 눌러서 캡픽을 등록할 수 있어요.'],
-    ['화면 개요', '등록된 캡픽이 없을 때 표시되는 캡픽 관리 빈 상태 화면이다. 디바이스 검색 또는 일련번호 등록을 유도한다.'],
     ['레이아웃', '상단: StatusBar + TopBar(back → con-04, "캡픽 관리") / 중앙: EmptyState(캡픽 SVG + pulse 애니메이션, 제목, 설명) + Button 영역(주변에서 캡픽 찾기, 일련번호로 등록하기) / 하단: 없음'],
     ['주요 컴포넌트', 'TopBar(back → con-04), EmptyState(icon: 캡픽 SVG + pulse 2s 애니메이션, title: "등록된 캡픽이 없어요", desc: "캡픽을 등록하면 촬영을 시작할 수 있어요"), Button(Primary, full-width: 주변에서 캡픽 찾기), Button(Outline, full-width: 일련번호로 등록하기)'],
     ['인터랙션', '"주변에서 캡픽 찾기" 탭 시 adm-04(ADM-03)로 push 이동 / "일련번호로 등록하기" 탭 시 con-18-register(CON-16a)로 push 이동'],
@@ -692,7 +630,6 @@ const descriptions = {
   ]},
   'con-18-register': { title: 'CON-16a 캡픽 등록하기', items: [
     ['사용자 시나리오', '캡픽을 일련번호로 등록하는 화면이에요. 캡픽 뒷면에 적힌 번호(예: CPK-2026-XXXX-XXXX)를 입력하고, 원하면 캡픽에 이름(예: 서준맘의 캡픽)도 붙여줘요. "등록하기"를 누르면 캡픽 설정 과정이 시작돼요.'],
-    ['화면 개요', '캡픽 뒷면의 일련번호를 직접 입력하여 디바이스를 계정에 등록하는 폼 화면이다.'],
     ['레이아웃', '상단: StatusBar + TopBar(back → con-18-empty, "캡픽 등록하기") / 중앙: 캡픽 SVG 일러스트 + 안내 텍스트 + FormGroup(일련번호 TextInput + 도움말, 캡픽 이름 TextInput) + Button(Primary: 등록하기) / 하단: 없음'],
     ['주요 컴포넌트', 'TopBar(back → con-18-empty), Illustration(캡픽 SVG 64x72), Heading("일련번호를 입력해주세요"), Description("캡픽 뒷면에 적힌 일련번호를 입력하면 본인 인증 후 등록 완료"), TextInput(placeholder: CPK-2026-XXXX-XXXX, letter-spacing), HelpText(info icon), TextInput(placeholder: 서준맘의 캡픽, 선택), Button(Primary, full-width: 등록하기)'],
     ['인터랙션', '뒤로가기 탭 시 con-18-empty로 pop 이동 / "등록하기" Button 탭 시 con-ob1(CON-04 캡픽 설정: WiFi)로 push 이동'],
@@ -701,7 +638,6 @@ const descriptions = {
   ]},
   'con-08': { title: 'CON-17 실시간 중계', items: [
     ['사용자 시나리오', '경기를 실시간으로 중계하는 화면이에요. 유튜브나 페이스북 같은 플랫폼을 선택하고, 스트리밍 링크를 복사해서 보고 싶은 사람에게 보내줄 수 있어요. 스코어보드 표시를 켜거나 끌 수 있고, "스트리밍 시작하기"를 누르면 중계가 시작돼요.'],
-    ['화면 개요', '캡픽 영상을 YouTube/Facebook으로 실시간 스트리밍하는 설정 및 관리 화면.'],
     ['레이아웃', '상단 TopBar(뒤로가기 + "라이브 스트리밍") / 16:9 프리뷰 영역(LIVE 배지 + 시청자 수) / 스코어보드 / 플랫폼 선택 + 링크 복사 / 스코어보드 표시 Toggle / 하단 버튼 영역'],
     ['주요 컴포넌트', 'Badge(LIVE), Scoreboard(홈 vs 어웨이), Chip "YouTube"·"Facebook", TextInput(readonly) 스트리밍 링크 + Button(Outline) "복사", Toggle "스코어보드 표시", Button(Danger) "스트리밍 시작하기", Button(Outline) "링크 공유하기"'],
     ['인터랙션', '복사 버튼 탭 시 링크 클립보드 복사 토스트 / 스트리밍 시작 버튼 탭 시 시작 토스트 / 뒤로가기 탭 시 CON-16으로 pop 이동'],
@@ -710,7 +646,6 @@ const descriptions = {
   ]},
   'con-upload': { title: 'CON-18 촬영 설정', items: [
     ['사용자 시나리오', '촬영을 시작하기 전에 경기 정보를 입력하는 화면이에요. 경기 이름(예: 7세반 수업), 장소, 날짜를 쓰고, 시작/종료 시간을 정해요. 시간을 안 정하면 지금부터 계속 촬영해요. 다 쓰면 "촬영하기"를 눌러서 녹화를 시작해요.'],
-    ['화면 개요', '캡픽으로 새 촬영을 시작하기 전에 경기 정보를 입력하는 폼 화면.'],
     ['레이아웃', '상단 TopBar(뒤로가기 + "촬영 설정") / 중앙 입력 폼(경기 이름, 장소, 날짜, 시간) / 하단 촬영하기 버튼'],
     ['주요 컴포넌트', 'TextInput "경기 이름", TextInput "장소", Input(date), Toggle "시간 미설정" + Input(time) 시작·종료, Button(Primary) "촬영하기"'],
     ['인터랙션', '시간 미설정 Toggle on 시 시간 입력 필드 비활성 / 촬영하기 버튼 탭 시 CON-12로 push 이동 / 뒤로가기 탭 시 CON-16으로 pop 이동'],
@@ -719,7 +654,6 @@ const descriptions = {
   ]},
   'con-explore': { title: 'CON-19 탐색', items: [
     ['사용자 시나리오', '새로운 영상이나 사람을 찾아보는 탐색 화면이에요. 검색창에서 선수, 구장, 해시태그를 검색할 수 있어요. 인기 해시태그(#골모음, #세이브, #드리블 등)를 누르면 관련 영상이 나오고, PIC STAR에서 인기 사용자를 볼 수 있어요. "지금 뜨는 영상"과 "인기 구장"도 확인할 수 있어요.'],
-    ['화면 개요', '선수·구장·해시태그 통합 검색과 인기 콘텐츠를 탐색하는 디스커버리 화면.'],
     ['레이아웃', '상단 검색바(TextInput + 돋보기 아이콘) / 인기 해시태그 Chip 가로 나열 / PIC STAR 선수 아바타 가로 스크롤(5명) / 지금 뜨는 영상 필터 Chip + 2열 Grid / 인기 구장 Card x3 / 하단 BottomNav(5탭: 홈/탐색/피드/아카이브/마이)'],
     ['주요 컴포넌트', 'TextInput(검색) "선수, 구장, 해시태그 검색...", Chip(toggle) x6 해시태그, Avatar(bordered) x5 PIC STAR, Chip(필터) 전체·골·세이브·드리블·어시스트·세레모니, 영상 썸네일 Grid(2열) 조회수·시간 Badge, Card(구장) x3 구장명·위치·경기 수, BottomNav(5탭: 홈/탐색/피드/아카이브/마이)'],
     ['인터랙션', 'PIC STAR 아바타 탭 시 CON-20으로 push 이동 / 영상 썸네일 탭 시 CON-11로 push 이동 / 구장 Card 탭 시 CON-07로 push 이동'],
@@ -728,7 +662,6 @@ const descriptions = {
   ]},
   'con-profile-other': { title: 'CON-20 다른 사용자 프로필', items: [
     ['사용자 시나리오', '다른 사용자(예: 김민수 @minsu_striker)의 프로필을 보는 화면이에요. 그 사람의 경기 수, 하이라이트, 팔로워를 볼 수 있고, "팔로우" 버튼을 눌러서 팔로우할 수 있어요. 올린 영상도 격자로 보이고, 점 세 개 메뉴에서 신고, 차단, 링크 복사를 할 수 있어요.'],
-    ['화면 개요', '다른 사용자의 프로필, 활동 통계, 배지, 게시물 그리드를 열람하고 팔로우·신고·차단할 수 있는 화면이다.'],
     ['레이아웃', '상단: StatusBar + TopBar(back → con-feed, @username, 더보기 → profileMenuSheet) / 중앙: Avatar(64px) + StatRow(경기·하이라이트·팔로워·팔로잉) + 프로필 정보(이름·Badge·@ID·해시태그·자기소개) + Button 행(팔로우·공유) + Badge 칩 + ProfileTabBar(그리드·좋아요) + Grid(3열 4:5) / 하단: BottomNav(5탭)'],
     ['주요 컴포넌트', 'TopBar(back → con-feed), IconButton(더보기 → profileMenuSheet BottomSheet), Avatar(64px), StatRow(경기 12, 하이라이트 8, 팔로워 89 → con-followers, 팔로잉 45 → con-followers), Badge(accent: 슛타트업), Button(Primary: 팔로우, 토글 → Outline: 팔로잉), Button(Outline: 공유 → globalShareSheet), Badge(accent-light: 15경기 달성, warning-light: 2주 연속 업로드), TextLink("활동 배지 3개 >" → con-badges), ProfileTabBar, Grid(3열 4:5, 각 → con-feed), BottomSheet(profileMenuSheet: 신고하기·차단하기·프로필 링크 복사)'],
     ['인터랙션', '"팔로우" Button 탭 시 Primary/Outline 토글(팔로우 ↔ 팔로잉) / "공유" 탭 시 globalShareSheet 표시 / 팔로워·팔로잉 수 탭 시 con-followers로 push 이동 / 더보기 탭 시 profileMenuSheet 표시 → 신고·차단·링크 복사 각각 toast / 게시물 그리드 탭 시 con-feed로 push 이동'],
@@ -737,7 +670,6 @@ const descriptions = {
   ]},
   'con-followers': { title: 'CON-21 팔로워/팔로잉', items: [
     ['사용자 시나리오', '내 팔로워와 내가 팔로잉하는 사람 목록을 보는 화면이에요. "156 팔로워"와 "89 팔로잉" 탭을 오갈 수 있어요. 각 사람 옆에 "팔로우" 또는 "팔로잉" 버튼이 있어서 누르면 팔로우하거나 취소할 수 있고, 이름을 누르면 그 사람의 프로필로 이동해요.'],
-    ['화면 개요', '팔로워와 팔로잉 목록을 탭으로 전환하며 확인하고, 개별 팔로우 상태를 토글하는 화면이다.'],
     ['레이아웃', '상단: StatusBar + TopBar(back → con-my, "팔로워") + TabBar(156 팔로워 / 89 팔로잉) / 중앙: 사용자 ListItem 리스트(Avatar + 이름 + @ID + 팔로우 Button) / 하단: BottomNav(5탭, 마이 활성)'],
     ['주요 컴포넌트', 'TopBar(back → con-my), TabBar(156 팔로워·89 팔로잉), ListItem(Avatar(40px) + 이름 + @ID + Button(Outline: 팔로우 / Primary: 팔로잉)) x6, BottomNav'],
     ['인터랙션', '탭 전환: 팔로워 ↔ 팔로잉 / 팔로우 Button 탭 시 Primary/Outline 토글(팔로우 ↔ 팔로잉) / ListItem 탭 시 con-profile-other로 push 이동'],
@@ -746,7 +678,6 @@ const descriptions = {
   ]},
   'con-pw-reset': { title: 'CON-23 비밀번호 찾기', items: [
     ['사용자 시나리오', '비밀번호를 잊어버린 사용자가 오는 화면이에요. 가입할 때 쓴 이메일 주소를 입력하고 "재설정 링크 보내기"를 누르면, 이메일로 비밀번호를 다시 설정할 수 있는 링크가 가요.'],
-    ['화면 개요', '가입 이메일로 비밀번호 재설정 링크를 전송하는 화면이다.'],
     ['레이아웃', '상단: StatusBar + TopBar(back → con-02, "비밀번호 찾기") / 중앙: 자물쇠 SVG 일러스트 + Heading + Description + FormGroup(이메일 TextInput) + Button(Primary: 재설정 링크 보내기) / 하단: 없음'],
     ['주요 컴포넌트', 'TopBar(back → con-02), Illustration(자물쇠 SVG 56x56, accent 색상), Heading("비밀번호를 재설정해드릴게요"), Description("가입하신 이메일을 입력하면 재설정 링크를 보내드려요"), TextInput(email, placeholder: example@email.com), Button(Primary, full-width: 재설정 링크 보내기)'],
     ['인터랙션', '뒤로가기 탭 시 con-02로 pop 이동 / "재설정 링크 보내기" 탭 시 toast("이메일이 전송되었습니다") 후 1.5s 뒤 con-02로 push 이동'],
@@ -755,7 +686,6 @@ const descriptions = {
   ]},
   'con-signup': { title: 'CON-24 회원가입', items: [
     ['사용자 시나리오', '새로 회원가입하는 화면이에요. 이름, 이메일, 비밀번호를 입력하고, 이용약관 동의에 체크한 뒤 "가입하기"를 누르면 돼요. 가입이 되면 앱 시작 화면으로 이동해요.'],
-    ['화면 개요', '이메일 기반 신규 계정을 생성하는 회원가입 폼 화면이다.'],
     ['레이아웃', '상단: StatusBar + TopBar(back → con-02, "회원가입") / 중앙: FormGroup(이름·이메일·비밀번호·비밀번호 확인 TextInput x4) + Checkbox(약관 동의) + Button(Primary: 가입하기) / 하단: 없음'],
     ['주요 컴포넌트', 'TopBar(back → con-02), TextInput(이름), TextInput(email), TextInput(password), TextInput(password 확인), Checkbox(이용약관 및 개인정보처리방침 동의, 탭 시 accent 체크 토글), Button(Primary, full-width: 가입하기)'],
     ['인터랙션', '뒤로가기 탭 시 con-02로 pop 이동 / Checkbox 탭 시 체크·해제 토글(accent 배경 + check SVG) / "가입하기" 탭 시 toast("가입이 완료되었습니다!") 후 1.5s 뒤 con-01(온보딩)로 push 이동'],
@@ -764,7 +694,6 @@ const descriptions = {
   ]},
   'con-profile-edit': { title: 'CON-25 프로필 수정', items: [
     ['사용자 시나리오', '내 프로필 정보를 수정하는 화면이에요. 사진을 바꾸고, 이름, 이메일, 성별, 유형(동호인/선수/학부모), 자기소개를 수정할 수 있어요. 다 고치면 "저장"을 누르면 바뀐 내용이 저장돼요.'],
-    ['화면 개요', '로그인 사용자의 프로필 정보(사진·이름·이메일·성별·유형·자기소개)를 수정하는 폼 화면이다.'],
     ['레이아웃', '상단: StatusBar + TopBar(back → con-settings, "프로필 수정", TextButton(저장)) / 중앙: Avatar(72px, "사진 변경" 링크) + FormGroup(이름·이메일 TextInput + 성별 ChipGroup + 유형 ChipGroup + 자기소개 TextArea) + Button(Primary: 저장) / 하단: 없음'],
     ['주요 컴포넌트', 'TopBar(back → con-settings), TextButton(accent: 저장), Avatar(72px), TextLink("사진 변경"), TextInput(이름: 김민지(서준맘)), TextInput(email: minji@email.com), Chip(남성·여성, 여성 active), Chip(동호인·선수·학부모, 학부모 active), TextArea(자기소개), Button(Primary, full-width: 저장)'],
     ['인터랙션', '뒤로가기 탭 시 con-settings로 pop 이동 / Chip 탭 시 active 토글 / "저장" 탭 시 toast("저장되었습니다") 후 1s 뒤 con-settings로 push 이동'],
@@ -773,7 +702,6 @@ const descriptions = {
   ]},
   'con-pw-change': { title: 'CON-26 비밀번호 변경', items: [
     ['사용자 시나리오', '비밀번호를 바꾸고 싶을 때 오는 화면이에요. 현재 비밀번호를 먼저 입력하고, 새 비밀번호를 두 번 입력한 뒤 "변경하기"를 누르면 비밀번호가 바뀌어요.'],
-    ['화면 개요', '현재 비밀번호를 확인한 뒤 새 비밀번호로 변경하는 폼 화면이다.'],
     ['레이아웃', '상단: StatusBar + TopBar(back → con-settings, "비밀번호 변경") / 중앙: FormGroup(현재 비밀번호·새 비밀번호·새 비밀번호 확인 TextInput x3) + Button(Primary: 변경하기) / 하단: 없음'],
     ['주요 컴포넌트', 'TopBar(back → con-settings), TextInput(password: 현재 비밀번호), TextInput(password: 새 비밀번호), TextInput(password: 새 비밀번호 확인), Button(Primary, full-width: 변경하기)'],
     ['인터랙션', '뒤로가기 탭 시 con-settings로 pop 이동 / "변경하기" 탭 시 toast("비밀번호가 변경되었습니다") 후 1s 뒤 con-settings로 push 이동'],
@@ -782,7 +710,6 @@ const descriptions = {
   ]},
   'con-subscribe': { title: 'CON-27 구독 관리', items: [
     ['사용자 시나리오', '구독 요금제를 고르고 결제하는 화면이에요. 현재 "무료 체험 중"이고 남은 기간이 7일이에요. 월간(3,900원/월)과 연간(39,000원/년, 17% 할인) 중 골라서 "구독 시작하기"를 누르면 돼요. 카드도 등록할 수 있어요.'],
-    ['화면 개요', '현재 구독 플랜 확인 및 월간/연간 구독 전환, 결제 수단을 관리하는 화면이다.'],
     ['레이아웃', '상단: StatusBar + TopBar(back → con-settings, "구독 관리") / 중앙: Card(현재 플랜: 무료 체험 중, 남은 기간 7일) + Card(월간 구독: 3,900원/월, border 선택) + Card(연간 구독: 39,000원/년, Badge(추천), border 선택) + Button(Primary: 구독 시작하기) + SectionHeader(결제 수단) + Button(Outline: 카드 등록하기) / 하단: 없음'],
     ['주요 컴포넌트', 'TopBar(back → con-settings), Card(Badge(accent: 현재 플랜) + "무료 체험 중" + 남은 기간), Card(월간 구독: 3,900원/월, border 선택 토글), Card(연간 구독: 39,000원/년 + Badge(accent: 추천) + "월 3,250원 (17% 할인)", border 선택 토글), Button(Primary, full-width: 구독 시작하기), Button(Outline, full-width: 카드 등록하기)'],
     ['인터랙션', '뒤로가기 탭 시 con-settings로 pop 이동 / 월간/연간 Card 탭 시 border accent 토글(상호 배타) / "구독 시작하기" 탭 시 toast("구독이 완료되었습니다!") 후 1.5s 뒤 con-04로 push 이동 / "카드 등록하기" 탭 시 toast'],
@@ -791,7 +718,6 @@ const descriptions = {
   ]},
   'con-venue-manage': { title: 'CON-28 구장 관리', items: [
     ['사용자 시나리오', '등록해 놓은 구장을 관리하는 화면이에요. 등록된 구장(캡틴FC 용인점, 풋살파크 강남) 목록이 보이고, 필요 없는 구장은 "삭제"를 눌러서 지울 수 있어요. "구장 추가하기"를 눌러서 새 구장을 등록할 수도 있어요.'],
-    ['화면 개요', '등록된 구장 목록을 확인하고 삭제하거나 새 구장을 추가하는 관리 화면이다.'],
     ['레이아웃', '상단: StatusBar + TopBar(back → con-settings, "구장 관리") / 중앙: Card(구장명 + 주소 + 등록일 + 삭제 텍스트) x2 + Button(Outline: 구장 추가하기) / 하단: 없음'],
     ['주요 컴포넌트', 'TopBar(back → con-settings), Card(구장명: 캡틴FC 용인점, 주소, 등록일: 2026.05.10, TextLink(error: 삭제 → toast)) x1, Card(구장명: 풋살파크 강남, 주소, 등록일, TextLink(error: 삭제 → toast)) x1, Button(Outline, full-width: 구장 추가하기)'],
     ['인터랙션', '뒤로가기 탭 시 con-settings로 pop 이동 / "삭제" 탭 시 toast("구장이 삭제되었습니다") / "구장 추가하기" 탭 시 con-05로 push 이동'],
@@ -800,7 +726,6 @@ const descriptions = {
   ]},
   'con-terms': { title: 'CON-29 이용약관', items: [
     ['사용자 시나리오', '캡픽 서비스의 이용약관을 읽어볼 수 있는 화면이에요. 서비스의 목적, 용어 정의, 이용 방법, 개인정보 관련 내용이 조항별로 적혀 있어요.'],
-    ['화면 개요', '서비스 이용약관 전문을 조항별로 표시하는 정적 콘텐츠 화면이다.'],
     ['레이아웃', '상단: StatusBar + TopBar(back → con-settings, "이용약관") / 중앙: 약관 조항(제1조 목적, 제2조 정의, 제3조 서비스 이용, 제4조 개인정보) / 하단: 없음'],
     ['주요 컴포넌트', 'TopBar(back → con-settings), Heading(제1~4조, font-weight 700), BodyText(약관 본문, font-size 13px, line-height 1.6)'],
     ['인터랙션', '뒤로가기 탭 시 con-settings로 pop 이동 / 인터랙션 없음(읽기 전용)'],
@@ -809,7 +734,6 @@ const descriptions = {
   ]},
   'con-privacy': { title: 'CON-30 개인정보처리방침', items: [
     ['사용자 시나리오', '캡픽의 개인정보처리방침을 읽어볼 수 있는 화면이에요. 어떤 개인정보를 모으는지, 왜 모으는지, 얼마나 보관하는지, 어떻게 지우는지가 적혀 있어요.'],
-    ['화면 개요', '개인정보처리방침 전문을 항목별로 표시하는 정적 콘텐츠 화면이다.'],
     ['레이아웃', '상단: StatusBar + TopBar(back → con-settings, "개인정보처리방침") / 중앙: 방침 항목(1. 수집 항목, 2. 이용 목적, 3. 보관 기간, 4. 파기 절차) / 하단: 없음'],
     ['주요 컴포넌트', 'TopBar(back → con-settings), Heading(1~4항, font-weight 700), BodyText(방침 본문, font-size 13px, line-height 1.6)'],
     ['인터랙션', '뒤로가기 탭 시 con-settings로 pop 이동 / 인터랙션 없음(읽기 전용)'],
@@ -818,7 +742,6 @@ const descriptions = {
   ]},
   'con-badges': { title: 'CON-31 활동 배지', items: [
     ['사용자 시나리오', '내가 받은 활동 배지와 아직 도전 중인 배지를 보는 화면이에요. "10경기 달성", "3주 연속 업로드" 같은 배지를 이미 받았고, "50경기 달성", "1000회 조회" 같은 배지는 아직 잠겨 있어서 목표를 채우면 열려요.'],
-    ['화면 개요', '획득한 배지와 도전 중인 배지를 2열 그리드로 분류 표시하는 화면이다.'],
     ['레이아웃', '상단: StatusBar + TopBar(back → con-my, "활동 배지") / 중앙: SectionHeader(획득한 배지) + Grid(2열, accent-light 배경) + SectionHeader(도전 중인 배지) + Grid(2열, gray-100 배경, 잠금 아이콘) / 하단: 없음'],
     ['주요 컴포넌트', 'TopBar(back → con-my), SectionHeader(획득한 배지), BadgeCard(accent-light: 10경기 달성 + 날짜, 3주 연속 업로드 + 날짜, 첫 하이라이트 공유 + 날짜, 100회 조회 달성 + 날짜) x4, SectionHeader(도전 중인 배지), BadgeCard(gray-100, opacity 0.4 + 잠금 아이콘: 50경기 달성 0/50, 1000회 조회 100/1000, MVP 3회 1/3, 시즌 리포트 잠금) x4'],
     ['인터랙션', '뒤로가기 탭 시 con-my로 pop 이동 / 인터랙션 없음(읽기 전용)'],
@@ -827,7 +750,6 @@ const descriptions = {
   ]},
   'con-purchase': { title: 'CON-32 캡픽 구매', items: [
     ['사용자 시나리오', '캡픽 스마트 캠을 구매하는 화면이에요. 가격(490,000원)과 주요 기능(AI 자동 하이라이트, 4K 고화질, WiFi 연결, 방수/방진)이 나와 있어요. "구매하기"를 누르면 결제 페이지로 가고, "문의하기"를 누르면 전화나 이메일로 물어볼 수 있어요.'],
-    ['화면 개요', '캡픽 하드웨어 제품 정보와 주요 기능을 소개하고 구매·문의 액션을 제공하는 화면이다.'],
     ['레이아웃', '상단: StatusBar + TopBar(back → con-04, "캡픽 구매") / 중앙: ProductImage(16:9, 캡픽 SVG) + 제품명·가격 + FeatureList(체크 아이콘 x4) + Button(Primary: 구매하기) + Button(Outline: 문의하기) / 하단: 없음'],
     ['주요 컴포넌트', 'TopBar(back → con-04), ProductImage(캡픽 SVG, gray-100 배경, 16:9), Heading("CAPP!C 스마트 캠"), Price(490,000원, accent), FeatureItem(check SVG + "AI 자동 하이라이트 생성") x1, FeatureItem(check SVG + "4K 고화질 녹화") x1, FeatureItem(check SVG + "무선 WiFi 연결") x1, FeatureItem(check SVG + "방수/방진 설계") x1, Button(Primary, full-width: 구매하기 → toast), Button(Outline, full-width: 문의하기 → toast)'],
     ['인터랙션', '뒤로가기 탭 시 con-04로 pop 이동 / "구매하기" 탭 시 toast("구매 페이지로 이동합니다") / "문의하기" 탭 시 toast(전화·이메일 정보)'],
@@ -836,7 +758,6 @@ const descriptions = {
   ]},
   'web-01': { title: 'WEB-01 구장 경기 페이지', items: [
     ['사용자 시나리오', '앱을 설치하지 않은 사람이 QR코드나 공유 링크를 통해 웹으로 접속하면 보이는 화면이에요. 구장 이름(강남 풋살 아레나)과 오늘 촬영된 경기 목록이 나와요. 보고 싶은 경기를 누르면 1분 하이라이트를 무료로 볼 수 있어요.'],
-    ['화면 개요', '앱 설치 없이 QR/공유 링크로 접근하는 웹 전용 구장 경기 목록 페이지.'],
     ['레이아웃', '상단 WebHeader(구장명 + 날짜) / 중앙 경기 카드 리스트 / 하단 안내 텍스트'],
     ['주요 컴포넌트', 'WebHeader(구장명, 부제), SectionHeader(날짜), Card(경기명 + 시간 + Badge(REC/경기 종료) + 유형 라벨) x2, InfoText'],
     ['인터랙션', '학부모 전용 경기 카드 탭 → web-02 push 이동 / 일반 경기 카드 탭 → web-02a push 이동'],
@@ -845,7 +766,6 @@ const descriptions = {
   ]},
   'web-02': { title: 'WEB-02 1분 하이라이트 (학부모)', items: [
     ['사용자 시나리오', '웹에서 학부모용 경기(7세반 수업)의 하이라이트를 보는 화면이에요. 1분 하이라이트를 무료로 재생하고 공유하거나 내려받을 수 있어요. 우리 아이 하이라이트나 더 긴 영상을 보려면 앱을 설치하라는 안내가 나와서, App Store나 Play Store 버튼을 눌러 앱을 깔 수 있어요.'],
-    ['화면 개요', '학부모 대상 웹 하이라이트 페이지로, 무료 1분 영상과 아이별 하이라이트를 제공하고 앱 설치를 유도한다.'],
     ['레이아웃', '상단 WebHeader(수업명 + 시간·구장) / 1분 하이라이트 Card(무료 영상 + 조회수 + 공유·내려받기) / 우리 아이 하이라이트 Card(3열 썸네일 그리드) / 10분 하이라이트 + 전체 수업 영상(페이드 오버레이) / 하단 앱 설치 CTA'],
     ['주요 컴포넌트', 'WebHeader, VideoCard(1:00, 무료) + FullscreenButton, ViewCount, Button(outline, 공유하기) + Button(outline, 내려받기), ThumbnailGrid(3col, 민준/서연/지호), VideoCard(10:00) + VideoCard(60:00) + FadeOverlay, AppCTA(캡픽 일러스트 + StoreButton(iOS) + StoreButton(Android))'],
     ['인터랙션', '공유하기 탭 → 공유 시트 표시 / 내려받기 탭 → 다운로드 토스트 / App Store·Play Store 탭 → 스토어 이동 토스트'],
@@ -854,7 +774,6 @@ const descriptions = {
   ]},
   'web-02a': { title: 'WEB-02a 1분 하이라이트 (일반)', items: [
     ['사용자 시나리오', '웹에서 일반 경기(슛타트업 vs FC축신)의 하이라이트를 보는 화면이에요. 1분 하이라이트를 무료로 보고 공유/내려받기 할 수 있어요. 선수별 하이라이트나 10분/전체 영상을 보려면 앱을 설치하라는 안내가 나와서, 앱 스토어로 이동할 수 있어요.'],
-    ['화면 개요', '일반 경기 대상 웹 하이라이트 페이지로, 무료 1분 영상과 선수별 하이라이트를 제공하고 앱 설치를 유도한다.'],
     ['레이아웃', '상단 WebHeader(경기명 + 시간·구장) / 1분 하이라이트 Card(무료 영상 + 조회수 + 공유·내려받기) / 선수별 하이라이트 Card(3x2 썸네일 그리드) / 10분 하이라이트 + 전체 경기 영상(페이드 오버레이) / 하단 앱 설치 CTA'],
     ['주요 컴포넌트', 'WebHeader, VideoCard(1:00, 무료) + FullscreenButton, ViewCount, Button(outline, 공유하기) + Button(outline, 내려받기), ThumbnailGrid(3col x2row, #1~#6), VideoCard(10:00) + VideoCard(60:00) + FadeOverlay, AppCTA(캡픽 일러스트 + StoreButton(iOS) + StoreButton(Android))'],
     ['인터랙션', '공유하기 탭 → 공유 시트 표시 / 내려받기 탭 → 다운로드 토스트 / App Store·Play Store 탭 → 스토어 이동 토스트'],

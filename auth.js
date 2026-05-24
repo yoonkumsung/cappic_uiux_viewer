@@ -21,8 +21,8 @@
   var AUTH_KEY = 'cappic_auth';
   var isAuthed = sessionStorage.getItem(AUTH_KEY) === '1' || isLocal;
 
-  // SHA-256 해시 (비밀번호: "cappic2026")
-  var HASH = '169f77391bbf51a5f197d94002ef37b180f933e101bac2ca906f33bfd95a8a48';
+  // SHA-256 해시 (비밀번호: "5450")
+  var HASH = 'c54bea44135df61e37bdca547a01c223ff648ddf790677cafe9d30a484cac7c8';
 
   // --- DOM 생성 (즉시 실행으로 FOUC 방지) ---
   var overlay = document.createElement('div');

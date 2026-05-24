@@ -75,6 +75,7 @@
   <div class="zi-extract">
     <button onclick="ziExtractPNG()">PNG 추출</button>
     <button onclick="ziExtractHTML()">HTML 코드</button>
+    <button onclick="ziExtractScenario()">시나리오</button>
   </div>
 </div>
 <div class="zi-desc" id="ziDesc"></div>
@@ -817,6 +818,37 @@ document.addEventListener('click', function(e) {
     document.getElementById('codeModalTitle').textContent = `${ziScreen.code} ${ziScreen.name}`;
     document.getElementById('codeModal').classList.add('show');
   } catch(e) { showToast('HTML 추출 실패 (GitHub Pages에서 실행해주세요)'); }
+}
+
+function ziExtractScenario() {
+  if (!ziScreen) return;
+  const desc = descriptions[ziScreen.id];
+  if (!desc) { showToast('설명 정보가 없습니다'); return; }
+
+  let text = `${ziScreen.code} ${ziScreen.name}\n`;
+  text += '='.repeat(40) + '\n\n';
+
+  // 연결 화면 정보
+  const outgoing = connections.filter(c => c[0] === ziScreen.id).map(c => { const ts = screenMap[c[1]]; return ts ? `→ ${ts.code} ${ts.name}` : `→ ${c[1]}`; });
+  const incoming = connections.filter(c => c[1] === ziScreen.id).map(c => { const ts = screenMap[c[0]]; return ts ? `← ${ts.code} ${ts.name}` : `← ${c[0]}`; });
+
+  desc.items.forEach(([label, content]) => {
+    text += `[${label}]\n${content}\n\n`;
+  });
+
+  if (outgoing.length > 0) {
+    text += '[이동할 수 있는 화면]\n' + outgoing.join('\n') + '\n\n';
+  }
+  if (incoming.length > 0) {
+    text += '[이 화면으로 오는 화면]\n' + incoming.join('\n') + '\n\n';
+  }
+
+  const blob = new Blob([text], {type:'text/plain;charset=utf-8'});
+  const a = document.createElement('a');
+  a.download = `${ziScreen.code}_${ziScreen.name}_시나리오.txt`;
+  a.href = URL.createObjectURL(blob);
+  a.click();
+  showToast('시나리오 다운로드 완료!');
 }
 
 function copyCode() {
