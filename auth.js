@@ -14,8 +14,8 @@
   // iframe 안이면 (overview→index.html embed) 건너뜀
   if (window.top !== window) return;
 
-  // 로컬(localhost/127.0.0.1)에서는 암호 건너뜀 — 로딩만 표시
-  var isLocal = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
+  // 로컬 또는 GitHub Pages에서는 암호 건너뜀 — 로딩만 표시
+  var isLocal = location.hostname === 'localhost' || location.hostname === '127.0.0.1' || location.hostname.endsWith('.github.io');
 
   // 이미 인증된 세션이면 로딩만 표시
   var AUTH_KEY = 'cappic_auth';
